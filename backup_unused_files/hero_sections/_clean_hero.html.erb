@@ -1,0 +1,252 @@
+<!-- 깔끔한 프리미엄 히어로 섹션 -->
+<%
+  generated_jpg = Rails.root.join('app/assets/images/generated/hero_main.jpg')
+  generated_svg = Rails.root.join('app/assets/images/generated/hero_main.svg')
+  
+  if File.exist?(generated_jpg)
+    bg_image = image_path("generated/hero_main.jpg?v=#{Time.now.to_i}")
+  elsif File.exist?(generated_svg)
+    bg_image = image_path("generated/hero_main.svg?v=#{Time.now.to_i}")
+  else
+    bg_image = nil
+  end
+%>
+<section class="hero-premium" style="background: <%= bg_image ? "url(#{bg_image})" : "#faf7f1" %> center/cover; background-color: #faf7f1; border-bottom: 1px solid #e5e5e5;">
+  <div class="container-premium">
+    <div class="hero-premium-content">
+      <!-- 배지 -->
+      <div class="mb-md">
+        <span class="chip-minimal active">
+          ✨ 2024 최고의 동화책 플랫폼
+        </span>
+      </div>
+      
+      <!-- 메인 타이틀 -->
+      <h1 class="hero-premium-title" style="color: #000; background: none; -webkit-text-fill-color: initial;">
+        정화의 서재
+      </h1>
+      
+      <!-- 서브 타이틀 -->
+      <p class="hero-premium-subtitle">
+        아이들의 상상력을 키우는 마법 같은 동화책 세상<br>
+        전자동화책, 구연동화, 동화만들기 교육까지
+      </p>
+      
+      <!-- CTA 버튼 -->
+      <div class="hero-premium-actions">
+        <%= link_to courses_path(category: 'ebook'), class: "btn-premium btn-premium-primary btn-premium-lg" do %>
+          <span>📖</span>
+          <span>전자동화책 둘러보기</span>
+        <% end %>
+        
+        <%= link_to courses_path(category: 'storytelling'), class: "btn-premium btn-premium-outline btn-premium-lg" do %>
+          <span>🎭</span>
+          <span>구연동화 시작하기</span>
+        <% end %>
+      </div>
+      
+      <!-- 통계 -->
+      <div class="grid-premium cols-3 mt-xl" style="max-width: 600px; margin: var(--space-xl) auto 0;">
+        <div class="text-center">
+          <div class="stat-number">1,000+</div>
+          <div class="stat-label">동화책</div>
+        </div>
+        <div class="text-center">
+          <div class="stat-number">50,000+</div>
+          <div class="stat-label">회원</div>
+        </div>
+        <div class="text-center">
+          <div class="stat-number">⭐ 4.9</div>
+          <div class="stat-label">평점</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3가지 핵심 서비스 -->
+<section class="section-premium" style="background: var(--color-gray-50);">
+  <div class="container-premium">
+    <div class="text-center mb-xl">
+      <h2 style="font-size: var(--text-3xl); margin-bottom: var(--space-sm);">
+        우리가 제공하는 서비스
+      </h2>
+      <p style="color: var(--color-gray-600); font-size: var(--text-lg);">
+        정화의 서재에서 만나는 특별한 동화 콘텐츠
+      </p>
+    </div>
+    
+    <div class="grid-premium cols-3">
+      <!-- 전자동화책 -->
+      <div class="card-premium">
+        <div class="card-premium-header">
+          <div class="service-icon">📖</div>
+          <h3>전자동화책</h3>
+          <p class="text-sm" style="color: var(--color-gray-500); margin: 0;">
+            인터랙티브 디지털 동화책
+          </p>
+        </div>
+        <div class="card-premium-body">
+          <ul class="feature-list">
+            <li>터치 반응형 인터페이스</li>
+            <li>전문 성우 나레이션</li>
+            <li>오프라인 다운로드</li>
+            <li>다국어 지원</li>
+          </ul>
+        </div>
+        <div class="card-premium-footer">
+          <div class="price-tag">
+            <span class="price-label">개별 구매</span>
+            <span class="price-value">5,000원~</span>
+          </div>
+          <%= link_to "둘러보기 →", courses_path(category: 'ebook'), 
+              class: "btn-minimal btn-minimal-primary btn-minimal-sm w-100 mt-md" %>
+        </div>
+      </div>
+      
+      <!-- 구연동화 -->
+      <div class="card-premium">
+        <div class="card-premium-header">
+          <div class="service-icon">🎭</div>
+          <h3>구연동화</h3>
+          <p class="text-sm" style="color: var(--color-gray-500); margin: 0;">
+            생생한 영상 구연동화
+          </p>
+        </div>
+        <div class="card-premium-body">
+          <ul class="feature-list">
+            <li>HD 고화질 영상</li>
+            <li>애니메이션 효과</li>
+            <li>매월 신작 업데이트</li>
+            <li>모바일 앱 지원</li>
+          </ul>
+        </div>
+        <div class="card-premium-footer">
+          <div class="price-tag">
+            <span class="price-label">월 구독</span>
+            <span class="price-value">9,900원/월</span>
+          </div>
+          <%= link_to "시작하기 →", courses_path(category: 'storytelling'), 
+              class: "btn-minimal btn-minimal-primary btn-minimal-sm w-100 mt-md" %>
+        </div>
+      </div>
+      
+      <!-- 동화만들기 -->
+      <div class="card-premium">
+        <div class="card-premium-header">
+          <div class="service-icon">✍️</div>
+          <h3>동화만들기</h3>
+          <p class="text-sm" style="color: var(--color-gray-500); margin: 0;">
+            창작 교육 프로그램
+          </p>
+        </div>
+        <div class="card-premium-body">
+          <ul class="feature-list">
+            <li>전문 작가 멘토링</li>
+            <li>단계별 커리큘럼</li>
+            <li>1:1 피드백</li>
+            <li>작품 전시회</li>
+          </ul>
+        </div>
+        <div class="card-premium-footer">
+          <div class="price-tag">
+            <span class="price-label">교육과정</span>
+            <span class="price-value">30,000원~</span>
+          </div>
+          <%= link_to "신청하기 →", courses_path(category: 'education'), 
+              class: "btn-minimal btn-minimal-primary btn-minimal-sm w-100 mt-md" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* 추가 스타일 */
+.stat-number {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: #000;
+  margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.service-icon {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  padding: var(--space-xs) 0;
+  padding-left: var(--space-md);
+  position: relative;
+  color: var(--color-gray-600);
+  font-size: var(--text-sm);
+}
+
+.feature-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-success);
+  font-weight: bold;
+}
+
+.price-tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+}
+
+.price-label {
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.price-value {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: #000;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+  .hero-premium-title {
+    font-size: var(--text-3xl);
+  }
+  
+  .hero-premium-subtitle {
+    font-size: var(--text-base);
+  }
+  
+  .hero-premium-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-premium-lg {
+    width: 100%;
+  }
+}
+</style>

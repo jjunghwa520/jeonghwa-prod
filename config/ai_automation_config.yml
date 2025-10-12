@@ -1,0 +1,100 @@
+# AI 자동화 설정 파일
+# 이 파일은 AI가 프로젝트를 이해하고 자동화하는데 도움을 줍니다
+
+project:
+  name: KICDA Online Education Platform
+  type: rails_application
+  version: 8.0.2
+  
+automation_rules:
+  # AI가 자동으로 수행할 수 있는 작업들
+  allowed_actions:
+    - generate_models
+    - create_controllers
+    - write_tests
+    - fix_syntax_errors
+    - optimize_queries
+    - generate_documentation
+  
+  # 사람의 승인이 필요한 작업들
+  require_approval:
+    - database_migrations
+    - delete_files
+    - modify_credentials
+    - deploy_production
+    - install_gems
+    - modify_routes
+
+development_workflow:
+  # 개발 워크플로우 자동화
+  steps:
+    1_analyze:
+      description: "사용자 요구사항 분석"
+      tools: ["claude", "cursor"]
+      
+    2_design:
+      description: "시스템 설계"
+      tools: ["claude"]
+      outputs: ["models", "controllers", "views"]
+      
+    3_implement:
+      description: "코드 구현"
+      tools: ["cursor", "claude"]
+      validation: true
+      
+    4_test:
+      description: "테스트 실행"
+      command: "rails test"
+      auto_fix: true
+      
+    5_review:
+      description: "코드 리뷰"
+      tools: ["claude"]
+      criteria:
+        - security
+        - performance
+        - best_practices
+
+mcp_tools:
+  # 필요시 자동 설치할 MCP 도구들
+  available:
+    - name: "database-tool"
+      purpose: "데이터베이스 관리"
+      auto_install: false
+      
+    - name: "test-runner"
+      purpose: "테스트 자동화"
+      auto_install: true
+      
+    - name: "code-analyzer"
+      purpose: "코드 품질 분석"
+      auto_install: true
+
+error_handling:
+  # 오류 자동 처리 규칙
+  strategies:
+    syntax_error:
+      action: "auto_fix"
+      max_attempts: 3
+      
+    test_failure:
+      action: "analyze_and_fix"
+      require_approval: false
+      
+    migration_error:
+      action: "alert_user"
+      require_approval: true
+
+quality_checks:
+  # 자동 품질 검사
+  enabled: true
+  checks:
+    - rubocop        # Ruby 스타일 가이드
+    - brakeman       # 보안 검사
+    - rails_best_practices
+    
+feedback_loop:
+  # 피드백 및 학습
+  collect_metrics: true
+  learn_from_fixes: true
+  improvement_threshold: 0.8

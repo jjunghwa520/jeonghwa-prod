@@ -1,0 +1,268 @@
+<!-- 동화책 스타일 홈페이지 -->
+<div class="storybook-theme">
+  <!-- 플로팅 요소들 -->
+  <div class="floating-elements">
+    <div class="floating-book">📚</div>
+    <div class="floating-book">✨</div>
+    <div class="floating-book">🌟</div>
+    <div class="floating-book">📖</div>
+  </div>
+
+  <!-- 히어로 섹션 -->
+  <section class="storybook-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="display-1">정화의 서재</h1>
+        <p class="subtitle">아이의 상상과 배움을 잇는 조용한 독서 공간</p>
+        
+        <div class="cta-buttons">
+          <button class="btn btn-storybook btn-primary-story">지금 시작하기</button>
+          <button class="btn btn-storybook btn-secondary-story">둘러보기</button>
+        </div>
+
+        <!-- 특징 아이콘들 -->
+        <div class="feature-icons mt-5">
+          <div class="row g-4">
+            <div class="col-md-3">
+              <div class="icon-box">
+                <span class="icon-emoji">🎯</span>
+                <p>60+ 그림 스타일</p>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="icon-box">
+                <span class="icon-emoji">🎨</span>
+                <p>AI 일러스트</p>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="icon-box">
+                <span class="icon-emoji">📚</span>
+                <p>100+ 템플릿</p>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="icon-box">
+                <span class="icon-emoji">🗣️</span>
+                <p>10+ 음성 더빙</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI 동화책 생성 섹션 -->
+  <section class="ai-storybook-section py-5">
+    <div class="container">
+      <h2 class="section-title">
+        <span>✨</span> AI가 만드는 마법같은 이야기 <span>✨</span>
+      </h2>
+      
+      <div class="story-generator-box">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="generator-input">
+              <h3>당신의 상상을 현실로!</h3>
+              <textarea class="story-input" placeholder="예: 용감한 토끼가 우주를 여행하는 이야기를 만들어줘..."></textarea>
+              <div class="style-options">
+                <span class="style-tag">🦄 판타지</span>
+                <span class="style-tag">🚀 SF</span>
+                <span class="style-tag">🏰 동화</span>
+                <span class="style-tag">🦸 영웅</span>
+              </div>
+              <button class="btn-generate">
+                <span>🎨</span> 이야기 생성하기
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="preview-area">
+              <img src="https://via.placeholder.com/500x400/8B5CF6/ffffff?text=AI+Story+Preview" alt="Story Preview" class="img-fluid rounded-3">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 인기 동화책 코스 -->
+  <section class="storybook-courses py-5">
+    <div class="container">
+      <h2 class="section-title">
+        <span>📚</span> 인기 동화책 학습 코스 <span>🌟</span>
+      </h2>
+      
+      <div class="row g-4">
+        <% sample_courses = [
+          { 
+            title: "마법의 영어 동화", 
+            icon: "🧙‍♂️", 
+            badge: "BEST", 
+            description: "재미있는 동화로 배우는 영어 기초",
+            students: "1,234",
+            rating: "4.9",
+            price: "₩29,900"
+          },
+          { 
+            title: "코딩 모험 이야기", 
+            icon: "💻", 
+            badge: "NEW", 
+            description: "동화 속 캐릭터와 함께 배우는 프로그래밍",
+            students: "856",
+            rating: "4.8",
+            price: "₩39,900"
+          },
+          { 
+            title: "수학 왕국 탐험", 
+            icon: "🔢", 
+            badge: "HOT", 
+            description: "숫자와 도형이 살아있는 수학 동화",
+            students: "2,103",
+            rating: "4.9",
+            price: "₩34,900"
+          },
+          { 
+            title: "과학 실험실 이야기", 
+            icon: "🔬", 
+            badge: "추천", 
+            description: "신기한 과학 실험을 동화로 배워요",
+            students: "967",
+            rating: "4.7",
+            price: "₩32,900"
+          }
+        ] %>
+        
+        <% sample_courses.each do |course| %>
+          <div class="col-lg-3 col-md-6">
+            <div class="storybook-course-card">
+              <!-- Claude가 추가한 책 효과 요소들 -->
+              <div class="book-pages"></div>
+              <div class="page-flip"></div>
+              <div class="bookmark"></div>
+              
+              <div class="course-image-wrapper">
+                <div class="course-badge"><%= course[:badge] %></div>
+                <div class="course-icon"><%= course[:icon] %></div>
+              </div>
+              <div class="course-content">
+                <h3><%= course[:title] %></h3>
+                <p class="course-description"><%= course[:description] %></p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <span class="icon">👥</span>
+                    <span><%= course[:students] %></span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="icon">⭐</span>
+                    <span><%= course[:rating] %></span>
+                  </div>
+                </div>
+                <div class="course-action">
+                  <button class="btn-enroll">
+                    <%= course[:price] %> - 시작하기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- 기능 소개 -->
+  <section class="storybook-features">
+    <div class="container">
+      <h2 class="section-title">
+        <span>🎯</span> 특별한 기능들 <span>🎯</span>
+      </h2>
+      
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h4>AI 일러스트 생성</h4>
+            <p>상상하는 모든 것을 그림으로! 60가지 이상의 아트 스타일로 나만의 동화책 일러스트를 만들어보세요.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">📖</div>
+            <h4>대화형 스토리</h4>
+            <p>선택에 따라 달라지는 이야기! 아이들이 직접 참여하며 만들어가는 인터랙티브 동화책.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">🗣️</div>
+            <h4>음성 더빙</h4>
+            <p>전문 성우의 생생한 목소리로! 10가지 이상의 캐릭터 음성으로 동화를 들려드립니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 사용자 후기 -->
+  <section class="testimonials-section py-5">
+    <div class="container">
+      <h2 class="section-title">
+        <span>💝</span> 행복한 이야기들 <span>💝</span>
+      </h2>
+      
+      <div class="testimonial-carousel">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="testimonial-card">
+              <div class="stars">⭐⭐⭐⭐⭐</div>
+              <p>"아이가 매일 새로운 이야기를 만들어달라고 해요. AI가 만든 그림도 너무 예뻐요!"</p>
+              <div class="author">
+                <strong>김민지</strong>
+                <span>7살 딸 엄마</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card">
+              <div class="stars">⭐⭐⭐⭐⭐</div>
+              <p>"교실에서 아이들과 함께 동화를 만들어요. 창의력 교육에 정말 좋습니다!"</p>
+              <div class="author">
+                <strong>박선생님</strong>
+                <span>초등학교 교사</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card">
+              <div class="stars">⭐⭐⭐⭐⭐</div>
+              <p>"영어 동화로 자연스럽게 영어를 배워요. 아이가 스스로 찾아서 봅니다."</p>
+              <div class="author">
+                <strong>이준호</strong>
+                <span>9살 아들 아빠</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA 섹션 -->
+  <section class="cta-section py-5">
+    <div class="container">
+      <div class="cta-box text-center">
+        <h2>🎁 지금 시작하면 특별 혜택!</h2>
+        <p>첫 달 무료 체험 + 100개 AI 이미지 생성 크레딧</p>
+        <div class="cta-buttons">
+          <button class="btn btn-lg btn-rainbow">
+            🚀 지금 시작하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 인라인 스타일 제거: minimal_theme.scss로 이전 -->

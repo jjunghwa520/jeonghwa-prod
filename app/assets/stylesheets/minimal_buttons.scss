@@ -1,0 +1,449 @@
+// =============================================
+// 2024 미니멀 버튼 디자인 시스템
+// =============================================
+
+// 모든 그라데이션 제거, 플랫 디자인 적용
+
+// 1. 베이스 버튼 스타일 (그라데이션 없음)
+.btn-minimal {
+  // 기본 스타일
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  
+  // 그라데이션 제거, 단색 배경
+  background: #000;
+  color: #fff;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+// 2. Primary 버튼 (단색)
+.btn-minimal-primary {
+  background: #000;
+  color: #fff;
+  
+  &:hover {
+    background: #1a1a1a;
+  }
+}
+
+// 3. Secondary 버튼 (아웃라인)
+.btn-minimal-secondary {
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+  
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
+}
+
+// 4. Ghost 버튼 (투명)
+.btn-minimal-ghost {
+  background: transparent;
+  color: #666;
+  
+  &:hover {
+    background: #f5f5f5;
+    color: #000;
+  }
+}
+
+// 5. 크기 변형
+.btn-minimal-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.btn-minimal-lg {
+  padding: 16px 32px;
+  font-size: 17px;
+  border-radius: 10px;
+}
+
+// 6. 색상 변형 (플랫 컬러)
+.btn-minimal-blue {
+  background: #0066FF;
+  color: #fff;
+  
+  &:hover {
+    background: #0052CC;
+  }
+}
+
+.btn-minimal-green {
+  background: #00C896;
+  color: #fff;
+  
+  &:hover {
+    background: #00A67E;
+  }
+}
+
+.btn-minimal-red {
+  background: #FF3B30;
+  color: #fff;
+  
+  &:hover {
+    background: #E6342B;
+  }
+}
+
+.btn-minimal-yellow {
+  background: #FFD60A;
+  color: #000;
+  
+  &:hover {
+    background: #FFC300;
+  }
+}
+
+// 7. 네비게이션 버튼 (그라데이션 제거)
+.nav-btn-minimal {
+  padding: 8px 16px;
+  background: transparent;
+  color: #666;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #f5f5f5;
+    color: #000;
+  }
+  
+  &.active {
+    background: #000;
+    color: #fff;
+  }
+}
+
+// 8. 카드 내 버튼 (심플)
+.card-btn-minimal {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #1a1a1a;
+    transform: translateY(-1px);
+  }
+}
+
+// 9. 아이콘 버튼
+.btn-icon-minimal {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
+}
+
+// 10. 플로팅 액션 버튼 (FAB)
+.fab-minimal {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  z-index: 1000;
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// 11. 태그/칩 스타일 버튼
+.chip-minimal {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #e8e8e8;
+  }
+  
+  &.active {
+    background: #000;
+    color: #fff;
+  }
+}
+
+// 12. 로딩 상태
+.btn-minimal-loading {
+  color: transparent;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.6s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// 13. 버튼 그룹
+.btn-group-minimal {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  .btn-minimal {
+    border-radius: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    
+    &:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+    
+    &:last-child {
+      border-radius: 0 8px 8px 0;
+      border-right: none;
+    }
+  }
+}
+
+// 14. 모든 Bootstrap 버튼 오버라이드
+.btn {
+  // 그라데이션 제거
+  background-image: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  
+  &.btn-primary {
+    background: #000 !important;
+    border: none !important;
+    
+    &:hover {
+      background: #1a1a1a !important;
+      transform: translateY(-1px);
+    }
+  }
+  
+  &.btn-secondary {
+    background: #666 !important;
+    border: none !important;
+    
+    &:hover {
+      background: #555 !important;
+    }
+  }
+  
+  &.btn-success {
+    background: #00C896 !important;
+    border: none !important;
+    
+    &:hover {
+      background: #00A67E !important;
+    }
+  }
+  
+  &.btn-warning {
+    background: #FFD60A !important;
+    color: #000 !important;
+    border: none !important;
+    
+    &:hover {
+      background: #FFC300 !important;
+    }
+  }
+  
+  &.btn-danger {
+    background: #FF3B30 !important;
+    border: none !important;
+    
+    &:hover {
+      background: #E6342B !important;
+    }
+  }
+  
+  &.btn-outline-primary {
+    background: transparent !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+    
+    &:hover {
+      background: #000 !important;
+      color: #fff !important;
+    }
+  }
+}
+
+// 15. 히어로 버튼 스타일 개선
+.btn-hero {
+  padding: 16px 32px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  background-image: none !important;
+  transition: all 0.2s ease !important;
+  
+  &.btn-primary-hero {
+    background: #000 !important;
+    color: #fff !important;
+    
+    &:hover {
+      background: #1a1a1a !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  &.btn-secondary-hero {
+    background: transparent !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+    
+    &:hover {
+      background: #000 !important;
+      color: #fff !important;
+    }
+  }
+}
+
+// 16. 카드 내 가격 버튼 (플랫)
+.price-btn-minimal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  border: none;
+  border-radius: 8px;
+  
+  .price-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  .price-value {
+    font-size: 18px;
+    color: #000;
+    font-weight: 700;
+  }
+}
+
+// 17. 모던 토글 버튼
+.toggle-minimal {
+  display: inline-flex;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 4px;
+  
+  .toggle-option {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background: transparent;
+    color: #666;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &.active {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// 18. 반응형 조정
+@media (max-width: 768px) {
+  .btn-minimal {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .btn-minimal-lg {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+  
+  .fab-minimal {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+}

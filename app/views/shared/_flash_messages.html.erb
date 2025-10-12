@@ -1,0 +1,181 @@
+<!-- Flash 메시지 표시 (고정 헤더 위에) -->
+<% if flash.any? %>
+  <div class="flash-messages-container">
+    <% flash.each do |type, message| %>
+      <div class="alert alert-<%= type == 'notice' ? 'success' : type == 'alert' ? 'danger' : 'info' %> alert-dismissible fade show flash-alert" role="alert">
+        <% case type %>
+        <% when 'notice' %>
+          <i class="bi bi-check-circle-fill"></i>
+        <% when 'alert' %>
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        <% else %>
+          <i class="bi bi-info-circle-fill"></i>
+        <% end %>
+        <strong><%= message %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<style>
+.flash-messages-container {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 1060;
+  width: 400px;
+  pointer-events: none;
+}
+
+.flash-alert {
+  pointer-events: all;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  font-size: 0.95rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.flash-alert i {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.flash-alert.alert-success {
+  border-left: 4px solid #10b981;
+  color: #065f46;
+}
+
+.flash-alert.alert-success i {
+  color: #10b981;
+}
+
+.flash-alert.alert-danger {
+  border-left: 4px solid #ef4444;
+  color: #7f1d1d;
+}
+
+.flash-alert.alert-danger i {
+  color: #ef4444;
+}
+
+.flash-alert.alert-info {
+  border-left: 4px solid #3b82f6;
+  color: #1e3a8a;
+}
+
+.flash-alert.alert-info i {
+  color: #3b82f6;
+}
+
+.flash-alert .btn-close {
+  font-size: 0.8rem;
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.flash-alert .btn-close:hover {
+  opacity: 1;
+}
+
+/* 깔끔한 애니메이션 */
+.flash-alert {
+  animation: flashSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+             flashFadeOut 0.3s ease-in 3.5s forwards;
+}
+
+@keyframes flashSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes flashFadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .flash-messages-container {
+    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
+    top: 85px;
+  }
+  
+  .flash-alert {
+    font-size: 0.9rem;
+    padding: 0.875rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .flash-messages-container {
+    width: calc(100% - 20px);
+    right: 10px;
+    left: 10px;
+  }
+  
+  .flash-alert {
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    gap: 8px;
+  }
+}
+</style>
+
+<!-- Toast 컨테이너 -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 11;">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <i class="bi bi-bell-fill text-primary me-2"></i>
+      <strong class="me-auto">알림</strong>
+      <small class="text-muted">방금 전</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <!-- 동적으로 메시지가 삽입됩니다 -->
+    </div>
+  </div>
+</div>
+
+<script>
+// Toast 알림 표시 함수
+function showToast(message, type = 'info') {
+  const toastElement = document.getElementById('liveToast');
+  const toastBody = toastElement.querySelector('.toast-body');
+  const toastIcon = toastElement.querySelector('i');
+  
+  // 아이콘 변경
+  toastIcon.className = `bi bi-${type === 'success' ? 'check-circle-fill text-success' : 
+                                  type === 'error' ? 'exclamation-triangle-fill text-danger' : 
+                                  'info-circle-fill text-primary'} me-2`;
+  
+  toastBody.textContent = message;
+  
+  const toast = new bootstrap.Toast(toastElement);
+  toast.show();
+}
+
+// 전역적으로 사용할 수 있도록 window 객체에 추가
+window.showToast = showToast;
+</script>
+

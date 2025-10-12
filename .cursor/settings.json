@@ -1,0 +1,21 @@
+{
+  "ai.terminal.allowAutonomousCommands": true,
+  "ai.terminal.autoApprove": true,
+  "ai.terminal.turboMode": true,
+  "ai.terminal.maxConcurrentCommands": 10,
+  "ai.terminal.allowBackgroundProcesses": true,
+  "ai.terminal.allowFileSystemAccess": true,
+  "ai.terminal.allowNetworkAccess": true,
+  "ai.terminal.timeoutSeconds": 600,
+  "ai.terminal.confirmDangerousCommands": false,
+  "ai.codeGeneration.autoImplement": true,
+  "ai.codeGeneration.autoTest": true,
+  "ai.codeGeneration.autoFix": true,
+  "ai.codeGeneration.autoSave": true,
+  "ai.suggestions.enabled": true,
+  "ai.suggestions.autoAccept": true,
+  "ai.context.includeWorkspace": true,
+  "ai.context.maxFiles": 100
+}
+
+

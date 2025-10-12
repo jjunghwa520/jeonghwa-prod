@@ -1,0 +1,96 @@
+<% content_for :title, "내 강의 관리 - 정화의 서재" %>
+
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">강사 메뉴</h6>
+          <div class="list-group list-group-flush">
+            <%= link_to dashboard_user_path(@user), class: "list-group-item list-group-item-action #{'active' if action_name == 'dashboard'}" do %>
+              <i class="bi bi-speedometer2"></i> 대시보드
+            <% end %>
+            <%= link_to my_courses_user_path(@user), class: "list-group-item list-group-item-action #{'active' if action_name == 'my_courses'}" do %>
+              <i class="bi bi-book"></i> 수강 중인 강의
+            <% end %>
+            <%= link_to my_teachings_user_path(@user), class: "list-group-item list-group-item-action #{'active' if action_name == 'my_teachings'}" do %>
+              <i class="bi bi-person-video3"></i> 내가 가르치는 강의
+            <% end %>
+            <%= link_to new_course_path, class: "list-group-item list-group-item-action" do %>
+              <i class="bi bi-plus-circle"></i> 새 강의 만들기
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>내가 가르치는 강의</h2>
+        <%= link_to "새 강의 만들기", new_course_path, class: "btn btn-primary" %>
+      </div>
+      
+      <% if @taught_courses.any? %>
+        <div class="row">
+          <% @taught_courses.each do |course| %>
+            <div class="col-md-6 mb-4">
+              <div class="card course-card">
+                <div class="card-body">
+                  <h5 class="card-title"><%= course.title %></h5>
+                  <p class="card-text"><%= truncate(course.description, length: 100) %></p>
+                  
+                  <div class="row mb-3">
+                    <div class="col-sm-6">
+                      <small class="text-muted">
+                        <i class="bi bi-people"></i>
+                        수강생: <%= course.total_students %>명
+                      </small>
+                    </div>
+                    <div class="col-sm-6">
+                      <small class="text-muted">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        평점: <%= number_with_precision(course.average_rating || 0, precision: 1) %>
+                      </small>
+                    </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    <div class="col-sm-6">
+                      <small class="text-muted">
+                        <i class="bi bi-chat-dots"></i>
+                        리뷰: <%= course.reviews.count %>개
+                      </small>
+                    </div>
+                    <div class="col-sm-6">
+                      <small class="text-muted">
+                        <i class="bi bi-tag"></i>
+                        <%= course.status == 'published' ? '게시됨' : '비공개' %>
+                      </small>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex gap-2">
+                    <%= link_to "상세보기", course, class: "btn btn-outline-primary btn-sm" %>
+                    <%= link_to "수정", edit_course_path(course), class: "btn btn-outline-secondary btn-sm" %>
+                    <% if course.status == 'draft' %>
+                      <%= link_to "게시", course_path(course), data: { turbo_method: :patch, turbo_confirm: '강의를 게시하시겠습니까?' }, 
+                          params: { course: { status: 'published' } },
+                          class: "btn btn-success btn-sm" %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <i class="bi bi-book display-1 text-muted"></i>
+          <h4 class="mt-3">아직 가르치는 강의가 없습니다</h4>
+          <p class="text-muted">첫 번째 강의를 만들어보세요!</p>
+          <%= link_to "강의 만들기", new_course_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

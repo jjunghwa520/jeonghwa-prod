@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+ruby_basics:
+  title: Ruby Programming Basics
+  description: Learn the fundamentals of Ruby programming language
+  price: 49.99
+  instructor: instructor_user
+  category: Programming
+  level: beginner
+  duration: 30
+  thumbnail: ruby_basics.jpg
+  status: published
+
+advanced_rails:
+  title: Advanced Rails Development
+  description: Master advanced concepts in Ruby on Rails framework
+  price: 99.99
+  instructor: instructor_user
+  category: Web Development
+  level: advanced
+  duration: 60
+  thumbnail: rails_advanced.jpg
+  status: published

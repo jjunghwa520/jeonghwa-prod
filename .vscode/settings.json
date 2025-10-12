@@ -1,0 +1,41 @@
+{
+  "cursor.ai.terminal.allowAutonomous": true,
+  "cursor.ai.terminal.turboMode": true,
+  "cursor.ai.terminal.autoApprove": true,
+  "cursor.ai.terminal.maxConcurrentCommands": 15,
+  "cursor.ai.terminal.allowDangerousCommands": true,
+  "cursor.ai.codeGeneration.enabled": true,
+  "cursor.ai.codeGeneration.autoImplement": true,
+  "cursor.ai.codeGeneration.autoSave": true,
+  "cursor.ai.suggestions.enabled": true,
+  "cursor.ai.suggestions.autoAccept": true,
+  "cursor.ai.chat.autoScroll": true,
+  "cursor.ai.chat.showInlineCode": true,
+  "terminal.integrated.allowWorkspaceConfiguration": true,
+  "terminal.integrated.automationProfile.osx": {
+    "path": "/bin/zsh",
+    "args": ["-l"]
+  },
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh",
+      "args": ["-l"]
+    }
+  },
+  "ruby.intellisense": "rubyLSP",
+  "ruby.format": "rubocop",
+  "ruby.lint": {
+    "rubocop": {
+      "useBundler": true
+    }
+  },
+  "files.associations": {
+    "*.rb": "ruby",
+    "Gemfile": "ruby",
+    "Rakefile": "ruby",
+    "config.ru": "ruby"
+  }
+}
+
+

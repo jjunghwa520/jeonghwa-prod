@@ -1,0 +1,727 @@
+<% content_for :title, "청소년 콘텐츠 - 정화의 서재" %>
+
+<!-- 청소년 전용 히어로 섹션 -->
+<section class="modern-hero-section teen-hero">
+  <div class="hero-background">
+    <div class="hero-pattern"></div>
+    <div class="hero-gradient"></div>
+  </div>
+  
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 col-md-12 order-2 order-lg-1">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-icon">🎯</span>
+            <span class="badge-text">14-16세 전용</span>
+          </div>
+          
+          <h1 class="hero-title">
+            청소년을 위한<br>
+            <span class="title-highlight">특별한 콘텐츠</span>
+          </h1>
+          
+          <p class="hero-description">
+            꿈을 키우고 재능을 발견하는 청소년 맞춤 프로그램.<br>
+            또래들과 함께 성장하는 특별한 경험을 시작하세요.
+          </p>
+          
+          <div class="hero-stats">
+            <div class="stat-card">
+              <div class="stat-number"><%= Course.where(age: 'teen').count %></div>
+              <div class="stat-label">전체 콘텐츠</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number"><%= Course.where(category: '청소년콘텐츠').count %></div>
+              <div class="stat-label">엔터테인먼트</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number"><%= Course.where(category: '청소년교육').count %></div>
+              <div class="stat-label">교육 과정</div>
+            </div>
+          </div>
+          
+          <div class="hero-actions">
+            <%= link_to courses_path(category: 'teen_content'), class: "btn-modern primary" do %>
+              <span class="btn-icon">🚀</span>
+              <span class="btn-text">콘텐츠 탐색하기</span>
+            <% end %>
+            <%= link_to courses_path(category: 'teen_education'), class: "btn-modern secondary" do %>
+              <span class="btn-icon">📚</span>
+              <span class="btn-text">교육 과정 보기</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-6 col-md-12 order-1 order-lg-2">
+        <div class="hero-visual">
+          <div class="visual-container">
+            <div class="main-visual">
+              <div class="visual-card card-1">
+                <div class="card-icon">📱</div>
+                <div class="card-title">웹툰 & 만화</div>
+              </div>
+              <div class="visual-card card-2">
+                <div class="card-icon">🎮</div>
+                <div class="card-title">게임 개발</div>
+              </div>
+              <div class="visual-card card-3">
+                <div class="card-icon">🎨</div>
+                <div class="card-title">창작 & 디자인</div>
+              </div>
+              <div class="visual-card card-4">
+                <div class="card-icon">🌟</div>
+                <div class="card-title">진로 탐색</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 청소년 특화 기능 소개 (카테고리 중복 제거) -->
+<section class="teen-intro-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>청소년만을 위한 <span class="highlight">특별한 기능</span></h2>
+      <p>또래들과 함께 성장하는 맞춤형 학습 환경</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="intro-card content-focused">
+          <div class="intro-icon">📱</div>
+          <h4>트렌디한 엔터테인먼트</h4>
+          <p>웹툰, 애니메이션, K-POP 등 청소년이 좋아하는 최신 콘텐츠</p>
+          <%= link_to "콘텐츠 보기", courses_path(category: 'teen_content'), class: "btn-intro primary" %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="intro-card education-focused">
+          <div class="intro-icon">🎓</div>
+          <h4>실용적인 교육 과정</h4>
+          <p>게임 개발, 창작, 진로 탐색 등 미래를 준비하는 실무 교육</p>
+          <%= link_to "교육 보기", courses_path(category: 'teen_education'), class: "btn-intro secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 트렌딩 청소년 콘텐츠 -->
+<section class="featured-teen-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>🔥 지금 핫한 청소년 콘텐츠</h2>
+      <p>또래들이 가장 많이 보고 있는 트렌딩 콘텐츠를 확인해보세요!</p>
+      <div class="trending-tags">
+        <span class="trend-tag">#웹툰창작</span>
+        <span class="trend-tag">#게임개발</span>
+        <span class="trend-tag">#진로탐색</span>
+        <span class="trend-tag">#크리에이터</span>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <% @featured_teen_courses.each do |course| %>
+        <div class="col-lg-4 col-md-6">
+          <div class="course-card teen-style">
+            <div class="course-thumbnail">
+              <%
+                clean_title = course.title.gsub(/[^\w\s가-힣]/, '').strip.gsub(/\s+/, '_')
+                title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+                fallback_thumb = "generated/abstract/korean_neutral_teen_#{(course.id % 3) + 1}.jpg"
+                
+                thumb = if Rails.application.assets&.find_asset(title_specific_vertex_path)
+                  title_specific_vertex_path
+                else
+                  fallback_thumb
+                end
+              %>
+              <% if Rails.application.assets && Rails.application.assets.find_asset(thumb) %>
+                <%= image_tag thumb, alt: course.title %>
+              <% end %>
+              <div class="course-overlay">
+                <span class="course-category"><%= course.category %></span>
+              </div>
+            </div>
+            <div class="course-info">
+              <h4><%= link_to course.title, course_path(course), class: "course-title" %></h4>
+              <p class="course-instructor">
+                <i class="bi bi-person-circle"></i>
+                <%= course.instructor.name %>
+              </p>
+              <div class="course-meta">
+                <div class="rating">
+                  <% 5.times do |i| %>
+                    <i class="bi bi-star<%= i < course.average_rating ? '-fill' : '' %> text-warning"></i>
+                  <% end %>
+                  <span class="rating-text">(<%= course.reviews.count %>)</span>
+                </div>
+                <div class="duration">
+                  <i class="bi bi-clock"></i>
+                  <%= course.duration / 60 %>시간 <%= course.duration % 60 %>분
+                </div>
+              </div>
+              
+              <!-- 가격 정보 (카드 하단) -->
+              <div class="course-price-section mt-3">
+                <% if course.category == "구연동화" || course.category == "storytelling" %>
+                  <span class="badge bg-warning text-dark">구독형</span>
+                  <div class="course-price subscription-price">9,900원/월</div>
+                <% elsif course.price == 0 %>
+                  <span class="badge bg-success">무료</span>
+                <% else %>
+                  <div class="course-price">
+                    <%= number_to_currency(course.price, unit: "", precision: 0) %>원
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="text-center mt-5">
+      <%= link_to "모든 청소년 콘텐츠 보기", courses_path(age: 'teen'), class: "btn-outline-teen" %>
+    </div>
+  </div>
+</section>
+
+<!-- 청소년 특화 기능 소개 -->
+<section class="teen-features-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>청소년만을 위한 <span class="highlight">특별한 기능</span></h2>
+      <p>청소년의 특성을 고려한 맞춤형 학습 환경을 제공합니다</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <span class="icon-emoji">🎯</span>
+          </div>
+          <h4>맞춤형 진로 가이드</h4>
+          <p>개인의 관심사와 적성을 분석하여 최적의 진로 방향을 제시합니다.</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <span class="icon-emoji">👥</span>
+          </div>
+          <h4>또래 소통 공간</h4>
+          <p>같은 관심사를 가진 또래들과 소통하며 함께 성장할 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <span class="icon-emoji">🏆</span>
+          </div>
+          <h4>성취 인증 시스템</h4>
+          <p>학습 성과를 인증받고 포트폴리오로 활용할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* 청소년 인트로 섹션 */
+.teen-intro-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.intro-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.intro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.intro-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.intro-card h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.intro-card p {
+  color: #718096;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.btn-intro {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  min-height: 44px;
+  
+  &.primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      color: white;
+    }
+  }
+  
+  &.secondary {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+      color: white;
+    }
+  }
+}
+
+/* 트렌딩 태그 스타일 */
+.trending-tags {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.trend-tag {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+/* 청소년 카테고리 섹션 */
+.teen-categories-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  position: relative;
+}
+
+.teen-categories-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.teen-categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.teen-category-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.teen-category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.teen-category-card:hover::before {
+  transform: scaleX(1);
+}
+
+.teen-category-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.category-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.teen-category-card:hover .category-icon {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  transform: scale(1.1);
+}
+
+.category-emoji {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.teen-category-card h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.category-desc {
+  font-size: 1.1rem;
+  color: #4a5568;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.category-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.category-features li {
+  padding: 8px 0;
+  font-size: 1rem;
+  color: #2d3748;
+  font-weight: 500;
+  position: relative;
+  padding-left: 24px;
+}
+
+.category-features li::before {
+  content: '✨';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  font-size: 0.9rem;
+}
+
+.btn-teen {
+  display: inline-block;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-teen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-teen:hover::before {
+  left: 100%;
+}
+
+.btn-teen.content {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-teen.content:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  color: white;
+}
+
+.btn-teen.education {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+}
+
+.btn-teen.education:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
+  color: white;
+}
+
+/* 특별 효과 */
+.content-card {
+  position: relative;
+}
+
+.content-card::after {
+  content: '📱✨';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.2rem;
+  opacity: 0.3;
+}
+
+.education-card {
+  position: relative;
+}
+
+.education-card::after {
+  content: '🎓💡';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.2rem;
+  opacity: 0.3;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .teen-categories-section {
+    padding: 60px 0;
+  }
+  
+  .teen-categories {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  
+  .teen-category-card {
+    padding: 32px 24px;
+  }
+  
+  .category-icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .category-emoji {
+    font-size: 2.5rem;
+  }
+  
+  .teen-category-card h3 {
+    font-size: 1.5rem;
+  }
+  
+  .btn-teen {
+    padding: 14px 28px;
+    font-size: 0.9rem;
+  }
+}
+
+.featured-teen-section {
+  padding: 80px 0;
+  background: white;
+}
+
+.course-card.teen-style {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.course-card.teen-style:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.course-thumbnail {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f8fafc;
+  width: 100%;
+}
+
+.course-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.course-card.teen-style:hover .course-thumbnail img {
+  transform: scale(1.05);
+}
+
+.course-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.course-category {
+  background: rgba(102, 126, 234, 0.9);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* 썸네일 오버레이 가격 스타일 제거됨 - 카드 하단으로 이동 */
+
+.course-info {
+  padding: 1.5rem;
+}
+
+.course-title {
+  color: #2d3748;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.course-title:hover {
+  color: #667eea;
+}
+
+.course-instructor {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.course-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.btn-outline-teen {
+  padding: 1rem 2rem;
+  border: 2px solid #667eea;
+  color: #667eea;
+  background: transparent;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-teen:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.teen-features-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.feature-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-emoji {
+  font-size: 2rem;
+}
+
+.feature-card h4 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #2d3748;
+}
+
+.feature-card p {
+  color: #718096;
+  line-height: 1.6;
+}
+
+/* 모바일 반응형 - 히어로 관련 항목 제거, 카테고리 카드만 유지 */
+</style>

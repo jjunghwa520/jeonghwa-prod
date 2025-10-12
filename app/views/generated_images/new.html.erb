@@ -1,0 +1,112 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">AI 이미지 생성</h3>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @generated_image, local: true do |f| %>
+            <% if @generated_image.errors.any? %>
+              <div class="alert alert-danger">
+                <ul class="mb-0">
+                  <% @generated_image.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            
+            <div class="mb-3">
+              <%= f.label :prompt, "이미지 설명 (프롬프트)", class: "form-label" %>
+              <%= f.text_area :prompt, class: "form-control", rows: 3, 
+                  placeholder: "생성하고 싶은 이미지를 자세히 설명해주세요..." %>
+              <small class="form-text text-muted">
+                예: "현대적인 온라인 교육 플랫폼의 메인 배너, 밝고 전문적인 느낌"
+              </small>
+            </div>
+            
+            <div class="mb-3">
+              <%= f.label :image_type, "이미지 유형", class: "form-label" %>
+              <%= f.select :image_type, 
+                  options_for_select([
+                    ["배너", "banner"],
+                    ["썸네일", "thumbnail"],
+                    ["히어로 이미지", "hero"],
+                    ["코스 이미지", "course_image"],
+                    ["프로필 이미지", "profile"]
+                  ]), 
+                  { prompt: "이미지 유형을 선택하세요" },
+                  class: "form-select" %>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <%= f.label :style, "스타일", class: "form-label" %>
+                  <%= f.select :style,
+                      options_for_select([
+                        ["모던", "modern"],
+                        ["교육적", "educational"],
+                        ["전문적", "professional"],
+                        ["창의적", "creative"]
+                      ], "modern"),
+                      {},
+                      class: "form-select" %>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <%= f.label :size, "크기", class: "form-label" %>
+                  <%= f.select :size,
+                      options_for_select([
+                        ["정사각형 (1024x1024)", "1024x1024"],
+                        ["배너 (1920x600)", "1920x600"],
+                        ["썸네일 (800x600)", "800x600"]
+                      ], "1024x1024"),
+                      {},
+                      class: "form-select" %>
+                </div>
+              </div>
+            </div>
+            
+            <% if @course %>
+              <%= f.hidden_field :course_id, value: @course.id %>
+              <div class="alert alert-info">
+                <strong>코스:</strong> <%= @course.title %>
+              </div>
+            <% end %>
+            
+            <div class="mb-3">
+              <label class="form-label">추가 정보 (선택사항)</label>
+              <div class="mb-2">
+                <%= text_field_tag "generated_image[metadata][title]", nil, 
+                    class: "form-control", placeholder: "제목" %>
+              </div>
+              <div class="mb-2">
+                <%= text_field_tag "generated_image[metadata][description]", nil, 
+                    class: "form-control", placeholder: "부제목 또는 설명" %>
+              </div>
+            </div>
+            
+            <div class="alert alert-warning">
+              <i class="bi bi-info-circle"></i>
+              <strong>참고사항:</strong>
+              <ul class="mb-0 mt-2">
+                <li>이미지 생성에는 10-30초 정도 소요됩니다.</li>
+                <li>생성된 이미지는 자동으로 저장됩니다.</li>
+                <li>하루 최대 <%= ENV['MAX_IMAGE_GENERATION_REQUESTS_PER_HOUR'] || 100 %>개까지 생성 가능합니다.</li>
+              </ul>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <%= f.submit "이미지 생성 시작", class: "btn btn-primary btn-lg" %>
+              <%= link_to "취소", :back, class: "btn btn-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

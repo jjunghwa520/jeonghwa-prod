@@ -1,0 +1,1 @@
+projects/gen-lang-client-0492798913/locations/us-central1/publishers/google/models/veo-2.0-generate-001/operations/ba58ea24-a063-4518-ab2f-a93324127ead

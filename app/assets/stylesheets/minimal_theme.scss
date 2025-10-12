@@ -1,0 +1,76 @@
+@import "tokens";
+
+body.minimal-theme {
+  font-family: $font-sans;
+  background: $color-bg;
+  color: $color-text;
+}
+
+.minimal-theme .storybook-navbar {
+  background: $color-surface;
+  border-radius: $radius-lg;
+  margin: $space-3;
+  padding: $space-2 $space-4;
+  box-shadow: $shadow-sm;
+  .navbar-brand { font-weight: 800; color: $color-text; }
+  .nav-link {
+    color: $color-muted;
+    border-radius: 9999px;
+    padding: 6px 14px !important;
+    &:hover { background: #f3f4f6; color: $color-text; }
+    &.active { background: $color-primary; color: #fff !important; }
+  }
+}
+
+.minimal-theme .storybook-hero {
+  padding: $space-6 0; text-align: left;
+  .hero-content { background: transparent; box-shadow: none; padding: 0; }
+  h1 { font-weight: 800; font-size: 44px; color: $color-text; animation: none; letter-spacing: -0.02em; }
+  .subtitle { color: $color-muted; margin-top: $space-2; font-size: 18px; }
+  .cta-buttons { gap: $space-2; justify-content: flex-start; }
+  .btn-storybook { border-radius: $radius-md; font-weight: 700; letter-spacing: 0; }
+  .btn-primary-story { background: $color-primary; color: #fff; box-shadow: none; }
+  .btn-secondary-story { background: #f3f4f6; color: $color-text; }
+}
+
+.minimal-theme .feature-icons .icon-box {
+  background: $color-surface; border: 1px solid $color-border; border-radius: $radius-md; box-shadow: none;
+}
+
+.minimal-theme .storybook-courses .storybook-course-card {
+  border-radius: $radius-lg; box-shadow: $shadow-sm; overflow: hidden; transform: none !important;
+  &:hover { transform: translateY(-4px); box-shadow: $shadow-md; }
+  .page-flip, .bookmark { display: none; }
+  .course-image-wrapper { height: 200px; background: #eef2ff; }
+  .course-badge { background: #f3f4f6; color: $color-text; box-shadow: none; }
+  .course-icon { box-shadow: none; }
+  .course-content { padding: 28px 20px; }
+  h3 { font-weight: 700; color: $color-text; }
+  .course-description { color: $color-muted; }
+  .btn-enroll { background: $color-primary; color: #fff; border-radius: $radius-md; }
+}
+
+.minimal-theme .feature-card, .minimal-theme .testimonial-card {
+  background: $color-surface; border: 1px solid $color-border; border-radius: $radius-lg; box-shadow: none; padding: $space-4;
+}
+
+.minimal-theme .cta-section .cta-box {
+  background: #111827; color: #fff; border-radius: $radius-lg; box-shadow: $shadow-lg;
+  .btn-rainbow { background: $color-primary; animation: none; border-radius: $radius-md; }
+}
+
+.minimal-theme .storybook-footer {
+  background: $color-surface; border-radius: $radius-lg $radius-lg 0 0; box-shadow: none; border-top: 1px solid $color-border;
+}
+
+/* Motion reduction & intensity control */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Inline-style 클래스들의 미니멀 재정의 */
+.minimal-theme .btn-generate { background: $color-primary; border-radius: $radius-md; box-shadow: none; }
+.minimal-theme .style-tag { background: #f3f4f6; color: $color-text; }
+.minimal-theme .icon-emoji { font-size: 32px; }
+
+

@@ -1,0 +1,59 @@
+# 로컬 개발 서버 배포 설정
+service: kicda_jh_local
+
+# 로컬 Docker 이미지
+image: kicda-jh-local
+
+# 로컬 서버 배포
+servers:
+  web:
+    - 127.0.0.1
+
+# 로컬 프록시 설정 (SSL 비활성화)
+proxy:
+  ssl: false
+  host: localhost
+
+# 로컬 Docker Hub 사용 안함
+registry:
+  server: registry.localhost
+  username: local
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# 환경 변수 설정
+env:
+  secret:
+    - RAILS_MASTER_KEY
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    RAILS_ENV: production
+    RAILS_LOG_TO_STDOUT: true
+    RAILS_SERVE_STATIC_FILES: true
+    DB_HOST: host.docker.internal
+    
+# 별칭 명령어
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+# 볼륨 설정 (로컬 스토리지)
+volumes:
+  - "./storage:/rails/storage"
+  - "./log:/rails/log"
+
+# 자산 경로
+asset_path: /rails/public/assets
+
+# 빌더 설정
+builder:
+  multiarch: false
+  cache:
+    type: registry
+  
+# SSH 설정 (로컬이므로 비활성화)
+ssh:
+  user: root
+

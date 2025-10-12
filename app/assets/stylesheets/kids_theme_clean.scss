@@ -1,0 +1,267 @@
+/* 키즈 친화적 테마 스타일 - 정리된 버전 */
+
+/* 떠다니는 요소들 */
+.floating-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cloud {
+  position: absolute;
+  width: 120px;
+  height: 60px;
+  background: white;
+  border-radius: 100px;
+  opacity: 0.8;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    top: -25px;
+    left: 20px;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    top: -15px;
+    right: 20px;
+  }
+}
+
+.cloud-1 {
+  top: 20%;
+  left: 10%;
+  animation: float 20s infinite ease-in-out;
+}
+
+.cloud-2 {
+  top: 40%;
+  right: 10%;
+  animation: float 25s infinite ease-in-out reverse;
+}
+
+.star {
+  position: absolute;
+  font-size: 24px;
+  animation: twinkle 3s infinite;
+}
+
+.star-1 { top: 15%; left: 30%; animation-delay: 0s; }
+.star-2 { top: 25%; right: 25%; animation-delay: 1s; }
+.star-3 { top: 60%; left: 20%; animation-delay: 2s; }
+
+.rainbow {
+  position: absolute;
+  width: 300px;
+  height: 150px;
+  top: 30%;
+  right: 5%;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    rgba(255,0,0,0.2) 14%, 
+    rgba(255,127,0,0.2) 28%, 
+    rgba(255,255,0,0.2) 42%, 
+    rgba(0,255,0,0.2) 56%, 
+    rgba(0,0,255,0.2) 70%, 
+    rgba(75,0,130,0.2) 84%, 
+    transparent 100%);
+  border-radius: 150px 150px 0 0;
+  transform: rotate(-10deg);
+}
+
+/* 애니메이션 */
+@keyframes float {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(30px) translateY(-20px); }
+  50% { transform: translateX(-20px) translateY(10px); }
+  75% { transform: translateX(40px) translateY(-10px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes rainbow-shift {
+  to { background-position: 200% center; }
+}
+
+/* 컬렉션 섹션 */
+.collections-section {
+  padding: 60px 0 40px;
+  background: #fff;
+}
+
+.collection-block { margin-bottom: 36px; }
+.collection-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.collection-header h3 { margin:0; font-size:20px; color: var(--dark); }
+
+.collection-badge { padding: 6px 12px; border-radius: 999px; font-size:12px; font-weight:800; color:white; }
+.collection-badge.bedtime { background:#6366F1; }
+.collection-badge.nature  { background:#10B981; }
+.collection-badge.rainbow { display: none !important; }
+
+.collection-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  gap: 24px; 
+  margin: 2rem 0; 
+  width: 100%; 
+}
+
+.collection-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.collection-thumb .chip.small { position:absolute; bottom:8px; left:8px; }
+.collection-info { padding:10px 12px; }
+.collection-info h4 { margin:0 0 4px 0; font-size:14px; color: var(--dark); }
+.collection-info p { margin:0; font-size:12px; color: var(--gray-500); }
+
+@media (max-width: 768px) {
+  .collection-grid { 
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    gap: 1rem; 
+  }
+}
+
+/* 연령별 카드 섹션 */
+.age-selection-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #FFF5F7 0%, #F0F9FF 100%);
+  
+  .age-cards {
+    margin-top: 48px;
+  }
+  
+  .age-card {
+    border-radius: 20px !important;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #FF6B6B, #4ECDC4, #FFE66D);
+    }
+    
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+    
+    .age-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #FFE5CC 0%, #FFD4B8 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .age-emoji {
+        font-size: 48px;
+      }
+    }
+    
+    h3 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    
+    .age-desc {
+      font-size: 16px;
+      color: var(--gray-600);
+      margin-bottom: 24px;
+    }
+    
+    .age-features {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 32px;
+      text-align: left;
+      
+      li {
+        padding: 8px 0;
+        font-size: 14px;
+        color: var(--gray-700);
+      }
+    }
+  }
+  
+  .btn-age {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    &.baby {
+      background: linear-gradient(135deg, #FFC0E3 0%, #F687B3 100%);
+      color: white;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(246, 135, 179, 0.4);
+      }
+    }
+    
+    &.toddler {
+      background: linear-gradient(135deg, #B3D9FF 0%, #60A5FA 100%);
+      color: white;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
+      }
+    }
+    
+    &.elementary {
+      background: linear-gradient(135deg, #DDB7FF 0%, #A78BFA 100%);
+      color: white;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4);
+      }
+    }
+    
+    &.teen {
+      background: linear-gradient(135deg, #A7F3D0 0%, #34D399 100%);
+      color: white;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+      }
+    }
+  }
+}
+
+
+

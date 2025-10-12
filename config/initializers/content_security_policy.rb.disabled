@@ -1,0 +1,37 @@
+# Define an application-wide content security policy.
+# See the Securing Rails Applications Guide for more information:
+# https://guides.rubyonrails.org/security.html#content-security-policy-header
+
+# 개발 환경에서는 CSP를 완전히 비활성화
+if Rails.env.development?
+  # CSP 설정 자체를 비활성화
+  Rails.logger.info "CSP가 개발 환경에서 비활성화되었습니다"
+else
+  # 프로덕션 환경에서만 CSP 적용
+  Rails.application.configure do
+    config.content_security_policy do |policy|
+      cdn_domains = %w[
+        https://cdn.jsdelivr.net
+        https://fonts.googleapis.com
+        https://fonts.gstatic.com
+        https://*.cloudfront.net
+      ]
+
+      policy.default_src :self, :https
+      policy.font_src    :self, :https, :data, *cdn_domains
+      policy.img_src     :self, :https, :data
+      policy.media_src   :self, :https, *cdn_domains
+      policy.object_src  :none
+      policy.script_src  :self, :https, *cdn_domains
+      policy.style_src   :self, :https, :unsafe_inline, *cdn_domains
+      policy.connect_src :self, :https
+    end
+
+    # Generate session nonces for permitted importmap, inline scripts, and inline styles.
+    config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
+    config.content_security_policy_nonce_directives = %w[script-src style-src]
+
+    # Report violations without enforcing the policy.
+    # config.content_security_policy_report_only = true
+  end
+end

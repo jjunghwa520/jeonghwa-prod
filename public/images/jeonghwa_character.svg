@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="240" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 정화 캐릭터 플레이스홀더 -->
+  <rect width="200" height="240" fill="transparent"/>
+  <text x="100" y="120" text-anchor="middle" fill="#667eea" font-size="16" font-family="sans-serif">정화 캐릭터</text>
+  <text x="100" y="140" text-anchor="middle" fill="#667eea" font-size="12" font-family="sans-serif">(이미지 교체 필요)</text>
+</svg>
+

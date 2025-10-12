@@ -1,0 +1,64 @@
+# Cursor ignore file - AI 컨텍스트에서 제외할 파일들
+
+# 임시 파일들
+tmp/
+*.tmp
+*.temp
+*.log
+*.pid
+*.swp
+*.swo
+*~
+
+# 캐시 파일들
+.cache/
+node_modules/
+vendor/bundle/
+.bundle/
+.sass-cache/
+
+# 데이터베이스 파일들
+*.sqlite3
+*.db
+storage/*.sqlite3
+
+# 빌드 및 컴파일된 파일들
+public/assets/
+public/packs/
+public/webpack/
+app/assets/builds/
+
+# 민감한 정보가 포함된 파일들
+.env*
+config/credentials.yml.enc
+config/master.key
+.kamal/secrets
+*.key
+*.pem
+*.crt
+
+# 로그 파일들
+log/
+*.log
+
+# 테스트 커버리지
+coverage/
+
+# 운영체제 파일들
+.DS_Store
+Thumbs.db
+
+# IDE 설정 파일들 (자체 설정 파일 제외)
+.idea/
+*.sublime-*
+
+# 대용량 파일들
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Bootsnap 캐시
+tmp/cache/bootsnap/
+
+

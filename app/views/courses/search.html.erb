@@ -1,0 +1,248 @@
+<% content_for :title, "강의 검색 - 정화의 서재" %>
+
+<!-- 검색 히어로 섹션 -->
+<section class="hero-section-small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="hero-title-general mb-3">🔍 강의 검색</h1>
+        <!-- 검색 폼 -->
+        <%= form_with url: search_courses_path, method: :get, local: true, class: "search-form mb-4" do |f| %>
+          <div class="row g-3 justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+              <%= f.text_field :q, placeholder: "강의명, 강사명, 키워드로 검색하세요", 
+                              class: "form-control form-control-lg search-input",
+                              value: @query %>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+              <%= f.submit "🔍 검색", class: "btn btn-warning btn-lg w-100 search-btn" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      
+      <!-- 검색 결과 정보 -->
+      <% if @query.present? %>
+        <div class="mb-3">
+          <p class="text-muted">
+            "<strong><%= @query %></strong>"에 대한 검색 결과 
+            <span class="badge bg-primary"><%= @courses.count %></span>개
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 필터 및 정렬 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 bg-light">
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- 카테고리 필터 -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">카테고리</label>
+              <div class="d-flex flex-wrap gap-2">
+                <%= link_to "전체", search_courses_path(q: @query), 
+                            class: "btn #{'btn-primary' if params[:category].blank?} #{'btn-outline-primary' unless params[:category].blank?} btn-sm" %>
+                <% @categories.each do |category| %>
+                  <%= link_to category, search_courses_path(q: @query, category: category), 
+                              class: "btn #{'btn-primary' if params[:category] == category} #{'btn-outline-primary' unless params[:category] == category} btn-sm" %>
+                <% end %>
+              </div>
+            </div>
+            
+            <!-- 레벨 필터 -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">레벨</label>
+              <div class="d-flex flex-wrap gap-2">
+                <%= link_to "전체", search_courses_path(q: @query, category: params[:category]), 
+                            class: "btn #{'btn-primary' if params[:level].blank?} #{'btn-outline-primary' unless params[:level].blank?} btn-sm" %>
+                <% @levels.each do |level| %>
+                  <% level_name = case level
+                                  when 'beginner' then '초급'
+                                  when 'intermediate' then '중급'  
+                                  when 'advanced' then '고급'
+                                  end %>
+                  <%= link_to level_name, search_courses_path(q: @query, category: params[:category], level: level), 
+                              class: "btn #{'btn-primary' if params[:level] == level} #{'btn-outline-primary' unless params[:level] == level} btn-sm" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 검색 결과 -->
+  <div class="content-grid">
+    <% if @courses.any? %>
+      <% @courses.each do |course| %>
+        <%= link_to course_path(course), class: "content-card" do %>
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            <% 
+              # 제목별 맞춤 Vertex AI 이미지 최우선 적용
+              clean_title = course.title.gsub(/[^\w\s가-힣]/, '').strip.gsub(/\s+/, '_')
+              
+              # 청소년 콘텐츠는 teen_title_specific_vertex 우선 사용
+              teen_title_specific_path = "generated/teen_title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+              title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+              title_matched_path = ThumbnailMatcherHelper.get_title_specific_thumbnail(course.title, course.id) if defined?(ThumbnailMatcherHelper)
+              
+              category = course.category&.downcase || 'ebook'
+              index = course.id % 6 + 1
+              thumbnail_path = "generated/thumbnails/#{category}_#{index}.svg"
+              
+              # 청소년 콘텐츠 우선 처리
+              if course.age == 'teen' && Rails.application.assets && Rails.application.assets.find_asset(teen_title_specific_path)
+                final_thumb = teen_title_specific_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(title_specific_vertex_path)
+                final_thumb = title_specific_vertex_path
+              elsif title_matched_path && Rails.application.assets && Rails.application.assets.find_asset(title_matched_path)
+                final_thumb = title_matched_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(thumbnail_path)
+                final_thumb = thumbnail_path
+              elsif course.thumbnail.present?
+                final_thumb = course.thumbnail
+              else
+                final_thumb = nil
+              end
+            %>
+            
+            <% if final_thumb %>
+              <%= image_tag final_thumb, alt: course.title, class: "thumbnail-image" %>
+            <% else %>
+              <div class="thumbnail-placeholder">
+                <span class="thumbnail-icon">
+                  <%= course.category == "education" ? "✏️" : (course.category == "storytelling" ? "🎭" : "📖") %>
+                </span>
+              </div>
+            <% end %>
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge <%= 
+              if course.category == "전자동화책" || course.category == "ebook"
+                'ebook'
+              elsif course.category == "구연동화" || course.category == "storytelling"
+                'storytelling'
+              else
+                'education'
+              end
+            %>">
+              <%= 
+                if course.category == "전자동화책" || course.category == "ebook"
+                  '전자책'
+                elsif course.category == "구연동화" || course.category == "storytelling"
+                  '구연동화'
+                else
+                  '교육'
+                end
+              %>
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4><%= course.title.truncate(20) %></h4>
+            <p class="content-author"><%= course.instructor.name %></p>
+            <div class="content-footer">
+              <span class="content-rating">
+                <% if course.reviews.any? %>
+                  ⭐ <%= course.reviews.average(:rating).round(1) %>
+                <% else %>
+                  <span class="text-muted">평가 없음</span>
+                <% end %>
+              </span>
+              <span class="content-price">
+                <% if course.price == 0 %>
+                  무료
+                <% else %>
+                  <%= number_to_currency(course.price, unit: "", precision: 0) %>원
+                <% end %>
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                <%= 
+                  case course.age
+                  when 'baby' then '0-3세'
+                  when 'toddler' then '4-7세'
+                  when 'elementary' then '8-12세'
+                  when 'teen' then '14-16세'
+                  else '전체'
+                  end
+                %>
+              </span>
+              <span class="chip length">
+                <%= 
+                  if course.duration.to_i < 3
+                    '<3분'
+                  elsif course.duration.to_i <= 7
+                    '3-7분'
+                  elsif course.duration.to_i <= 15
+                    '8-15분'
+                  else
+                    '>15분'
+                  end
+                %>
+              </span>
+              <% if course.price.to_i == 0 %>
+                <span class="chip free">무료</span>
+              <% end %>
+              <% if course.reviews.count.to_i >= 5 %>
+                <span class="chip popular">인기</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="col-12">
+        <div class="text-center py-5">
+          <i class="bi bi-search display-1 text-muted mb-3"></i>
+          <% if @query.present? %>
+            <h4 class="text-muted">검색 결과가 없습니다</h4>
+            <p class="text-muted mb-4">
+              "<strong><%= @query %></strong>"와 일치하는 강의를 찾을 수 없습니다.<br>
+              다른 키워드로 검색해보세요.
+            </p>
+          <% else %>
+            <h4 class="text-muted">검색어를 입력하세요</h4>
+            <p class="text-muted mb-4">원하는 강의나 키워드를 검색해보세요.</p>
+          <% end %>
+          <%= link_to "전체 강의 보기", courses_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 인기 검색어 (검색 결과가 없을 때만 표시) -->
+  <% if @courses.empty? %>
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="card border-0 bg-light">
+          <div class="card-body">
+            <h5 class="fw-bold mb-3">인기 검색어</h5>
+            <div class="d-flex flex-wrap gap-2">
+              <% %w[React Vue JavaScript Python Django Rails 웹개발 앱개발 데이터분석].each do |keyword| %>
+                <%= link_to keyword, search_courses_path(q: keyword), 
+                            class: "btn btn-outline-primary btn-sm" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<!-- 인라인 스타일 제거: hero-section-small는 unified_hero_design.scss에서 관리 -->

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>정화의 서재 · 아이의 상상과 배움을 잇는 조용한 독서 공간</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="정화의 서재 – 아이의 상상과 배움을 잇는 조용한 독서 공간. 추천 그림책과 학습 자료를 큐레이션하고, 편안한 독서 경험을 제공합니다.">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="canonical" href="/">
+    <meta property="og:title" content="정화의 서재">
+    <meta property="og:description" content="아이의 상상과 배움을 잇는 조용한 독서 공간">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="/">
+    <meta property="og:image" content="/og-image.png">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <!-- Storybook Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="minimal-theme">
+    <!-- 동화책 네비게이션 -->
+    <nav class="storybook-navbar">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="navbar-brand">
+            <span>📚</span> 정화의 서재
+          </div>
+          
+          <div class="nav-menu d-flex align-items-center">
+            <%= link_to "홈", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+            <%= link_to "카테고리", courses_path, class: "nav-link" %>
+            <%= link_to "라이브러리", "#", class: "nav-link" %>
+            <%= link_to "문의", "#", class: "nav-link" %>
+            
+            <% if logged_in? %>
+              <div class="dropdown ms-3">
+                <button class="btn btn-storybook-user dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  <span>👤</span> <%= current_user.name %>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><%= link_to "🎨 내 작품", dashboard_user_path(current_user), class: "dropdown-item" %></li>
+                  <li><%= link_to "📚 내 학습", my_courses_user_path(current_user), class: "dropdown-item" %></li>
+                  <li><%= link_to "⚙️ 설정", edit_user_path(current_user), class: "dropdown-item" %></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><%= link_to "👋 로그아웃", logout_path, method: :delete, class: "dropdown-item" %></li>
+                </ul>
+              </div>
+            <% else %>
+              <%= link_to login_path, class: "btn btn-login-story ms-3" do %>
+                <span>🔑</span> 로그인
+              <% end %>
+              <%= link_to signup_path, class: "btn btn-signup-story ms-2" do %>
+                <span>🎉</span> 가입하기
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 알림 메시지 -->
+    <% if notice.present? %>
+      <div class="storybook-alert alert-success">
+        <span>✅</span> <%= notice %>
+      </div>
+    <% end %>
+    
+    <% if alert.present? %>
+      <div class="storybook-alert alert-warning">
+        <span>⚠️</span> <%= alert %>
+      </div>
+    <% end %>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+      <%= yield %>
+    </main>
+
+    <!-- 동화책 푸터 -->
+    <footer class="storybook-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            📚 정화의 서재
+          </div>
+          
+          <p class="footer-tagline">
+            AI와 함께 만드는 꿈과 상상의 배움터
+          </p>
+          
+          <div class="social-links">
+            <a href="#"><span>📘</span></a>
+            <a href="#"><span>🐦</span></a>
+            <a href="#"><span>📷</span></a>
+            <a href="#"><span>▶️</span></a>
+          </div>
+          
+          <div class="footer-links mt-4">
+            <a href="#">이용약관</a>
+            <span>•</span>
+            <a href="#">개인정보처리방침</a>
+            <span>•</span>
+            <a href="#">고객센터</a>
+            <span>•</span>
+            <a href="#">제휴문의</a>
+          </div>
+          
+          <p class="copyright mt-3">
+            © 2025 정화의 서재. Made with 💝 and AI
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+/* 네비게이션 추가 스타일 */
+.btn-storybook-user {
+  background: linear-gradient(45deg, #8B5CF6, #EC4899);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: 600;
+}
+
+.btn-login-story {
+  background: linear-gradient(45deg, #34D399, #3B82F6);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-signup-story {
+  background: linear-gradient(45deg, #FCD34D, #FB923C);
+  color: #7C3AED;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-login-story:hover,
+.btn-signup-story:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* 알림 스타일 */
+.storybook-alert {
+  margin: 20px;
+  padding: 15px 30px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideDown 0.5s ease;
+}
+
+.storybook-alert.alert-success {
+  background: linear-gradient(45deg, #34D399, #3B82F6);
+  color: white;
+}
+
+.storybook-alert.alert-warning {
+  background: linear-gradient(45deg, #FCD34D, #FB923C);
+  color: #7C3AED;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 푸터 스타일 */
+.footer-tagline {
+  color: #6B7280;
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #9CA3AF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #8B5CF6;
+}
+
+.copyright {
+  color: #9CA3AF;
+  font-size: 14px;
+}
+</style>

@@ -1,0 +1,37 @@
+<!-- 개선된 동화책 코스 카드 구조 -->
+<div class="storybook-course-card">
+  <!-- 책 페이지 효과 -->
+  <div class="book-pages"></div>
+  
+  <!-- 페이지 펼침 애니메이션 레이어 -->
+  <div class="page-flip"></div>
+  
+  <!-- 책갈피 -->
+  <div class="bookmark"></div>
+  
+  <!-- 기존 내용 -->
+  <div class="course-image-wrapper">
+    <div class="course-badge"><%= course[:badge] %></div>
+    <div class="course-icon"><%= course[:icon] %></div>
+  </div>
+  
+  <div class="course-content">
+    <h3><%= course[:title] %></h3>
+    <p class="course-description"><%= course[:description] %></p>
+    <div class="course-meta">
+      <div class="meta-item">
+        <span class="icon">👥</span>
+        <span><%= course[:students] %></span>
+      </div>
+      <div class="meta-item">
+        <span class="icon">⭐</span>
+        <span><%= course[:rating] %></span>
+      </div>
+    </div>
+    <div class="course-action">
+      <button class="btn-enroll">
+        <%= course[:price] %> - 시작하기
+      </button>
+    </div>
+  </div>
+</div>

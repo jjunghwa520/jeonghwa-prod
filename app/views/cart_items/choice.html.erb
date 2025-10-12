@@ -1,0 +1,126 @@
+<% content_for :title, "수강 신청 완료 - 정화의 서재" %>
+
+<div class="choice-toast">
+  <div class="toast-content">
+    <div class="toast-icon">✅</div>
+    <div class="toast-text">
+      <strong><%= @course.title %></strong>이(가) 장바구니에 추가되었습니다
+    </div>
+  </div>
+  <div class="toast-actions">
+    <%= link_to "장바구니 보기", cart_items_path, class: "btn btn-primary btn-sm" %>
+    <%= link_to "계속 쇼핑", courses_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+</div>
+
+<style>
+.choice-toast {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 320px;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border-left: 4px solid #28a745;
+  z-index: 1060;
+  animation: slideInRight 0.3s ease-out, slideOutRight 0.3s ease-in 4s forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.toast-text {
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.toast-text strong {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.toast-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toast-actions .btn {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.toast-actions .btn:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .choice-toast {
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .toast-actions {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}
+</style>
+
+<script>
+// 4초 후 자동으로 강의 목록으로 이동 (토스트 애니메이션과 맞춤)
+setTimeout(function() {
+  window.location.href = '<%= courses_path %>';
+}, 4300);
+
+// ESC 키로 닫기
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    window.location.href = '<%= courses_path %>';
+  }
+});
+</script>

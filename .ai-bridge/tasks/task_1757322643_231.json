@@ -1,0 +1,17 @@
+{
+  "id": "task_1757322643_231",
+  "source": "cursor",
+  "intent": "동화책 홈페이지의 코스 카드 컴포넌트를 개선해주세요. 더 매력적이고 인터랙티브한 애니메이션을 추가하고, 호버 시 카드가 책처럼 펼쳐지는 효과를 구현해주세요.",
+  "context": {
+    "file": "app/views/home/storybook_index.html.erb",
+    "component": "storybook-course-card",
+    "requirements": [
+      "3D 효과",
+      "책 펼침 애니메이션",
+      "페이지 넘김 효과"
+    ]
+  },
+  "status": "pending",
+  "created_at": "2025-09-08 18:10:43 +0900",
+  "iteration": 0
+}

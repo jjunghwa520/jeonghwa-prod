@@ -1,0 +1,196 @@
+<% content_for :title, "내 대시보드 - 정화의 서재" %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">안녕하세요, <%= @user.name %>님! 👋</h1>
+        <div class="d-flex gap-2">
+          <%= link_to "프로필 수정", edit_user_path(@user), class: "btn btn-outline-primary" %>
+          <% if @user.instructor? %>
+            <%= link_to "새 강의 만들기", new_course_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 통계 카드 -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 bg-primary text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="card-title">수강 중인 강의</h6>
+              <h3 class="mb-0"><%= @enrolled_courses.count %>개</h3>
+            </div>
+            <div>
+              <i class="bi bi-book display-6"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <% if @user.instructor? %>
+      <div class="col-md-3">
+        <div class="card border-0 bg-success text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">내 강의</h6>
+                <h3 class="mb-0"><%= @taught_courses.count %>개</h3>
+              </div>
+              <div>
+                <i class="bi bi-person-video3 display-6"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card border-0 bg-info text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6 class="card-title">총 수강생</h6>
+                <h3 class="mb-0"><%= @taught_courses.sum(&:total_students) %>명</h3>
+              </div>
+              <div>
+                <i class="bi bi-people display-6"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+    <div class="col-md-3">
+      <div class="card border-0 bg-warning text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="card-title">작성한 리뷰</h6>
+              <h3 class="mb-0"><%= @recent_reviews.count %>개</h3>
+            </div>
+            <div>
+              <i class="bi bi-star display-6"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- 최근 수강 중인 강의 -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">최근 수강 강의</h5>
+            <%= link_to "전체보기", my_courses_user_path(@user), class: "btn btn-sm btn-outline-primary" %>
+          </div>
+        </div>
+        <div class="card-body">
+          <% if @enrolled_courses.any? %>
+            <% @enrolled_courses.limit(3).each do |course| %>
+              <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                <div class="course-thumbnail me-3" style="width: 80px; height: 60px;">
+                  <% if course.thumbnail.present? %>
+                    <%= image_tag course.thumbnail, class: "w-100 h-100 rounded", style: "object-fit: cover;" %>
+                  <% else %>
+                    <div class="w-100 h-100 bg-primary d-flex align-items-center justify-content-center rounded">
+                      <i class="bi bi-play-circle text-white"></i>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">
+                    <%= link_to course.title, course, class: "text-decoration-none" %>
+                  </h6>
+                  <small class="text-muted">
+                    <i class="bi bi-person"></i> <%= course.instructor.name %>
+                  </small>
+                </div>
+                <div>
+                  <%= link_to "수강하기", watch_course_path(course), class: "btn btn-sm btn-primary" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center py-4">
+              <i class="bi bi-book display-4 text-muted mb-3"></i>
+              <p class="text-muted">아직 수강 중인 강의가 없습니다.</p>
+              <%= link_to "강의 둘러보기", courses_path, class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <div class="col-lg-4">
+      <!-- 최근 리뷰 -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0">최근 작성한 리뷰</h5>
+        </div>
+        <div class="card-body">
+          <% if @recent_reviews.any? %>
+            <% @recent_reviews.each do |review| %>
+              <div class="mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="rating me-2">
+                    <% 5.times do |i| %>
+                      <i class="bi bi-star<%= i < review.rating ? '-fill' : '' %> text-warning"></i>
+                    <% end %>
+                  </div>
+                  <small class="text-muted"><%= review.created_at.strftime("%m/%d") %></small>
+                </div>
+                <h6 class="mb-1">
+                  <%= link_to review.course.title, review.course, class: "text-decoration-none" %>
+                </h6>
+                <p class="small text-muted mb-0">
+                  <%= truncate(review.content, length: 60) %>
+                </p>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center py-3">
+              <i class="bi bi-chat-quote display-5 text-muted mb-2"></i>
+              <p class="text-muted small">작성한 리뷰가 없습니다.</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 빠른 액션 -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0">빠른 액션</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <%= link_to cart_items_path, class: "btn btn-outline-primary" do %>
+              <i class="bi bi-cart"></i> 장바구니 보기
+            <% end %>
+            <%= link_to courses_path, class: "btn btn-outline-primary" do %>
+              <i class="bi bi-search"></i> 새 강의 찾기
+            <% end %>
+            <% if @user.instructor? %>
+              <%= link_to my_teachings_user_path(@user), class: "btn btn-outline-success" do %>
+                <i class="bi bi-person-video3"></i> 내 강의 관리
+              <% end %>
+            <% end %>
+            <%= link_to edit_user_path(@user), class: "btn btn-outline-secondary" do %>
+              <i class="bi bi-person-gear"></i> 프로필 설정
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

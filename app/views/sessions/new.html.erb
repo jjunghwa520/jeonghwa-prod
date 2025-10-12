@@ -1,0 +1,267 @@
+<% content_for :title, "로그인 - 정화의 서재" %>
+
+<div class="container py-5">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-5">
+      <!-- 로그인 카드 -->
+      <div class="login-card glass-card">
+        <div class="card-body p-5">
+          <!-- 로고 및 타이틀 -->
+          <div class="text-center mb-5">
+            <div class="logo-animation mb-4">
+              <span class="display-1">🏰</span>
+            </div>
+            <h2 class="gradient-text mb-2">정화의 서재</h2>
+            <p class="text-muted">마법 같은 동화책 세상으로 오신 것을 환영합니다</p>
+          </div>
+
+          <!-- 로그인 폼 -->
+          <%= form_with url: login_path, local: true, class: "form-modern", data: { turbo: false } do |f| %>
+            <div class="mb-4">
+              <%= f.label :email, "이메일", class: "form-label-modern" %>
+              <div class="input-group-modern">
+                <span class="input-icon">📧</span>
+                <%= f.email_field :email, 
+                    class: "form-control-modern", 
+                    placeholder: "이메일을 입력하세요",
+                    required: true,
+                    autofocus: true %>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <%= f.label :password, "비밀번호", class: "form-label-modern" %>
+              <div class="input-group-modern">
+                <span class="input-icon">🔐</span>
+                <%= f.password_field :password, 
+                    class: "form-control-modern", 
+                    placeholder: "비밀번호를 입력하세요",
+                    required: true %>
+              </div>
+            </div>
+
+            <div class="form-check mb-4">
+              <input type="checkbox" class="form-check-input" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">
+                로그인 상태 유지
+              </label>
+            </div>
+
+            <div class="d-grid mb-4">
+              <%= f.submit "🚀 로그인", class: "btn-modern btn-primary-modern btn-glow" %>
+            </div>
+          <% end %>
+
+          <!-- 구분선 -->
+          <div class="divider-modern">
+            <span>또는</span>
+          </div>
+
+          <!-- 회원가입 링크 -->
+          <div class="text-center mb-4">
+            <p class="mb-0">
+              아직 계정이 없으신가요?
+            </p>
+            <%= link_to signup_path, class: "btn btn-outline-primary btn-modern w-100 mt-2" do %>
+              ✨ 회원가입하기
+            <% end %>
+          </div>
+
+          <!-- 테스트 계정 정보 -->
+          <div class="test-accounts glass-card">
+            <h6 class="text-center mb-3">
+              <span class="badge badge-modern badge-gradient">테스트 계정</span>
+            </h6>
+            <div class="account-list">
+              <div class="account-item">
+                <span class="account-type">👨‍👩‍👧 부모</span>
+                <code>parent1@jeonghwa.com</code>
+              </div>
+              <div class="account-item">
+                <span class="account-type">✍️ 작가</span>
+                <code>author1@jeonghwa.com</code>
+              </div>
+              <div class="account-item">
+                <span class="account-type">👑 관리자</span>
+                <code>admin@jeonghwa.com</code>
+              </div>
+              <small class="text-muted d-block text-center mt-2">
+                비밀번호: password123
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단 링크 -->
+      <div class="text-center mt-4">
+        <%= link_to "← 홈으로 돌아가기", root_path, class: "text-muted text-decoration-none hover-link" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* 로그인 페이지 전용 스타일 */
+.login-card {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  animation: slide-up 0.6s ease;
+}
+
+.logo-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.input-group-modern {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  z-index: 10;
+}
+
+.form-control-modern {
+  width: 100%;
+  padding: 14px 20px 14px 45px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-control-modern:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.divider-modern {
+  text-align: center;
+  margin: 30px 0;
+  position: relative;
+}
+
+.divider-modern::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.divider-modern span {
+  background: white;
+  padding: 0 20px;
+  position: relative;
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.test-accounts {
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 16px;
+}
+
+.account-list {
+  font-size: 14px;
+}
+
+.account-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.account-item:last-of-type {
+  border-bottom: none;
+}
+
+.account-type {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+code {
+  background: #f7fafc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #667eea;
+  font-size: 13px;
+}
+
+.hover-link {
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.hover-link:hover {
+  color: #667eea !important;
+  transform: translateX(-5px);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .login-card {
+    margin: 20px;
+  }
+  
+  .card-body {
+    padding: 30px 20px !important;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 폼 제출 애니메이션
+  const form = document.querySelector('.form-modern');
+  const submitBtn = document.querySelector('.btn-primary-modern');
+  
+  form.addEventListener('submit', function(e) {
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>로그인 중...';
+    submitBtn.disabled = true;
+  });
+  
+  // 입력 필드 포커스 효과
+  const inputs = document.querySelectorAll('.form-control-modern');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.querySelector('.input-icon').style.color = '#667eea';
+    });
+    
+    input.addEventListener('blur', function() {
+      this.parentElement.querySelector('.input-icon').style.color = '#a0aec0';
+    });
+  });
+  
+  // 테스트 계정 클릭시 자동 입력
+  const accountItems = document.querySelectorAll('.account-item');
+  accountItems.forEach(item => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', function() {
+      const email = this.querySelector('code').textContent;
+      document.querySelector('#email').value = email;
+      document.querySelector('#password').value = 'password123';
+      
+      // 피드백 애니메이션
+      this.style.background = 'rgba(102, 126, 234, 0.1)';
+      setTimeout(() => {
+        this.style.background = 'transparent';
+      }, 300);
+    });
+  });
+});
+</script>

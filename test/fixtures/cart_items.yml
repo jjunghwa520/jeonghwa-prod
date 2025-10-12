@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  course: one
+  quantity: 1
+  added_at: 2025-09-05 20:23:46
+
+two:
+  user: two
+  course: two
+  quantity: 1
+  added_at: 2025-09-05 20:23:46

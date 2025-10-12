@@ -1,0 +1,114 @@
+<% content_for :title, "수강 중인 강의 - 정화의 서재" %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">내 수강 강의</h1>
+        <span class="badge bg-primary fs-6"><%= @enrolled_courses.count %>개 강의</span>
+      </div>
+    </div>
+  </div>
+
+  <% if @enrolled_courses.any? %>
+    <div class="row">
+      <% @enrolled_courses.each do |course| %>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card course-card h-100 border-0 shadow-sm">
+            <!-- 강의 썸네일 -->
+            <div class="course-thumbnail">
+              <% if course.thumbnail.present? %>
+                <%= image_tag course.thumbnail, class: "card-img-top", style: "height: 200px; object-fit: cover;" %>
+              <% else %>
+                <div class="card-img-top bg-primary d-flex align-items-center justify-content-center" style="height: 200px;">
+                  <i class="bi bi-play-circle text-white display-4"></i>
+                </div>
+              <% end %>
+              
+              <!-- 레벨 배지 -->
+              <div class="position-absolute top-0 end-0 m-2">
+                <span class="badge <%= course.level == 'beginner' ? 'bg-success' : course.level == 'intermediate' ? 'bg-warning' : 'bg-danger' %>">
+                  <%= case course.level
+                      when 'beginner' then '초급'
+                      when 'intermediate' then '중급'
+                      when 'advanced' then '고급'
+                      end %>
+                </span>
+              </div>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+              <!-- 강의 제목 -->
+              <h5 class="card-title mb-2">
+                <%= link_to course.title, course, class: "text-decoration-none text-dark" %>
+              </h5>
+              
+              <!-- 강사 정보 -->
+              <p class="text-muted mb-2">
+                <i class="bi bi-person"></i> <%= course.instructor.name %>
+              </p>
+              
+              <!-- 평점 -->
+              <div class="d-flex align-items-center mb-2">
+                <div class="rating me-2">
+                  <% 5.times do |i| %>
+                    <i class="bi bi-star<%= i < course.average_rating ? '-fill' : '' %> text-warning"></i>
+                  <% end %>
+                </div>
+                <small class="text-muted">
+                  <%= course.average_rating %> (<%= course.reviews.count %>)
+                </small>
+              </div>
+              
+              <!-- 카테고리 -->
+              <div class="mb-3">
+                <span class="badge bg-light text-dark"><%= course.category %></span>
+              </div>
+              
+              <!-- 액션 버튼 -->
+              <div class="mt-auto">
+                <%= link_to watch_course_path(course), class: "btn btn-success w-100 mb-2" do %>
+                  <i class="bi bi-play-circle"></i> 수강하기
+                <% end %>
+                <%= link_to course, class: "btn btn-outline-primary w-100" do %>
+                  <i class="bi bi-info-circle"></i> 상세보기
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- 수강 중인 강의가 없을 때 -->
+    <div class="row">
+      <div class="col-12">
+        <div class="text-center py-5">
+          <i class="bi bi-book display-1 text-muted mb-4"></i>
+          <h3 class="text-muted mb-3">수강 중인 강의가 없습니다</h3>
+          <p class="text-muted mb-4">새로운 강의를 찾아서 학습을 시작해보세요!</p>
+          <%= link_to "강의 둘러보기", courses_path, class: "btn btn-primary btn-lg" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.course-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+}
+
+.course-thumbnail {
+  position: relative;
+  overflow: hidden;
+}
+
+.rating i {
+  font-size: 0.9rem;
+}
+</style>

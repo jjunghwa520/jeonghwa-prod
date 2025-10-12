@@ -1,0 +1,385 @@
+<!-- 동적 3페이지 히어로 섹션 -->
+<section class="dynamic-hero-section">
+  <!-- 슬라이드 컨테이너 -->
+  <div class="hero-slides-container">
+    
+    <!-- 슬라이드 1: 새로운 콘텐츠 소개 -->
+    <div class="hero-slide active" data-slide="1">
+      <div class="container">
+        <div class="row align-items-center min-vh-100">
+          <!-- 왼쪽 캐릭터 안내 영역 -->
+          <div class="col-lg-4">
+            <div class="character-guide-area">
+              <!-- 정화 대표 (안내 역할) -->
+              <div class="guide-character main-guide">
+                <img src="/images/refined/jeonghwa_refined_isnet-general-use.png?v=<%= Time.current.to_i %>" 
+                     alt="정화 대표" 
+                     class="guide-character-image"
+                     onerror="this.src='/images/refined/jeonghwa_magic_wand_refined.png'">
+                <div class="speech-bubble">
+                  <p>새로운 동화책이 도착했어요! 📚✨</p>
+                </div>
+              </div>
+              
+              <!-- 학생 캐릭터들 (보조 안내) -->
+              <div class="student-guides">
+                <div class="student-guide bear-guide">
+                  <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="곰 학생" 
+                       class="student-guide-image">
+                  <div class="mini-bubble">와! 🎉</div>
+                </div>
+                <div class="student-guide rabbit-guide">
+                  <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="토끼 학생" 
+                       class="student-guide-image">
+                  <div class="mini-bubble">읽고싶어요!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 중앙 콘텐츠 영역 -->
+          <div class="col-lg-8">
+            <div class="hero-content-slide">
+              <div class="content-badge">🆕 NEW ARRIVAL</div>
+              <h1 class="slide-title">
+                이번 주 <span class="highlight">새로운 동화책</span>
+              </h1>
+              <p class="slide-description">
+                아이들이 가장 사랑하는 새로운 이야기들이 도착했어요!<br>
+                매주 업데이트되는 신선한 콘텐츠를 만나보세요.
+              </p>
+              
+              <!-- 새 콘텐츠 미리보기 -->
+              <div class="new-content-preview">
+                <div class="preview-item">
+                  <div class="preview-thumb">📖</div>
+                  <span>마법의 숲 모험</span>
+                </div>
+                <div class="preview-item">
+                  <div class="preview-thumb">🦄</div>
+                  <span>유니콘과 친구들</span>
+                </div>
+                <div class="preview-item">
+                  <div class="preview-thumb">🌟</div>
+                  <span>별빛 왕국 이야기</span>
+                </div>
+              </div>
+              
+              <div class="slide-actions">
+                <a href="/courses?category=new" class="btn btn-primary btn-lg">
+                  새 콘텐츠 보기 🚀
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 슬라이드 2: 교육 콘텐츠 소개 -->
+    <div class="hero-slide" data-slide="2">
+      <div class="container">
+        <div class="row align-items-center min-vh-100">
+          <!-- 왼쪽 캐릭터 안내 영역 -->
+          <div class="col-lg-4">
+            <div class="character-guide-area">
+              <!-- 정화 대표 (교육 안내) -->
+              <div class="guide-character main-guide">
+                <img src="/images/refined/jeonghwa_refined_u2net_human_seg.png?v=<%= Time.current.to_i %>" 
+                     alt="정화 대표" 
+                     class="guide-character-image">
+                <div class="speech-bubble">
+                  <p>함께 배우고 성장해요! 🎓📝</p>
+                </div>
+              </div>
+              
+              <!-- 학생 캐릭터들 -->
+              <div class="student-guides">
+                <div class="student-guide bear-guide">
+                  <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="곰 학생" 
+                       class="student-guide-image">
+                  <div class="mini-bubble">배우자! 📚</div>
+                </div>
+                <div class="student-guide rabbit-guide">
+                  <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="토끼 학생" 
+                       class="student-guide-image">
+                  <div class="mini-bubble">재미있어요!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 중앙 콘텐츠 영역 -->
+          <div class="col-lg-8">
+            <div class="hero-content-slide">
+              <div class="content-badge">🎓 EDUCATION</div>
+              <h1 class="slide-title">
+                체계적인 <span class="highlight">교육 프로그램</span>
+              </h1>
+              <p class="slide-description">
+                연령별 맞춤 교육과정으로 아이의 창의력과 사고력을 키워주세요.<br>
+                전문 교육자가 설계한 단계별 학습 시스템입니다.
+              </p>
+              
+              <!-- 교육 프로그램 미리보기 -->
+              <div class="education-preview">
+                <div class="preview-item">
+                  <div class="preview-thumb">✏️</div>
+                  <span>창작 동화 만들기</span>
+                </div>
+                <div class="preview-item">
+                  <div class="preview-thumb">🎨</div>
+                  <span>그림책 일러스트</span>
+                </div>
+                <div class="preview-item">
+                  <div class="preview-thumb">🎭</div>
+                  <span>스토리텔링 기법</span>
+                </div>
+              </div>
+              
+              <div class="slide-actions">
+                <a href="/courses?category=education" class="btn btn-primary btn-lg">
+                  교육 과정 보기 🎯
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 슬라이드 3: 성공 사례 & 후기 -->
+    <div class="hero-slide" data-slide="3">
+      <div class="container">
+        <div class="row align-items-center min-vh-100">
+          <!-- 왼쪽 캐릭터 안내 영역 -->
+          <div class="col-lg-4">
+            <div class="character-guide-area">
+              <!-- 정화 대표 (성공 사례 안내) -->
+              <div class="guide-character main-guide">
+                <img src="/images/refined/jeonghwa_magic_wand_refined.png?v=<%= Time.current.to_i %>" 
+                     alt="정화 대표" 
+                     class="guide-character-image">
+                <div class="speech-bubble">
+                  <p>우리 아이들의 성장 이야기! 🌟💝</p>
+                </div>
+              </div>
+              
+              <!-- 성공한 학생들 -->
+              <div class="student-guides">
+                <div class="student-guide bear-guide">
+                  <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="성공한 곰 학생" 
+                       class="student-guide-image">
+                  <div class="mini-bubble">성장했어요! 🏆</div>
+                </div>
+                <div class="student-guide rabbit-guide">
+                  <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="성공한 토끼 학생" 
+                       class="student-guide-image">
+                  <div class="mini-bubble">꿈을 찾았어요!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 중앙 콘텐츠 영역 -->
+          <div class="col-lg-8">
+            <div class="hero-content-slide">
+              <div class="content-badge">⭐ SUCCESS STORY</div>
+              <h1 class="slide-title">
+                아이들의 <span class="highlight">성장 이야기</span>
+              </h1>
+              <p class="slide-description">
+                정화의 서재와 함께한 아이들의 놀라운 변화와 성장을 확인해보세요.<br>
+                창의력, 표현력, 자신감이 쑥쑥 자라는 교육의 힘을 경험하세요.
+              </p>
+              
+              <!-- 성공 사례 미리보기 -->
+              <div class="success-preview">
+                <div class="preview-item">
+                  <div class="preview-thumb">🏆</div>
+                  <span>창작 대회 수상</span>
+                </div>
+                <div class="preview-item">
+                  <div class="preview-thumb">📈</div>
+                  <span>읽기 능력 향상</span>
+                </div>
+                <div class="preview-item">
+                  <div class="preview-thumb">💝</div>
+                  <span>자신감 증진</span>
+                </div>
+              </div>
+              
+              <div class="slide-actions">
+                <a href="/reviews" class="btn btn-primary btn-lg">
+                  성공 사례 보기 🌟
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 슬라이드 인디케이터 -->
+  <div class="slide-indicators">
+    <button class="indicator active" data-slide="1"></button>
+    <button class="indicator" data-slide="2"></button>
+    <button class="indicator" data-slide="3"></button>
+  </div>
+  
+  <!-- 진행 바 -->
+  <div class="slide-progress">
+    <div class="progress-bar"></div>
+  </div>
+</section>
+
+<!-- 동적 히어로 JavaScript -->
+<script>
+class DynamicHero {
+  constructor() {
+    this.currentSlide = 1;
+    this.totalSlides = 3;
+    this.slideInterval = 3000; // 3초
+    this.isAutoPlaying = true;
+    this.intervalId = null;
+    
+    this.init();
+  }
+  
+  init() {
+    this.startAutoSlide();
+    this.bindEvents();
+    this.animateCharacters();
+  }
+  
+  startAutoSlide() {
+    this.intervalId = setInterval(() => {
+      if (this.isAutoPlaying) {
+        this.nextSlide();
+      }
+    }, this.slideInterval);
+  }
+  
+  nextSlide() {
+    this.currentSlide = this.currentSlide >= this.totalSlides ? 1 : this.currentSlide + 1;
+    this.showSlide(this.currentSlide);
+  }
+  
+  showSlide(slideNumber) {
+    // 모든 슬라이드 숨기기
+    document.querySelectorAll('.hero-slide').forEach(slide => {
+      slide.classList.remove('active');
+    });
+    
+    // 모든 인디케이터 비활성화
+    document.querySelectorAll('.indicator').forEach(indicator => {
+      indicator.classList.remove('active');
+    });
+    
+    // 현재 슬라이드 표시
+    const currentSlideEl = document.querySelector(`[data-slide="${slideNumber}"]`);
+    if (currentSlideEl) {
+      currentSlideEl.classList.add('active');
+    }
+    
+    // 현재 인디케이터 활성화
+    const currentIndicator = document.querySelector(`.indicator[data-slide="${slideNumber}"]`);
+    if (currentIndicator) {
+      currentIndicator.classList.add('active');
+    }
+    
+    // 진행 바 리셋
+    this.resetProgressBar();
+    
+    // 캐릭터 애니메이션 트리거
+    this.triggerCharacterAnimation(slideNumber);
+    
+    console.log(`슬라이드 ${slideNumber} 활성화`);
+  }
+  
+  resetProgressBar() {
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+      progressBar.style.animation = 'none';
+      progressBar.offsetHeight; // 리플로우 강제
+      progressBar.style.animation = `slide-progress ${this.slideInterval}ms linear`;
+    }
+  }
+  
+  triggerCharacterAnimation(slideNumber) {
+    // 캐릭터별 특별 애니메이션
+    const mainGuide = document.querySelector('.main-guide .guide-character-image');
+    const bearGuide = document.querySelector('.bear-guide .student-guide-image');
+    const rabbitGuide = document.querySelector('.rabbit-guide .student-guide-image');
+    
+    // 애니메이션 클래스 제거 후 재추가
+    [mainGuide, bearGuide, rabbitGuide].forEach(char => {
+      if (char) {
+        char.classList.remove('animate-announce');
+        char.offsetHeight; // 리플로우 강제
+        char.classList.add('animate-announce');
+      }
+    });
+    
+    // 말풍선 애니메이션
+    const speechBubbles = document.querySelectorAll('.speech-bubble, .mini-bubble');
+    speechBubbles.forEach(bubble => {
+      bubble.classList.remove('animate-bubble');
+      bubble.offsetHeight;
+      bubble.classList.add('animate-bubble');
+    });
+  }
+  
+  bindEvents() {
+    // 인디케이터 클릭 이벤트
+    document.querySelectorAll('.indicator').forEach(indicator => {
+      indicator.addEventListener('click', (e) => {
+        const slideNumber = parseInt(e.target.dataset.slide);
+        this.currentSlide = slideNumber;
+        this.showSlide(slideNumber);
+        
+        // 자동 재생 잠시 중지
+        this.pauseAutoPlay();
+        setTimeout(() => this.resumeAutoPlay(), 5000);
+      });
+    });
+    
+    // 마우스 호버 시 자동 재생 일시 중지
+    const heroSection = document.querySelector('.dynamic-hero-section');
+    if (heroSection) {
+      heroSection.addEventListener('mouseenter', () => this.pauseAutoPlay());
+      heroSection.addEventListener('mouseleave', () => this.resumeAutoPlay());
+    }
+  }
+  
+  pauseAutoPlay() {
+    this.isAutoPlaying = false;
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+  
+  resumeAutoPlay() {
+    this.isAutoPlaying = true;
+    this.startAutoSlide();
+  }
+  
+  animateCharacters() {
+    // 캐릭터들의 기본 애니메이션 시작
+    this.triggerCharacterAnimation(this.currentSlide);
+  }
+}
+
+// 페이지 로드 시 동적 히어로 시작
+document.addEventListener('DOMContentLoaded', () => {
+  new DynamicHero();
+});
+</script>
+

@@ -1,0 +1,202 @@
+<% content_for :title, "강의 수정 - #{@course.title}" %>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <div class="d-flex align-items-center">
+            <%= link_to @course, class: "btn btn-outline-secondary me-3" do %>
+              <i class="bi bi-arrow-left"></i>
+            <% end %>
+            <div>
+              <h4 class="mb-0">강의 수정</h4>
+              <p class="text-muted mb-0"><%= @course.title %></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <%= form_with model: @course, local: true, class: "needs-validation", novalidate: true do |f| %>
+            
+            <!-- 기본 정보 섹션 -->
+            <div class="mb-4">
+              <h5 class="border-bottom pb-2 mb-3">기본 정보</h5>
+              
+              <div class="mb-3">
+                <%= f.label :title, "강의 제목", class: "form-label fw-semibold" %>
+                <%= f.text_field :title, class: "form-control form-control-lg", required: true %>
+                <div class="form-text">매력적이고 명확한 제목을 작성해주세요 (5-100자)</div>
+                <div class="invalid-feedback">강의 제목을 입력해주세요.</div>
+              </div>
+              
+              <div class="mb-3">
+                <%= f.label :description, "강의 설명", class: "form-label fw-semibold" %>
+                <%= f.text_area :description, class: "form-control", rows: 6, required: true %>
+                <div class="form-text">최소 20자 이상 작성해주세요</div>
+                <div class="invalid-feedback">강의 설명을 입력해주세요.</div>
+              </div>
+            </div>
+            
+            <!-- 분류 및 난이도 섹션 -->
+            <div class="mb-4">
+              <h5 class="border-bottom pb-2 mb-3">분류 및 난이도</h5>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <%= f.label :category, "카테고리", class: "form-label fw-semibold" %>
+                    <%= f.select :category, 
+                                options_for_select([
+                                  ['프로그래밍', 'Programming'],
+                                  ['웹 개발', 'Web Development'],
+                                  ['모바일 개발', 'Mobile Development'],
+                                  ['데이터 사이언스', 'Data Science'],
+                                  ['인공지능/머신러닝', 'AI/ML'],
+                                  ['디자인', 'Design'],
+                                  ['마케팅', 'Marketing'],
+                                  ['비즈니스', 'Business'],
+                                  ['기타', 'Others']
+                                ], @course.category),
+                                {},
+                                { class: "form-select", required: true } %>
+                    <div class="invalid-feedback">카테고리를 선택해주세요.</div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <%= f.label :level, "난이도", class: "form-label fw-semibold" %>
+                    <%= f.select :level,
+                                options_for_select([
+                                  ['초급 - 처음 배우는 분들을 위한', 'beginner'],
+                                  ['중급 - 기본기가 있는 분들을 위한', 'intermediate'],
+                                  ['고급 - 실무 경험이 있는 분들을 위한', 'advanced']
+                                ], @course.level),
+                                {},
+                                { class: "form-select", required: true } %>
+                    <div class="invalid-feedback">난이도를 선택해주세요.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 강의 세부사항 섹션 -->
+            <div class="mb-4">
+              <h5 class="border-bottom pb-2 mb-3">강의 세부사항</h5>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <%= f.label :duration, "예상 수강 시간 (시간)", class: "form-label fw-semibold" %>
+                    <%= f.number_field :duration, class: "form-control", min: 1, max: 1000, required: true %>
+                    <div class="form-text">전체 강의를 완주하는데 필요한 시간</div>
+                    <div class="invalid-feedback">수강 시간을 입력해주세요.</div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <%= f.label :price, "가격 (원)", class: "form-label fw-semibold" %>
+                    <%= f.number_field :price, class: "form-control", min: 0, step: 1000, required: true %>
+                    <div class="form-text">0원으로 설정하면 무료 강의가 됩니다</div>
+                    <div class="invalid-feedback">가격을 입력해주세요.</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <%= f.label :thumbnail, "썸네일 이미지 URL", class: "form-label fw-semibold" %>
+                <%= f.url_field :thumbnail, class: "form-control" %>
+                <div class="form-text">강의를 대표하는 이미지 URL을 입력하세요 (선택사항)</div>
+              </div>
+            </div>
+            
+            <!-- 공개 설정 섹션 -->
+            <div class="mb-4">
+              <h5 class="border-bottom pb-2 mb-3">공개 설정</h5>
+              
+              <div class="mb-3">
+                <%= f.label :status, "공개 상태", class: "form-label fw-semibold" %>
+                <%= f.select :status,
+                            options_for_select([
+                              ['임시저장 - 아직 공개하지 않음', 'draft'],
+                              ['공개 - 학습자들이 수강할 수 있음', 'published'],
+                              ['보관됨 - 더 이상 판매하지 않음', 'archived']
+                            ], @course.status),
+                            {},
+                            { class: "form-select" } %>
+                <div class="form-text">공개 상태를 변경할 수 있습니다</div>
+              </div>
+              
+              <!-- 강의 통계 정보 -->
+              <div class="row text-center">
+                <div class="col-md-4">
+                  <div class="border rounded p-3">
+                    <h4 class="text-primary mb-1"><%= @course.total_students %></h4>
+                    <small class="text-muted">총 수강생</small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="border rounded p-3">
+                    <h4 class="text-warning mb-1"><%= @course.average_rating %></h4>
+                    <small class="text-muted">평균 평점</small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="border rounded p-3">
+                    <h4 class="text-success mb-1"><%= @course.reviews.count %></h4>
+                    <small class="text-muted">총 리뷰</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 위험 영역 -->
+            <div class="mb-4">
+              <h5 class="border-bottom pb-2 mb-3 text-danger">위험 영역</h5>
+              <div class="alert alert-danger">
+                <h6 class="alert-heading">⚠️ 주의사항</h6>
+                <p class="mb-0">강의를 삭제하면 모든 수강생 데이터와 리뷰가 함께 삭제되며, 복구할 수 없습니다.</p>
+              </div>
+              <%= link_to "강의 삭제", @course, 
+                          data: { 
+                            turbo_method: :delete, 
+                            turbo_confirm: "정말로 이 강의를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다." 
+                          },
+                          class: "btn btn-danger" %>
+            </div>
+            
+            <!-- 버튼 영역 -->
+            <div class="d-flex justify-content-between">
+              <%= link_to "취소", @course, class: "btn btn-outline-secondary" %>
+              <div>
+                <%= f.submit "변경사항 저장", class: "btn btn-primary" %>
+              </div>
+            </div>
+            
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 폼 유효성 검사 스크립트 -->
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

@@ -1,0 +1,307 @@
+<% content_for :title, "정화의 서재 - 아이들의 상상력을 키우는 동화책 플랫폼" %>
+
+<!-- 임팩트 있는 히어로 섹션 -->
+<%= render 'impactful_hero_section' %>
+
+<!-- 우리가 제공하는 서비스 -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>우리 아이를 위한 <span class="highlight">특별한 서비스</span></h2>
+      <p>정화의 서재가 제공하는 차별화된 동화 교육 서비스를 만나보세요</p>
+    </div>
+    
+    <div class="services-grid">
+      <!-- 전자동화책 서비스 -->
+      <div class="service-card ebook-card">
+        <div class="card-decoration">
+          <div class="decoration-icon ebook">
+            <span class="icon-emoji">📱</span>
+          </div>
+        </div>
+        <h3>전자동화책</h3>
+        <p>인터랙티브한 디지털 동화책으로 아이들의 흥미를 끌어보세요. 터치, 소리, 애니메이션이 어우러진 몰입감 있는 독서 경험을 제공합니다.</p>
+        <ul class="service-features">
+          <li>📖 인터랙티브 요소</li>
+          <li>🔊 나레이션 음성</li>
+          <li>🎨 생생한 애니메이션</li>
+        </ul>
+        <%= link_to courses_path(category: 'ebook'), class: "service-cta" do %>
+          <span>전자동화책 보기</span>
+          <span class="cta-arrow">→</span>
+        <% end %>
+      </div>
+      
+      <!-- 구연동화 서비스 -->
+      <div class="service-card storytelling-card">
+        <div class="card-decoration">
+          <div class="decoration-icon storytelling">
+            <span class="icon-emoji">🎭</span>
+          </div>
+        </div>
+        <h3>구연동화</h3>
+        <p>전문 성우와 교육자들이 들려주는 생생한 스토리텔링 영상입니다. 아이들이 이야기에 푹 빠질 수 있는 몰입감 있는 경험을 선사합니다.</p>
+        <ul class="service-features">
+          <li>🎬 전문 성우 더빙</li>
+          <li>🎨 아름다운 일러스트</li>
+          <li>💝 감동적인 스토리</li>
+        </ul>
+        <%= link_to courses_path(category: 'storytelling'), class: "service-cta" do %>
+          <span>구연동화 보기</span>
+          <span class="cta-arrow">→</span>
+        <% end %>
+      </div>
+      
+      <!-- 동화만들기 교육 -->
+      <div class="service-card education-card">
+        <div class="card-decoration">
+          <div class="decoration-icon education">
+            <span class="icon-emoji">✏️</span>
+          </div>
+        </div>
+        <h3>동화만들기 교육</h3>
+        <p>아이들이 직접 동화를 창작할 수 있도록 돕는 체계적인 교육 프로그램입니다. 상상력과 창의력을 키우는 특별한 여정을 시작하세요.</p>
+        <ul class="service-features">
+          <li>✍️ 창작 가이드</li>
+          <li>🎨 일러스트 교육</li>
+          <li>📚 완성작 출간</li>
+        </ul>
+        <%= link_to courses_path(category: 'education'), class: "service-cta" do %>
+          <span>교육과정 보기</span>
+          <span class="cta-arrow">→</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 빠른 진입 섹션 -->
+<section class="quick-entry-section">
+  <div class="container">
+    <div class="quick-entry-grid">
+      <%= link_to courses_path(category: 'ebook'), class: "quick-entry-item qe-ebook" do %>
+        <div class="qe-icon">📱</div>
+        <div class="qe-content">
+          <h3>전자동화책</h3>
+          <p>디지털 인터랙티브 동화</p>
+        </div>
+      <% end %>
+      
+      <%= link_to courses_path(category: 'storytelling'), class: "quick-entry-item qe-story" do %>
+        <div class="qe-icon">🎭</div>
+        <div class="qe-content">
+          <h3>구연동화</h3>
+          <p>전문 성우의 스토리텔링</p>
+        </div>
+      <% end %>
+      
+      <%= link_to courses_path(category: 'education'), class: "quick-entry-item qe-make" do %>
+        <div class="qe-icon">✏️</div>
+        <div class="qe-content">
+          <h3>동화 만들기</h3>
+          <p>손으로 완성하는 우리 동화</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+</section>
+
+<!-- 연령별 맞춤 콘텐츠 -->
+<section class="age-selection-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>우리 아이 연령에 맞는 <span class="highlight">맞춤 콘텐츠</span></h2>
+      <p>아이의 성장 단계에 딱 맞는 동화책을 만나보세요</p>
+    </div>
+    
+    <div class="age-cards">
+      <%= link_to courses_path(age: 'baby'), class: "age-card baby-card" do %>
+        <div class="age-icon">👶</div>
+        <h3>0-3세</h3>
+        <p>아기를 위한<br>첫 동화책</p>
+        <div class="age-features">
+          <span class="age-tag baby">감각발달</span>
+          <span class="age-tag baby">언어습득</span>
+        </div>
+      <% end %>
+      
+      <%= link_to courses_path(age: 'toddler'), class: "age-card toddler-card" do %>
+        <div class="age-icon">🧒</div>
+        <h3>4-7세</h3>
+        <p>유치원생을 위한<br>재미있는 이야기</p>
+        <div class="age-features">
+          <span class="age-tag toddler">상상력</span>
+          <span class="age-tag toddler">사회성</span>
+        </div>
+      <% end %>
+      
+      <%= link_to courses_path(age: 'elementary'), class: "age-card elementary-card" do %>
+        <div class="age-icon">📚</div>
+        <h3>8-13세</h3>
+        <p>초등학생을 위한<br>교육적 동화</p>
+        <div class="age-features">
+          <span class="age-tag elementary">논리사고</span>
+          <span class="age-tag elementary">창의력</span>
+        </div>
+      <% end %>
+      
+      <%= link_to courses_path(age: 'teen'), class: "age-card teen-card" do %>
+        <div class="age-icon">🌟</div>
+        <h3>14-16세</h3>
+        <p>청소년을 위한<br>특별한 콘텐츠</p>
+        <div class="age-features">
+          <span class="age-tag teen">자기계발</span>
+          <span class="age-tag teen">진로탐색</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- 우리가 제공하는 서비스 -->
+<section class="service-overview-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>정화의 서재만의 <span class="highlight">특별함</span></h2>
+      <p>다른 플랫폼과 차별화되는 우리만의 교육 철학과 서비스를 소개합니다</p>
+    </div>
+    
+    <div class="service-overview-grid">
+      <div class="overview-item">
+        <div class="overview-icon">👩‍🏫</div>
+        <h4>전문 교육자</h4>
+        <p>아동 교육 전문가들이 직접 설계한 체계적인 교육과정</p>
+      </div>
+      
+      <div class="overview-item">
+        <div class="overview-icon">🎨</div>
+        <h4>맞춤형 콘텐츠</h4>
+        <p>연령별, 수준별로 세분화된 개인 맞춤 학습 콘텐츠</p>
+      </div>
+      
+      <div class="overview-item">
+        <div class="overview-icon">📈</div>
+        <h4>성장 추적</h4>
+        <p>아이의 학습 진도와 성장 과정을 체계적으로 관리</p>
+      </div>
+      
+      <div class="overview-item">
+        <div class="overview-icon">🏆</div>
+        <h4>검증된 효과</h4>
+        <p>수많은 아이들의 성공 사례로 입증된 교육 효과</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 인기 동화책 콘텐츠 -->
+<section class="popular-content-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>이번 주 가장 사랑받은 <span class="highlight">동화책</span></h2>
+      <p>아이들이 가장 많이 읽고 좋아하는 인기 동화책들을 만나보세요</p>
+    </div>
+    
+    <div class="popular-content-grid">
+      <% Course.where(featured: true).limit(5).each_with_index do |course, index| %>
+        <%= link_to course_path(course), class: "popular-item", data: { aos: "fade-up", aos_delay: index * 100 } do %>
+          <div class="popular-thumb">
+            <% if course.thumbnail_url.present? %>
+              <img src="<%= course.thumbnail_url %>" alt="<%= course.title %>" loading="lazy">
+            <% else %>
+              <div class="thumb-placeholder">
+                <span class="placeholder-icon">📚</span>
+              </div>
+            <% end %>
+            <div class="popular-badge">인기</div>
+          </div>
+          <div class="popular-info">
+            <h4 class="popular-title"><%= course.title %></h4>
+            <p class="popular-description"><%= truncate(course.description, length: 60) %></p>
+            <div class="popular-meta">
+              <span class="popular-age">
+                <% case course.age_group %>
+                <% when 'baby' %>
+                  👶 0-3세
+                <% when 'toddler' %>
+                  🧒 4-7세
+                <% when 'elementary' %>
+                  📚 8-13세
+                <% when 'teen' %>
+                  🌟 14-16세
+                <% else %>
+                  📖 전체
+                <% end %>
+              </span>
+              <span class="popular-price">₩<%= number_with_delimiter(course.price) %></span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- 구독 플랜 -->
+<section class="subscription-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>우리 아이에게 딱 맞는 <span class="highlight">구독 플랜</span></h2>
+      <p>가족의 상황에 맞는 최적의 플랜을 선택하세요</p>
+    </div>
+    
+    <div class="subscription-plans">
+      <div class="plan-card basic-plan">
+        <div class="plan-header">
+          <h3>기본 플랜</h3>
+          <div class="plan-price">
+            <span class="price">₩9,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li>✅ 월 10권 동화책</li>
+          <li>✅ 기본 구연동화</li>
+          <li>✅ 학습 진도 관리</li>
+        </ul>
+        <a href="/users/new" class="plan-cta basic">지금 시작하기</a>
+      </div>
+      
+      <div class="plan-card premium-plan featured">
+        <div class="plan-badge">추천</div>
+        <div class="plan-header">
+          <h3>프리미엄 플랜</h3>
+          <div class="plan-price">
+            <span class="price">₩19,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li>✅ 무제한 동화책</li>
+          <li>✅ 프리미엄 구연동화</li>
+          <li>✅ 동화만들기 교육</li>
+          <li>✅ 1:1 맞춤 상담</li>
+        </ul>
+        <a href="/users/new" class="plan-cta premium">지금 시작하기</a>
+      </div>
+      
+      <div class="plan-card family-plan">
+        <div class="plan-header">
+          <h3>가족 플랜</h3>
+          <div class="plan-price">
+            <span class="price">₩29,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li>✅ 모든 프리미엄 기능</li>
+          <li>✅ 최대 3명 아이</li>
+          <li>✅ 가족 학습 리포트</li>
+          <li>✅ 우선 고객 지원</li>
+        </ul>
+        <a href="/users/new" class="plan-cta family">지금 시작하기</a>
+      </div>
+    </div>
+  </div>
+</section>

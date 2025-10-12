@@ -1,0 +1,83 @@
+<!-- 메인 히어로 섹션 (간소화) -->
+<section class="hero-carousel-section">
+  <div class="hero-carousel-container">
+    
+    <!-- 메인 히어로: 정화의 서재 소개 -->
+    <div class="hero-slide active" data-slide="1">
+      <div class="container">
+        <div class="row align-items-center" style="min-height: 70vh;">
+          <!-- 왼쪽 캐릭터 영역 -->
+          <div class="col-lg-6 order-2 order-lg-1">
+            <div class="character-stage">
+              <!-- 정화 선생님 -->
+              <div class="character jeonghwa-character">
+                <img src="/images/refined/jeonghwa_refined_isnet-general-use.png" 
+                     alt="정화 선생님" 
+                     class="character-img jeonghwa-img">
+              </div>
+            </div>
+          </div>
+          
+          <!-- 오른쪽 콘텐츠 영역 -->
+          <div class="col-lg-6 order-1 order-lg-2">
+            <div class="hero-content">
+              <div class="content-badge new">
+                <span class="badge-sparkle">🏰</span>
+                <span>정화의 서재</span>
+                <span class="badge-sparkle">✨</span>
+              </div>
+              <h1 class="hero-title">
+                <span class="title-line-1">아이들의 상상력을 키우는</span>
+                <span class="title-line-2">마법의 동화책 세상</span>
+              </h1>
+              <p class="hero-description">
+                0세부터 16세까지 모든 연령대를 위한 특별한 동화 콘텐츠.<br>
+                읽고, 듣고, 만들며 함께 성장하는 특별한 경험을 시작하세요!
+              </p>
+              <div class="hero-features">
+                <div class="feature-item">
+                  <span class="feature-icon">📚</span>
+                  <span>1000+ 프리미엄 동화책</span>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🎭</span>
+                  <span>구연동화 영상 콘텐츠</span>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">✏️</span>
+                  <span>창작 교육 프로그램</span>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🧑‍🎓</span>
+                  <span>청소년 전용 콘텐츠</span>
+                </div>
+              </div>
+              <div class="hero-actions">
+                <%= link_to courses_path, class: "btn-hero primary" do %>
+                  <span>동화 세상 탐험하기</span>
+                  <span class="btn-arrow">→</span>
+                <% end %>
+                <%= link_to teen_content_path, class: "btn-hero secondary" do %>
+                  <span>청소년 콘텐츠</span>
+                  <span class="btn-arrow">→</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 간소화된 히어로 섹션 - 캐러셀 기능 제거 -->
+
+<script>
+// 간소화된 메인 히어로 섹션
+console.log('🏰 정화의 서재 메인 히어로 로드됨');
+
+// 간단한 캐릭터 애니메이션만 유지
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('✅ 메인 히어로 초기화 완료');
+});
+</script>

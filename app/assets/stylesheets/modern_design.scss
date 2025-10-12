@@ -1,0 +1,396 @@
+// 🎨 정화의 서재 - 2024 모던 디자인 시스템
+
+// 색상 팔레트
+:root {
+  // 메인 컬러
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  
+  // 뉴모피즘 색상
+  --neumorphism-bg: #e0e5ec;
+  --neumorphism-light: #ffffff;
+  --neumorphism-dark: #a3b1c6;
+  
+  // 글래스모피즘
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  
+  // 다크모드 대비
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+}
+
+// 뉴모피즘 카드
+.neumorphic-card {
+  background: var(--neumorphism-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 
+    9px 9px 16px var(--neumorphism-dark),
+    -9px -9px 16px var(--neumorphism-light);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  &:hover {
+    box-shadow: 
+      6px 6px 12px var(--neumorphism-dark),
+      -6px -6px 12px var(--neumorphism-light);
+  }
+  
+  &:active {
+    box-shadow: 
+      inset 6px 6px 12px var(--neumorphism-dark),
+      inset -6px -6px 12px var(--neumorphism-light);
+  }
+}
+
+// 글래스모피즘 효과
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+// 그라데이션 텍스트
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+// 플로팅 애니메이션
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 모던 버튼
+.btn-modern {
+  position: relative;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+  
+  &.btn-primary-modern {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+    }
+  }
+  
+  &.btn-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+}
+
+// 인터랙티브 카드
+.interactive-card {
+  position: relative;
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 24px;
+    padding: 2px;
+    background: var(--primary-gradient);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+// 스크롤 애니메이션
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 파티클 배경
+.particle-bg {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '✨';
+    position: absolute;
+    font-size: 30px;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.1;
+  }
+  
+  &::after {
+    content: '🌟';
+    position: absolute;
+    font-size: 25px;
+    right: 10%;
+    animation: float 8s ease-in-out infinite reverse;
+    opacity: 0.1;
+  }
+}
+
+// 모던 네비게이션
+.navbar-modern {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  
+  &.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  .nav-link-modern {
+    position: relative;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background: var(--primary-gradient);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    &:hover, &.active {
+      color: #667eea;
+      
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// 모던 폼 요소
+.form-modern {
+  .form-control-modern {
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 16px;
+    background: #f7fafc;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    
+    &::placeholder {
+      color: #a0aec0;
+    }
+  }
+  
+  .form-label-modern {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// 모던 토스트
+.toast-modern {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 350px;
+  padding: 16px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: slide-in-right 0.3s ease;
+  z-index: 10000;
+  
+  &.success {
+    border-left: 4px solid #48bb78;
+  }
+  
+  &.error {
+    border-left: 4px solid #f56565;
+  }
+  
+  &.warning {
+    border-left: 4px solid #ed8936;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// 모던 히어로 섹션
+.hero-modern {
+  background: var(--primary-gradient);
+  position: relative;
+  padding: 100px 0;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: move-grid 20s linear infinite;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+@keyframes move-grid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+// 모던 카드 호버 효과
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  
+  &:hover {
+    transform: rotateY(10deg) rotateX(-10deg);
+  }
+}
+
+// 모던 배지
+.badge-modern {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  
+  &.badge-gradient {
+    background: var(--primary-gradient);
+    color: white;
+  }
+}
+
+// 모던 로딩 애니메이션
+.loader-modern {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// 반응형 그리드
+.grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

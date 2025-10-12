@@ -1,0 +1,127 @@
+<% content_for :title, "#{@user.name}님의 프로필 - 정화의 서재" %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4">
+      <!-- 프로필 카드 -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <!-- 프로필 이미지 -->
+          <div class="mb-3">
+            <% if @user.avatar.present? %>
+              <%= image_tag @user.avatar, class: "rounded-circle", style: "width: 120px; height: 120px; object-fit: cover;" %>
+            <% else %>
+              <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center text-white" style="width: 120px; height: 120px; font-size: 3rem;">
+                <%= @user.name.first.upcase %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- 기본 정보 -->
+          <h3 class="mb-1"><%= @user.name %></h3>
+          <p class="text-muted mb-3">
+            <span class="badge bg-<%= @user.role == 'admin' ? 'danger' : @user.role == 'instructor' ? 'success' : 'primary' %>">
+              <%= case @user.role
+                  when 'admin' then '관리자'
+                  when 'instructor' then '강사'
+                  else '학생'
+                  end %>
+            </span>
+          </p>
+
+          <!-- 바이오 -->
+          <% if @user.bio.present? %>
+            <p class="text-muted"><%= @user.bio %></p>
+          <% else %>
+            <p class="text-muted">자기소개가 없습니다.</p>
+          <% end %>
+
+          <!-- 액션 버튼 -->
+          <% if current_user == @user %>
+            <div class="d-grid gap-2">
+              <%= link_to "프로필 수정", edit_user_path(@user), class: "btn btn-primary" %>
+              <%= link_to "대시보드", dashboard_user_path(@user), class: "btn btn-outline-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 통계 카드 -->
+      <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0">활동 통계</h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="border-end">
+                <h4 class="text-primary mb-0"><%= @user.enrolled_courses.count %></h4>
+                <small class="text-muted">수강 강의</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <h4 class="text-success mb-0"><%= @user.reviews.count %></h4>
+              <small class="text-muted">작성 리뷰</small>
+            </div>
+          </div>
+          <% if @user.instructor? %>
+            <hr>
+            <div class="row text-center">
+              <div class="col-6">
+                <div class="border-end">
+                  <h4 class="text-warning mb-0"><%= @user.taught_courses.count %></h4>
+                  <small class="text-muted">개설 강의</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <h4 class="text-info mb-0"><%= @user.taught_courses.sum(&:total_students) %></h4>
+                <small class="text-muted">총 수강생</small>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5>수강 중인 강의</h5>
+          <% if @user.enrolled_courses.any? %>
+            <div class="row">
+              <% @user.enrolled_courses.includes(:instructor, :reviews).limit(6).each do |course| %>
+                <div class="col-md-6 mb-3">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="course-thumbnail" style="height: 120px;">
+                      <% if course.thumbnail.present? %>
+                        <%= image_tag course.thumbnail, class: "card-img-top h-100", style: "object-fit: cover;" %>
+                      <% else %>
+                        <div class="card-img-top h-100 bg-primary d-flex align-items-center justify-content-center">
+                          <i class="bi bi-play-circle text-white display-5"></i>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="card-body p-3">
+                      <h6 class="card-title">
+                        <%= link_to course.title, course, class: "text-decoration-none" %>
+                      </h6>
+                      <p class="text-muted small mb-0">
+                        <i class="bi bi-person"></i> <%= course.instructor.name %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="text-center py-4">
+              <i class="bi bi-book display-4 text-muted mb-3"></i>
+              <p class="text-muted">수강 중인 강의가 없습니다.</p>
+              <%= link_to "강의 둘러보기", courses_path, class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

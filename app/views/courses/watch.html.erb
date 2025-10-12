@@ -1,0 +1,876 @@
+<% content_for :title, "#{@course.title} - 수강하기" %>
+
+<div class="watch-container">
+  <!-- 비디오 플레이어 영역 -->
+  <div class="video-section bg-dark">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="video-player-wrapper">
+            <!-- 📹 영상 배움터 - 실제 비디오 플레이어 -->
+            <div class="modern-video-player" style="height: 60vh; position: relative;">
+              <!-- 비디오 엘리먼트 -->
+              <video 
+                id="mainVideo" 
+                class="w-100 h-100" 
+                style="object-fit: cover; background: #000;"
+                poster="https://via.placeholder.com/1280x720/667eea/ffffff?text=📹+영상+배움터"
+                preload="metadata"
+                playsinline>
+                <!-- 샘플 영상들 - 실제로는 강의 영상 URL이 들어갑니다 -->
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+                <p class="text-white text-center mt-5">브라우저가 비디오를 지원하지 않습니다.</p>
+              </video>
+
+              <!-- 커스텀 비디오 컨트롤 -->
+              <div class="video-controls" id="videoControls">
+                <div class="controls-background"></div>
+                
+                <!-- 진행바 -->
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress-filled" id="progressFilled"></div>
+                    <div class="progress-handle" id="progressHandle"></div>
+                  </div>
+                  <div class="time-display">
+                    <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
+                  </div>
+                </div>
+
+                <!-- 컨트롤 버튼들 -->
+                <div class="control-buttons">
+                  <div class="left-controls">
+                    <button id="playPauseBtn" class="control-btn">
+                      <i class="bi bi-play-fill"></i>
+                    </button>
+                    <button id="skipBackBtn" class="control-btn">
+                      <i class="bi bi-skip-backward-fill"></i>
+                    </button>
+                    <button id="skipForwardBtn" class="control-btn">
+                      <i class="bi bi-skip-forward-fill"></i>
+                    </button>
+                    <div class="volume-control">
+                      <button id="muteBtn" class="control-btn">
+                        <i class="bi bi-volume-up-fill"></i>
+                      </button>
+                      <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider">
+                    </div>
+                  </div>
+
+                  <div class="right-controls">
+                    <div class="speed-control">
+                      <select id="speedSelect" class="speed-select">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                      </select>
+                    </div>
+                    <button id="qualityBtn" class="control-btn">
+                      <i class="bi bi-gear-fill"></i>
+                    </button>
+                    <button id="fullscreenBtn" class="control-btn">
+                      <i class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 중앙 재생 버튼 -->
+                <div class="center-play-btn" id="centerPlayBtn">
+                  <button class="center-play-button">
+                    <i class="bi bi-play-fill"></i>
+                  </button>
+                </div>
+
+                <!-- 로딩 스피너 -->
+                <div class="loading-spinner" id="loadingSpinner">
+                  <div class="spinner"></div>
+                </div>
+              </div>
+
+              <!-- 영상 정보 오버레이 -->
+              <div class="video-info-overlay" id="videoInfo">
+                <div class="video-title">
+                  <h4><%= @course.title %></h4>
+                  <p><%= @course.instructor.name %> 강사</p>
+                </div>
+                <div class="lesson-info">
+                  <span class="badge bg-primary">1강. 강의 소개</span>
+                  <span class="lesson-duration">15:30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 강의 정보 및 컨텐츠 영역 -->
+  <div class="content-section bg-light">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- 메인 컨텐츠 -->
+        <div class="col-lg-8">
+          <div class="p-4">
+            <!-- 강의 헤더 -->
+            <div class="d-flex align-items-center mb-3">
+              <%= link_to @course, class: "btn btn-outline-secondary me-3" do %>
+                <i class="bi bi-arrow-left"></i> 강의로 돌아가기
+              <% end %>
+              <div>
+                <h4 class="mb-1"><%= @course.title %></h4>
+                <p class="text-muted mb-0">
+                  <i class="bi bi-person"></i> <%= @course.instructor.name %> 강사
+                </p>
+              </div>
+            </div>
+
+            <!-- 진도 바 -->
+            <div class="progress mb-4" style="height: 8px;">
+              <div class="progress-bar bg-success" role="progressbar" 
+                   style="width: <%= @enrollment.progress %>%" 
+                   aria-valuenow="<%= @enrollment.progress %>" 
+                   aria-valuemin="0" aria-valuemax="100">
+              </div>
+            </div>
+            <div class="d-flex justify-content-between text-muted small mb-4">
+              <span>진도율: <%= @enrollment.progress %>%</span>
+              <span>
+                <% if @enrollment.completed? %>
+                  <i class="bi bi-check-circle text-success"></i> 완료
+                <% else %>
+                  <i class="bi bi-clock"></i> 수강 중
+                <% end %>
+              </span>
+            </div>
+
+            <!-- 탭 네비게이션 -->
+            <ul class="nav nav-tabs" id="watchTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
+                  개요
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab">
+                  노트
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="qna-tab" data-bs-toggle="tab" data-bs-target="#qna" type="button" role="tab">
+                  Q&A
+                </button>
+              </li>
+            </ul>
+
+            <!-- 탭 컨텐츠 -->
+            <div class="tab-content" id="watchTabContent">
+              <!-- 개요 탭 -->
+              <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                <div class="p-3">
+                  <h5>강의 설명</h5>
+                  <p><%= simple_format(@course.description) %></p>
+                  
+                  <div class="row mt-4">
+                    <div class="col-md-6">
+                      <h6>강의 정보</h6>
+                      <ul class="list-unstyled">
+                        <li><strong>카테고리:</strong> <%= @course.category %></li>
+                        <li><strong>난이도:</strong> 
+                          <%= case @course.level
+                              when 'beginner' then '초급'
+                              when 'intermediate' then '중급'
+                              when 'advanced' then '고급'
+                              end %>
+                        </li>
+                        <li><strong>예상 수강시간:</strong> <%= @course.duration %>시간</li>
+                        <li><strong>수강 시작:</strong> <%= @enrollment.enrolled_at.strftime("%Y년 %m월 %d일") %></li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <h6>학습 통계</h6>
+                      <ul class="list-unstyled">
+                        <li><strong>전체 수강생:</strong> <%= @course.total_students %>명</li>
+                        <li><strong>평균 평점:</strong> 
+                          <span class="rating">
+                            <% 5.times do |i| %>
+                              <i class="bi bi-star<%= i < @course.average_rating ? '-fill' : '' %> text-warning"></i>
+                            <% end %>
+                          </span>
+                          <%= @course.average_rating %>
+                        </li>
+                        <li><strong>리뷰 수:</strong> <%= @course.reviews.count %>개</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 노트 탭 -->
+              <div class="tab-pane fade" id="notes" role="tabpanel">
+                <div class="p-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>학습 노트</h5>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#noteModal">
+                      <i class="bi bi-plus"></i> 노트 추가
+                    </button>
+                  </div>
+                  
+                  <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    학습 노트 기능은 향후 업데이트에서 구현될 예정입니다.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q&A 탭 -->
+              <div class="tab-pane fade" id="qna" role="tabpanel">
+                <div class="p-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>질문과 답변</h5>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#qnaModal">
+                      <i class="bi bi-question-circle"></i> 질문하기
+                    </button>
+                  </div>
+                  
+                  <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    Q&A 기능은 향후 업데이트에서 구현될 예정입니다.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 사이드바 - 강의 목차 -->
+        <div class="col-lg-4 bg-white border-start">
+          <div class="p-4">
+            <h5 class="mb-3">강의 목차</h5>
+            
+            <!-- 임시 강의 목차 -->
+            <div class="curriculum-list">
+              <div class="curriculum-section mb-3">
+                <h6 class="text-muted">섹션 1: 시작하기</h6>
+                <div class="curriculum-item p-2 border rounded mb-2 bg-light">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-play-circle text-primary me-2"></i>
+                    <div class="flex-grow-1">
+                      <div class="small fw-semibold">강의 소개</div>
+                      <div class="text-muted" style="font-size: 0.8rem;">5분</div>
+                    </div>
+                    <i class="bi bi-check-circle text-success"></i>
+                  </div>
+                </div>
+                
+                <div class="curriculum-item p-2 border rounded mb-2">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-play-circle text-primary me-2"></i>
+                    <div class="flex-grow-1">
+                      <div class="small fw-semibold">개발 환경 설정</div>
+                      <div class="text-muted" style="font-size: 0.8rem;">15분</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="curriculum-section mb-3">
+                <h6 class="text-muted">섹션 2: 기초 개념</h6>
+                <div class="curriculum-item p-2 border rounded mb-2">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-play-circle text-primary me-2"></i>
+                    <div class="flex-grow-1">
+                      <div class="small fw-semibold">기본 문법</div>
+                      <div class="text-muted" style="font-size: 0.8rem;">25분</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="curriculum-item p-2 border rounded mb-2">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-file-earmark-text text-muted me-2"></i>
+                    <div class="flex-grow-1">
+                      <div class="small fw-semibold">실습 자료</div>
+                      <div class="text-muted" style="font-size: 0.8rem;">PDF</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 강의 완료 버튼 -->
+            <div class="mt-4">
+              <% if @enrollment.completed? %>
+                <div class="alert alert-success text-center">
+                  <i class="bi bi-trophy"></i>
+                  <strong>강의 완료!</strong><br>
+                  수고하셨습니다.
+                </div>
+              <% else %>
+                <button class="btn btn-success w-100" onclick="completeCourse()">
+                  <i class="bi bi-check-circle"></i> 강의 완료하기
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.watch-container {
+  margin-top: -76px; /* 네비게이션 바 높이만큼 올리기 */
+}
+
+.curriculum-item:hover {
+  background-color: #f8f9fa !important;
+  cursor: pointer;
+}
+
+.curriculum-item.active {
+  background-color: #e3f2fd !important;
+  border-color: #2196f3 !important;
+}
+
+/* 🎥 모던 비디오 플레이어 스타일 */
+.modern-video-player {
+  background: #000;
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  cursor: none;
+  transition: cursor 0.3s ease;
+}
+
+.modern-video-player:hover {
+  cursor: default;
+}
+
+.modern-video-player video {
+  border-radius: 0;
+}
+
+/* 비디오 컨트롤 */
+.video-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.modern-video-player:hover .video-controls {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.controls-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  z-index: -1;
+}
+
+/* 진행바 */
+.progress-container {
+  margin-bottom: 15px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.progress-filled {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
+.progress-handle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  left: 0%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.progress-bar:hover .progress-handle {
+  opacity: 1;
+}
+
+.time-display {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 컨트롤 버튼 */
+.control-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-controls, .right-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.control-btn:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+/* 볼륨 컨트롤 */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-slider {
+  width: 80px;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* 속도 선택 */
+.speed-select {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.speed-select option {
+  background: #333;
+  color: white;
+}
+
+/* 중앙 재생 버튼 */
+.center-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.center-play-button {
+  background: rgba(0,0,0,0.7);
+  border: none;
+  color: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-play-button:hover {
+  background: rgba(0,0,0,0.9);
+  transform: scale(1.1);
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  display: none;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255,255,255,0.3);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 영상 정보 오버레이 */
+.video-info-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  color: white;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.modern-video-player:hover .video-info-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.video-title h4 {
+  margin: 0 0 5px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.video-title p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.lesson-info {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lesson-duration {
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  backdrop-filter: blur(5px);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .video-controls {
+    padding: 15px;
+  }
+  
+  .control-buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .left-controls, .right-controls {
+    gap: 8px;
+  }
+  
+  .control-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+  
+  .center-play-button {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+  
+  .volume-slider {
+    width: 60px;
+  }
+}
+</style>
+
+<script>
+// 🎥 영상 배움터 - 모던 비디오 플레이어 JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('mainVideo');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const centerPlayBtn = document.getElementById('centerPlayBtn');
+  const skipBackBtn = document.getElementById('skipBackBtn');
+  const skipForwardBtn = document.getElementById('skipForwardBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const volumeSlider = document.getElementById('volumeSlider');
+  const speedSelect = document.getElementById('speedSelect');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const progressBar = document.querySelector('.progress-bar');
+  const progressFilled = document.getElementById('progressFilled');
+  const progressHandle = document.getElementById('progressHandle');
+  const currentTimeSpan = document.getElementById('currentTime');
+  const totalTimeSpan = document.getElementById('totalTime');
+  const loadingSpinner = document.getElementById('loadingSpinner');
+  const videoControls = document.getElementById('videoControls');
+  const videoPlayer = document.querySelector('.modern-video-player');
+
+  let isPlaying = false;
+  let controlsTimeout;
+
+  // 비디오 로드 완료
+  video.addEventListener('loadedmetadata', function() {
+    totalTimeSpan.textContent = formatTime(video.duration);
+    loadingSpinner.style.display = 'none';
+  });
+
+  // 재생/일시정지 토글
+  function togglePlayPause() {
+    if (video.paused) {
+      video.play();
+      isPlaying = true;
+      playPauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+      centerPlayBtn.style.opacity = '0';
+      centerPlayBtn.style.pointerEvents = 'none';
+    } else {
+      video.pause();
+      isPlaying = false;
+      playPauseBtn.innerHTML = '<i class="bi bi-play-fill"></i>';
+      centerPlayBtn.style.opacity = '1';
+      centerPlayBtn.style.pointerEvents = 'all';
+    }
+  }
+
+  // 이벤트 리스너
+  playPauseBtn.addEventListener('click', togglePlayPause);
+  centerPlayBtn.addEventListener('click', togglePlayPause);
+  video.addEventListener('click', togglePlayPause);
+
+  // 스킵 기능
+  skipBackBtn.addEventListener('click', function() {
+    video.currentTime = Math.max(0, video.currentTime - 10);
+  });
+
+  skipForwardBtn.addEventListener('click', function() {
+    video.currentTime = Math.min(video.duration, video.currentTime + 10);
+  });
+
+  // 음소거 토글
+  muteBtn.addEventListener('click', function() {
+    if (video.muted) {
+      video.muted = false;
+      muteBtn.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
+      volumeSlider.value = video.volume * 100;
+    } else {
+      video.muted = true;
+      muteBtn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
+    }
+  });
+
+  // 볼륨 조절
+  volumeSlider.addEventListener('input', function() {
+    video.volume = this.value / 100;
+    video.muted = false;
+    
+    if (video.volume === 0) {
+      muteBtn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
+    } else if (video.volume < 0.5) {
+      muteBtn.innerHTML = '<i class="bi bi-volume-down-fill"></i>';
+    } else {
+      muteBtn.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
+    }
+  });
+
+  // 재생 속도 조절
+  speedSelect.addEventListener('change', function() {
+    video.playbackRate = parseFloat(this.value);
+  });
+
+  // 전체화면 토글
+  fullscreenBtn.addEventListener('click', function() {
+    if (!document.fullscreenElement) {
+      videoPlayer.requestFullscreen().catch(err => {
+        console.log('전체화면 오류:', err);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  // 전체화면 상태 변경 감지
+  document.addEventListener('fullscreenchange', function() {
+    if (document.fullscreenElement) {
+      fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+    } else {
+      fullscreenBtn.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+    }
+  });
+
+  // 진행바 업데이트
+  video.addEventListener('timeupdate', function() {
+    const progress = (video.currentTime / video.duration) * 100;
+    progressFilled.style.width = progress + '%';
+    progressHandle.style.left = progress + '%';
+    currentTimeSpan.textContent = formatTime(video.currentTime);
+  });
+
+  // 진행바 클릭으로 탐색
+  progressBar.addEventListener('click', function(e) {
+    const rect = progressBar.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const newTime = (clickX / rect.width) * video.duration;
+    video.currentTime = newTime;
+  });
+
+  // 로딩 상태 표시
+  video.addEventListener('waiting', function() {
+    loadingSpinner.style.display = 'block';
+  });
+
+  video.addEventListener('canplay', function() {
+    loadingSpinner.style.display = 'none';
+  });
+
+  // 키보드 단축키
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    switch(e.code) {
+      case 'Space':
+        e.preventDefault();
+        togglePlayPause();
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        video.currentTime = Math.max(0, video.currentTime - 10);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        video.currentTime = Math.min(video.duration, video.currentTime + 10);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        video.volume = Math.min(1, video.volume + 0.1);
+        volumeSlider.value = video.volume * 100;
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        video.volume = Math.max(0, video.volume - 0.1);
+        volumeSlider.value = video.volume * 100;
+        break;
+      case 'KeyM':
+        e.preventDefault();
+        muteBtn.click();
+        break;
+      case 'KeyF':
+        e.preventDefault();
+        fullscreenBtn.click();
+        break;
+    }
+  });
+
+  // 컨트롤 자동 숨김
+  function showControls() {
+    videoControls.style.opacity = '1';
+    videoControls.style.transform = 'translateY(0)';
+    videoPlayer.style.cursor = 'default';
+    
+    clearTimeout(controlsTimeout);
+    controlsTimeout = setTimeout(hideControls, 3000);
+  }
+
+  function hideControls() {
+    if (!video.paused) {
+      videoControls.style.opacity = '0';
+      videoControls.style.transform = 'translateY(20px)';
+      videoPlayer.style.cursor = 'none';
+    }
+  }
+
+  videoPlayer.addEventListener('mousemove', showControls);
+  videoPlayer.addEventListener('mouseleave', function() {
+    if (!video.paused) {
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(hideControls, 1000);
+    }
+  });
+
+  // 시간 포맷팅 함수
+  function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    
+    if (hours > 0) {
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    } else {
+      return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+  }
+
+  // 초기 설정
+  video.volume = 1;
+  volumeSlider.value = 100;
+  
+  console.log('🎥 영상 배움터 플레이어가 준비되었습니다!');
+});
+
+// 강의 완료 함수
+function completeCourse() {
+  if (confirm('강의를 완료하시겠습니까?')) {
+    // 실제 구현에서는 AJAX로 완료 상태 업데이트
+    alert('강의가 완료되었습니다! 🎉');
+    location.reload();
+  }
+}
+</script>
+

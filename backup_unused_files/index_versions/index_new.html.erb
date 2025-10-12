@@ -1,0 +1,672 @@
+<% content_for :title, "정화의 서재 - 아이들의 상상력을 키우는 동화책 플랫폼" %>
+
+<!-- 모던 히어로 섹션 -->
+<section class="modern-hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span>🏆 2024 최고의 동화책 플랫폼</span>
+      </div>
+      <h1 class="hero-title">정화의 서재</h1>
+      <p class="hero-subtitle">
+        아이들의 상상력을 키우는 특별한 동화책 세상<br>
+        1,000+ 동화책 · 50,000+ 회원 · ⭐ 4.9
+      </p>
+      <div class="hero-buttons">
+        <%= link_to courses_path(category: 'ebook'), class: "btn-modern primary" do %>
+          무료 체험하기
+        <% end %>
+        <%= link_to courses_path, class: "btn-modern secondary" do %>
+          둘러보기
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bg-pattern"></div>
+</section>
+
+<!-- 우리가 제공하는 서비스 -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>우리가 제공하는 서비스</h2>
+      <p>정화의 서재에서 만나는 특별한 동화 콘텐츠</p>
+    </div>
+    
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <div class="icon-circle ebook">📖</div>
+        </div>
+        <h3>전자동화책</h3>
+        <p>인터랙티브 디지털 동화책</p>
+        <ul class="service-features">
+          <li>터치 반응형 인터페이스</li>
+          <li>전문 성우 나레이션</li>
+          <li>오프라인 다운로드</li>
+        </ul>
+        <%= link_to "1,000+ 도서 →", courses_path(category: 'ebook'), class: "service-link" %>
+      </div>
+      
+      <div class="service-card">
+        <div class="service-icon">
+          <div class="icon-circle storytelling">🎭</div>
+        </div>
+        <h3>구연동화</h3>
+        <p>생생한 영상 구연동화</p>
+        <ul class="service-features">
+          <li>HD 고화질 영상</li>
+          <li>애니메이션 효과</li>
+          <li>매월 신작 업데이트</li>
+        </ul>
+        <%= link_to "월 9,900원 →", courses_path(category: 'storytelling'), class: "service-link" %>
+      </div>
+      
+      <div class="service-card">
+        <div class="service-icon">
+          <div class="icon-circle education">✏️</div>
+        </div>
+        <h3>동화만들기 교육</h3>
+        <p>창작 교육 프로그램</p>
+        <ul class="service-features">
+          <li>전문 작가 멘토링</li>
+          <li>단계별 커리큘럼</li>
+          <li>작품 전시회</li>
+        </ul>
+        <%= link_to "수강신청 →", courses_path(category: 'education'), class: "service-link" %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 인기 동화책 콘텐츠 -->
+<section class="content-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>인기 동화책 콘텐츠</h2>
+      <p>이번 주 가장 사랑받은 동화책</p>
+    </div>
+    
+    <div class="content-grid">
+      <% Course.limit(12).each do |course| %>
+        <div class="content-card">
+          <div class="content-thumbnail">
+            <% if course.category == "전자동화책" || course.category == "ebook" %>
+              <div class="thumbnail-badge ebook">전자책</div>
+            <% elsif course.category == "구연동화" || course.category == "storytelling" %>
+              <div class="thumbnail-badge storytelling">구연동화</div>
+            <% else %>
+              <div class="thumbnail-badge education">교육</div>
+            <% end %>
+            
+            <div class="thumbnail-placeholder">
+              <span class="thumbnail-icon">
+                <%= course.category == "education" ? "✏️" : (course.category == "storytelling" ? "🎭" : "📖") %>
+              </span>
+            </div>
+          </div>
+          
+          <div class="content-info">
+            <h4><%= course.title.truncate(20) %></h4>
+            <p class="content-author"><%= course.instructor.name %></p>
+            <div class="content-footer">
+              <span class="content-rating">
+                <% if course.reviews.any? %>
+                  ⭐ <%= course.reviews.average(:rating).round(1) %>
+                <% else %>
+                  <span class="text-muted">평가 없음</span>
+                <% end %>
+              </span>
+              <span class="content-price">
+                <% if course.price == 0 %>
+                  무료
+                <% else %>
+                  <%= number_to_currency(course.price, unit: "", precision: 0) %>원
+                <% end %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="section-footer">
+      <%= link_to "전체 콘텐츠 보기 →", courses_path, class: "btn-modern outline" %>
+    </div>
+  </div>
+</section>
+
+<!-- 구독 플랜 -->
+<section class="pricing-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>구독 플랜</h2>
+      <p>정화의 서재와 함께 시작하세요</p>
+    </div>
+    
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>무료 체험</h3>
+          <div class="pricing-amount">
+            <span class="currency">₩</span>
+            <span class="price">0</span>
+            <span class="period">/7일</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>✓ 전자동화책 10권</li>
+          <li>✓ 구연동화 5편</li>
+          <li>✓ 기본 학습 자료</li>
+          <li class="disabled">✗ 오프라인 다운로드</li>
+          <li class="disabled">✗ 프리미엄 콘텐츠</li>
+        </ul>
+        <button class="btn-modern secondary full">무료 시작하기</button>
+      </div>
+      
+      <div class="pricing-card featured">
+        <div class="pricing-badge">인기</div>
+        <div class="pricing-header">
+          <h3>프리미엄</h3>
+          <div class="pricing-amount">
+            <span class="currency">₩</span>
+            <span class="price">9,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>✓ 전자동화책 무제한</li>
+          <li>✓ 구연동화 무제한</li>
+          <li>✓ 모든 학습 자료</li>
+          <li>✓ 오프라인 다운로드</li>
+          <li>✓ 프리미엄 콘텐츠</li>
+        </ul>
+        <button class="btn-modern primary full">구독 시작하기</button>
+      </div>
+      
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>패밀리</h3>
+          <div class="pricing-amount">
+            <span class="currency">₩</span>
+            <span class="price">14,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>✓ 최대 5명 동시 이용</li>
+          <li>✓ 개인별 프로필</li>
+          <li>✓ 부모 관리 기능</li>
+          <li>✓ 학습 리포트</li>
+          <li>✓ 우선 고객 지원</li>
+        </ul>
+        <button class="btn-modern secondary full">패밀리 구독</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* 모던 디자인 시스템 */
+:root {
+  --primary-color: #5B4CFF;
+  --secondary-color: #FF6B9D;
+  --success-color: #00D68F;
+  --warning-color: #FFB800;
+  --dark: #1A1A2E;
+  --gray-100: #F7F9FC;
+  --gray-200: #EDF1F7;
+  --gray-300: #E4E9F2;
+  --gray-400: #C5CEE0;
+  --gray-500: #8F9BB3;
+  --gray-600: #57606F;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --radius: 12px;
+}
+
+/* 모던 히어로 섹션 */
+.modern-hero {
+  position: relative;
+  padding: 120px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+}
+
+.hero-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background-image: 
+    radial-gradient(circle at 20% 80%, white 2px, transparent 2px),
+    radial-gradient(circle at 80% 20%, white 2px, transparent 2px);
+  background-size: 50px 50px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 24px;
+  font-size: 14px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-title {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* 모던 버튼 */
+.btn-modern {
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-modern.primary {
+  background: white;
+  color: var(--primary-color);
+}
+
+.btn-modern.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.btn-modern.secondary {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-modern.secondary:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.btn-modern.outline {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-modern.full {
+  width: 100%;
+}
+
+/* 서비스 섹션 */
+.services-section {
+  padding: 80px 0;
+  background: var(--gray-100);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-header h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--dark);
+}
+
+.section-header p {
+  font-size: 18px;
+  color: var(--gray-600);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.service-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.service-icon {
+  margin-bottom: 24px;
+}
+
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.icon-circle.ebook {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.icon-circle.storytelling {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+.icon-circle.education {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.service-card h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--dark);
+}
+
+.service-card p {
+  color: var(--gray-600);
+  margin-bottom: 24px;
+}
+
+.service-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.service-features li {
+  padding: 8px 0;
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+.service-features li::before {
+  content: "✓ ";
+  color: var(--success-color);
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.service-link {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* 콘텐츠 섹션 */
+.content-section {
+  padding: 80px 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.content-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.content-thumbnail {
+  position: relative;
+  height: 280px;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.thumbnail-badge.ebook {
+  background: var(--primary-color);
+}
+
+.thumbnail-badge.storytelling {
+  background: var(--secondary-color);
+}
+
+.thumbnail-badge.education {
+  background: var(--success-color);
+}
+
+.thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+}
+
+.thumbnail-icon {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.content-info {
+  padding: 16px;
+}
+
+.content-info h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: var(--dark);
+}
+
+.content-author {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.content-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-rating {
+  font-size: 14px;
+  color: var(--warning-color);
+}
+
+.content-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 가격 섹션 */
+.pricing-section {
+  padding: 80px 0;
+  background: var(--gray-100);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 40px;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.pricing-card.featured {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--primary-color);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-color);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.pricing-header h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--dark);
+}
+
+.pricing-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.currency {
+  font-size: 20px;
+  color: var(--gray-500);
+}
+
+.price {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.period {
+  font-size: 16px;
+  color: var(--gray-500);
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.pricing-features li {
+  padding: 12px 0;
+  color: var(--gray-600);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.pricing-features li.disabled {
+  opacity: 0.5;
+}
+
+.section-footer {
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+  
+  .hero-subtitle {
+    font-size: 16px;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-modern {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .services-grid,
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .content-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .pricing-card.featured {
+    transform: none;
+  }
+}
+</style>

@@ -1,0 +1,466 @@
+<% content_for :title, "#{@page_title || '동화 콘텐츠'} - 정화의 서재" %>
+
+<!-- 동화 콘텐츠 히어로 섹션 -->
+<% if @current_category == 'teen_content' || @current_category == 'teen_education' %>
+  <!-- 청소년 전용 히어로 섹션 -->
+  <section class="teen-courses-hero">
+    <div class="hero-background">
+      <div class="hero-pattern"></div>
+      <div class="hero-gradient"></div>
+    </div>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <div class="hero-badge">
+            <span class="badge-icon">🎯</span>
+            <span class="badge-text">14-16세 전용</span>
+          </div>
+          
+          <h1 class="hero-title"><%= @page_title || "🎪 청소년 콘텐츠" %></h1>
+          <p class="hero-description"><%= @page_description || "청소년을 위한 특별한 콘텐츠를 만나보세요" %></p>
+          
+          <!-- 청소년 전용 카테고리 탭 -->
+          <div class="teen-category-tabs">
+            <%= link_to courses_path(category: 'teen_content'), class: "btn-teen-tab #{ @current_category == 'teen_content' ? 'active' : ''}" do %>
+              <span class="tab-icon">📱</span>
+              <span class="tab-text">엔터테인먼트</span>
+            <% end %>
+            <%= link_to courses_path(category: 'teen_education'), class: "btn-teen-tab #{ @current_category == 'teen_education' ? 'active' : ''}" do %>
+              <span class="tab-icon">🎓</span>
+              <span class="tab-text">교육 과정</span>
+            <% end %>
+          </div>
+          
+          <!-- 엔터테인먼트 세부 카테고리 필터 -->
+          <% if @current_category == 'teen_content' %>
+            <div class="teen-subcategory-filters">
+              <div class="filter-label">세부 카테고리:</div>
+              <div class="filter-buttons">
+                <%= link_to "전체", courses_path(category: 'teen_content'), 
+                    class: "btn-filter #{ params[:subcategory].blank? ? 'active' : '' }" %>
+                <%= link_to "📱 만화 & 웹툰", courses_path(category: 'teen_content', subcategory: 'webtoon'), 
+                    class: "btn-filter #{ params[:subcategory] == 'webtoon' ? 'active' : '' }" %>
+                <%= link_to "🎬 애니메이션 & 영상", courses_path(category: 'teen_content', subcategory: 'animation'), 
+                    class: "btn-filter #{ params[:subcategory] == 'animation' ? 'active' : '' }" %>
+                <%= link_to "📚 라이트노벨 & 소설", courses_path(category: 'teen_content', subcategory: 'novel'), 
+                    class: "btn-filter #{ params[:subcategory] == 'novel' ? 'active' : '' }" %>
+                <%= link_to "🎵 K-POP & 댄스", courses_path(category: 'teen_content', subcategory: 'dance'), 
+                    class: "btn-filter #{ params[:subcategory] == 'dance' ? 'active' : '' }" %>
+              </div>
+            </div>
+          <% end %>
+          
+          <!-- 교육 과정 세부 카테고리 필터 -->
+          <% if @current_category == 'teen_education' %>
+            <div class="teen-subcategory-filters">
+              <div class="filter-label">세부 카테고리:</div>
+              <div class="filter-buttons">
+                <%= link_to "전체", courses_path(category: 'teen_education'), 
+                    class: "btn-filter #{ params[:subcategory].blank? ? 'active' : '' }" %>
+                <%= link_to "🎨 창작 & 디자인", courses_path(category: 'teen_education', subcategory: 'creative'), 
+                    class: "btn-filter #{ params[:subcategory] == 'creative' ? 'active' : '' }" %>
+                <%= link_to "🎮 게임 개발 & 코딩", courses_path(category: 'teen_education', subcategory: 'game'), 
+                    class: "btn-filter #{ params[:subcategory] == 'game' ? 'active' : '' }" %>
+                <%= link_to "🌟 진로 탐색 & 자기계발", courses_path(category: 'teen_education', subcategory: 'career'), 
+                    class: "btn-filter #{ params[:subcategory] == 'career' ? 'active' : '' }" %>
+                <%= link_to "📸 크리에이터 & 미디어", courses_path(category: 'teen_education', subcategory: 'creator'), 
+                    class: "btn-filter #{ params[:subcategory] == 'creator' ? 'active' : '' }" %>
+              </div>
+            </div>
+          <% end %>
+          
+          <!-- 홈으로 돌아가기 링크 -->
+          <div class="back-to-home">
+            <%= link_to "← 전체 콘텐츠 보기", courses_path, class: "btn-back-home" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<% else %>
+  <!-- 일반 동화 콘텐츠 히어로 섹션 -->
+  <section class="hero-section-small <%=
+      case @current_category
+      when 'ebook' then 'hero-section-small--ebook'
+      when 'storytelling' then 'hero-section-small--storytelling'
+      when 'education' then 'hero-section-small--education'
+      else ''
+      end
+    %>">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <!-- 매력적인 배지 추가 -->
+          <div class="hero-badge-general mb-3">
+            <span class="badge-icon">🎪</span>
+            <span class="badge-text">모든 연령대</span>
+          </div>
+          
+          <h1 class="hero-title-general mb-3"><%= @page_title || "마법 같은 동화의 세계" %></h1>
+          <p class="hero-description-general mb-4"><%= @page_description || "정화의 서재에서 준비한 특별한 이야기들을 만나보세요 ✨" %></p>
+          
+          <!-- 특징 아이콘들 추가 -->
+          <div class="hero-features-general mb-4">
+            <div class="feature-item-general">
+              <span class="feature-icon">📚</span>
+              <span>1000+ 동화책</span>
+            </div>
+            <div class="feature-item-general">
+              <span class="feature-icon">🎵</span>
+              <span>전문 성우</span>
+            </div>
+            <div class="feature-item-general">
+              <span class="feature-icon">🎨</span>
+              <span>고품질 일러스트</span>
+            </div>
+          </div>
+          
+          <!-- 카테고리 탭 (미니멀) -->
+          <div class="d-flex justify-content-center gap-2 flex-wrap mb-3">
+            <%= link_to "전체", courses_path, class: "btn-minimal #{ @current_category.blank? ? 'btn-minimal-primary' : 'btn-minimal-secondary'} btn-minimal-lg" %>
+            <%= link_to "전자동화책", courses_path(category: 'ebook'), class: "btn-minimal #{ @current_category == 'ebook' ? 'btn-minimal-primary' : 'btn-minimal-secondary'} btn-minimal-lg" %>
+            <%= link_to "구연동화", courses_path(category: 'storytelling'), class: "btn-minimal #{ @current_category == 'storytelling' ? 'btn-minimal-primary' : 'btn-minimal-secondary'} btn-minimal-lg" %>
+            <%= link_to "동화만들기", courses_path(category: 'education'), class: "btn-minimal #{ @current_category == 'education' ? 'btn-minimal-primary' : 'btn-minimal-secondary'} btn-minimal-lg" %>
+          </div>
+          
+          <!-- 청소년 콘텐츠로 이동 링크 -->
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <small class="text-muted me-3 align-self-center">청소년 전용:</small>
+            <%= link_to "📱 콘텐츠", teen_content_path, class: "btn-minimal btn-minimal-secondary btn-minimal-sm" %>
+            <%= link_to "🎓 교육", courses_path(category: 'teen_education'), class: "btn-minimal btn-minimal-secondary btn-minimal-sm" %>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+<% end %>
+
+<div class="container-fluid py-5">
+  <div class="container">
+  
+  <!-- 카테고리별 안내 배너 -->
+  <% if @current_category == 'ebook' %>
+    <div class="alert alert-primary d-flex align-items-center mb-4" role="alert">
+      <span class="fs-2 me-3">📖</span>
+      <div>
+        <h5 class="alert-heading mb-1">전자동화책 구매 안내</h5>
+        <p class="mb-0">한 번 구매하면 평생 소장! 터치하고 듣고 읽는 인터랙티브 동화책입니다.</p>
+      </div>
+    </div>
+  <% elsif @current_category == 'storytelling' %>
+    <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+      <span class="fs-2 me-3">🎭</span>
+      <div>
+        <h5 class="alert-heading mb-1">구연동화 구독 안내</h5>
+        <p class="mb-0">월 9,900원으로 모든 구연동화를 무제한 시청! 매달 새로운 이야기가 추가됩니다.</p>
+      </div>
+    </div>
+  <% elsif @current_category == 'education' %>
+    <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+      <span class="fs-2 me-3">✍️</span>
+      <div>
+        <h5 class="alert-heading mb-1">동화만들기 교육 안내</h5>
+        <p class="mb-0">전문 작가와 함께 나만의 동화책을 만들어보세요. 완성 후 전시회 기회도 제공됩니다!</p>
+      </div>ㅗ
+    </div>
+  <!-- 청소년 전용 카테고리 안내 (단순화) -->
+  <% elsif @current_category == 'teen_content' %>
+    <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+      <span class="fs-2 me-3">📱</span>
+      <div>
+        <h5 class="alert-heading mb-1">청소년 콘텐츠</h5>
+        <p class="mb-0">만화, 애니메이션, 웹툰, 라이트노벨 등 청소년이 즐기는 다양한 엔터테인먼트 콘텐츠를 만나보세요!</p>
+      </div>
+    </div>
+  <% elsif @current_category == 'teen_education' %>
+    <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+      <span class="fs-2 me-3">🎓</span>
+      <div>
+        <h5 class="alert-heading mb-1">청소년 교육</h5>
+        <p class="mb-0">창작, 게임 개발, 진로 탐색, 자기계발 등 청소년 성장을 위한 실용적인 교육 과정입니다!</p>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- 강의 목록 -->
+  <div class="content-grid">
+    <% if @courses.any? %>
+      <% @courses.each do |course| %>
+        <%= link_to course_path(course), class: "content-card" do %>
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            <% 
+              # 제목별 맞춤 Vertex AI 이미지 최우선 적용
+              clean_title = course.title.gsub(/[^\w\s가-힣]/, '').strip.gsub(/\s+/, '_')
+              
+              # 청소년 콘텐츠는 teen_title_specific_vertex 우선 사용
+              teen_title_specific_path = "generated/teen_title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+              title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+              title_matched_path = ThumbnailMatcherHelper.get_title_specific_thumbnail(course.title, course.id) if defined?(ThumbnailMatcherHelper)
+              
+              category = course.category&.downcase || 'ebook'
+              index = course.id % 6 + 1
+              thumbnail_path = "generated/thumbnails/#{category}_#{index}.svg"
+              
+              # 청소년 콘텐츠 우선 처리
+              if course.age == 'teen' && Rails.application.assets && Rails.application.assets.find_asset(teen_title_specific_path)
+                final_thumb = teen_title_specific_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(title_specific_vertex_path)
+                final_thumb = title_specific_vertex_path
+              elsif title_matched_path && Rails.application.assets && Rails.application.assets.find_asset(title_matched_path)
+                final_thumb = title_matched_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(thumbnail_path)
+                final_thumb = thumbnail_path
+              elsif course.thumbnail.present?
+                final_thumb = course.thumbnail
+              else
+                final_thumb = nil
+              end
+            %>
+            
+            <% if final_thumb %>
+              <%= image_tag final_thumb, alt: course.title, class: "thumbnail-image" %>
+            <% else %>
+              <div class="thumbnail-placeholder">
+                <span class="thumbnail-icon">
+                  <%= course.category == "education" ? "✏️" : (course.category == "storytelling" ? "🎭" : "📖") %>
+                </span>
+              </div>
+            <% end %>
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge <%= 
+              if course.category == "전자동화책" || course.category == "ebook"
+                'ebook'
+              elsif course.category == "구연동화" || course.category == "storytelling"
+                'storytelling'
+              else
+                'education'
+              end
+            %>">
+              <%= 
+                if course.category == "전자동화책" || course.category == "ebook"
+                  '전자책'
+                elsif course.category == "구연동화" || course.category == "storytelling"
+                  '구연동화'
+                else
+                  '교육'
+                end
+              %>
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4><%= course.title.truncate(20) %></h4>
+            <p class="content-author"><%= course.instructor.name %></p>
+            <div class="content-footer">
+              <span class="content-rating">
+                <% if course.reviews.any? %>
+                  ⭐ <%= course.reviews.average(:rating).round(1) %>
+                <% else %>
+                  <span class="text-muted">평가 없음</span>
+                <% end %>
+              </span>
+              <span class="content-price">
+                <% if course.price == 0 %>
+                  무료
+                <% else %>
+                  <%= number_to_currency(course.price, unit: "", precision: 0) %>원
+                <% end %>
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                <%= 
+                  case course.age
+                  when 'baby' then '0-3세'
+                  when 'toddler' then '4-7세'
+                  when 'elementary' then '8-12세'
+                  when 'teen' then '14-16세'
+                  else '전체'
+                  end
+                %>
+              </span>
+              <span class="chip length">
+                <%= 
+                  if course.duration.to_i < 3
+                    '<3분'
+                  elsif course.duration.to_i <= 7
+                    '3-7분'
+                  elsif course.duration.to_i <= 15
+                    '8-15분'
+                  else
+                    '>15분'
+                  end
+                %>
+              </span>
+              <% if course.price.to_i == 0 %>
+                <span class="chip free">무료</span>
+              <% end %>
+              <% if course.reviews.count.to_i >= 5 %>
+                <span class="chip popular">인기</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="col-12">
+        <div class="text-center py-5">
+          <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+          <h4 class="text-muted">아직 등록된 콘텐츠가 없습니다</h4>
+          <p class="text-muted">곧 새로운 동화책 콘텐츠가 추가될 예정입니다!</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  </div>
+</div>
+
+<!-- 인라인 스타일 제거: hero-section-small 배경/효과는 unified_hero_design.scss에서 관리 -->
+
+<!-- 장바구니 추가 스크립트 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 장바구니 추가 폼 처리
+  document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const courseId = this.dataset.courseId;
+      const button = this.querySelector('button');
+      const originalContent = button.innerHTML;
+      
+      // 로딩 상태 표시
+      button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+      button.disabled = true;
+      
+      try {
+        const response = await fetch('/cart_items', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('[name="authenticity_token"]').value,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ course_id: courseId })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // 버튼을 "담김" 상태로 변경
+          button.innerHTML = '<i class="bi bi-cart-check"></i>';
+          button.classList.remove('btn-outline-primary');
+          button.classList.add('btn-success');
+          
+          // 토스트 알림 표시
+          showToast('✅ 동화책 보관함에 추가되었습니다!', data.course_title || '');
+        } else {
+          throw new Error(data.error || '오류가 발생했습니다');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        button.innerHTML = originalContent;
+        showToast('❌ 오류가 발생했습니다', error.message, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+  
+  // 토스트 알림 함수
+  function showToast(title, message, type = 'success') {
+    const toastHtml = `
+      <div class="toast-notification ${type}">
+        <div class="toast-header">
+          <strong>${title}</strong>
+          <button class="toast-close">&times;</button>
+        </div>
+        ${message ? `<div class="toast-body">${message}</div>` : ''}
+      </div>
+    `;
+    
+    const toastContainer = document.getElementById('toast-container') || createToastContainer();
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    const toast = toastContainer.lastElementChild;
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // 닫기 버튼
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    });
+    
+    // 자동 제거
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+  
+  function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+    document.body.appendChild(container);
+    return container;
+  }
+});
+</script>
+
+<style>
+.toast-notification {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 10px;
+  min-width: 300px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-notification.success {
+  border-left: 4px solid #28a745;
+}
+
+.toast-notification.error {
+  border-left: 4px solid #dc3545;
+}
+
+.toast-header {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toast-body {
+  padding: 12px;
+  color: #666;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.toast-close:hover {
+  color: #333;
+}
+</style>

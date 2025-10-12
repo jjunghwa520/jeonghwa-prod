@@ -1,0 +1,142 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">생성된 이미지</h3>
+          <span class="badge bg-<%= status_color(@generated_image.status) %>">
+            <%= status_text(@generated_image.status) %>
+          </span>
+        </div>
+        
+        <div class="card-body">
+          <% if @generated_image.processing? %>
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">이미지 생성 중...</span>
+              </div>
+              <h4>이미지를 생성하고 있습니다...</h4>
+              <p class="text-muted">잠시만 기다려주세요. (10-30초 소요)</p>
+              <div class="progress mt-3" style="height: 25px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                     role="progressbar" style="width: 100%">
+                  생성 중...
+                </div>
+              </div>
+            </div>
+            
+            <script>
+              // 5초마다 상태 확인
+              setInterval(function() {
+                fetch('/generated_images/<%= @generated_image.id %>/status.json')
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.status === 'completed' || data.status === 'failed') {
+                      location.reload();
+                    }
+                  });
+              }, 5000);
+            </script>
+            
+          <% elsif @generated_image.available? %>
+            <div class="text-center">
+              <img src="<%= @generated_image.image_url %>" 
+                   alt="<%= @generated_image.prompt %>"
+                   class="img-fluid rounded shadow mb-3"
+                   style="max-width: 100%; height: auto;">
+              
+              <div class="mt-3">
+                <a href="<%= @generated_image.image_url %>" 
+                   download="generated_image_<%= @generated_image.id %>.png"
+                   class="btn btn-success">
+                  <i class="bi bi-download"></i> 다운로드
+                </a>
+                
+                <% if @generated_image.course %>
+                  <%= link_to "코스에 적용", 
+                      apply_image_course_path(@generated_image.course, image_id: @generated_image.id),
+                      method: :patch,
+                      class: "btn btn-primary",
+                      data: { confirm: "이 이미지를 코스에 적용하시겠습니까?" } %>
+                <% end %>
+              </div>
+            </div>
+            
+          <% elsif @generated_image.failed? %>
+            <div class="alert alert-danger">
+              <h4 class="alert-heading">이미지 생성 실패</h4>
+              <p><%= @generated_image.error_message %></p>
+              <hr>
+              <div class="d-flex gap-2">
+                <%= link_to "다시 시도", 
+                    retry_generated_image_path(@generated_image),
+                    method: :post,
+                    class: "btn btn-warning" %>
+                <%= link_to "새로 만들기", 
+                    new_generated_image_path,
+                    class: "btn btn-primary" %>
+              </div>
+            </div>
+          <% end %>
+          
+          <div class="mt-4">
+            <h5>이미지 정보</h5>
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <th style="width: 30%;">프롬프트</th>
+                  <td><%= @generated_image.prompt %></td>
+                </tr>
+                <tr>
+                  <th>유형</th>
+                  <td><%= @generated_image.image_type %></td>
+                </tr>
+                <tr>
+                  <th>스타일</th>
+                  <td><%= @generated_image.style %></td>
+                </tr>
+                <tr>
+                  <th>크기</th>
+                  <td><%= @generated_image.size %></td>
+                </tr>
+                <tr>
+                  <th>생성 시간</th>
+                  <td>
+                    <% if @generated_image.generation_time %>
+                      <%= number_with_precision(@generated_image.generation_time, precision: 2) %>초
+                    <% else %>
+                      -
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <th>생성일</th>
+                  <td><%= @generated_image.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="d-flex justify-content-between mt-4">
+            <%= link_to "목록으로", generated_images_path, class: "btn btn-secondary" %>
+            
+            <div>
+              <% if @generated_image.failed? %>
+                <%= link_to "다시 시도", 
+                    retry_generated_image_path(@generated_image),
+                    method: :post,
+                    class: "btn btn-warning" %>
+              <% end %>
+              
+              <%= link_to "삭제", 
+                  @generated_image,
+                  method: :delete,
+                  data: { confirm: "정말 삭제하시겠습니까?" },
+                  class: "btn btn-danger" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

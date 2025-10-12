@@ -1,0 +1,1385 @@
+<% content_for :title, "정화의 서재 - 아이들의 상상력을 키우는 동화책 플랫폼" %>
+
+<!-- 임팩트 있는 히어로 섹션 -->
+<%= render 'impactful_hero_section' %>
+
+<!--
+기존 히어로 섹션 완전 제거됨
+  <!-- 배경 레이어들 -->
+  <div class="hero-bg-animated">
+    <div class="bg-gradient-main"></div>
+    <div class="bg-pattern-dots"></div>
+    <div class="bg-floating-elements"></div>
+  </div>
+  
+      <div class="container">
+    <div class="row align-items-center min-vh-100">
+      <!-- 왼쪽 콘텐츠 -->
+      <div class="col-lg-6">
+        <div class="hero-content-animated">
+          <!-- 상단 배지 -->
+          <div class="animated-badge">
+            <span class="badge-pulse"></span>
+            <span class="badge-icon">🌟</span>
+            <span class="badge-text">아이들의 상상력을 키우는 특별한 공간</span>
+          </div>
+          
+          <!-- 메인 타이틀 -->
+          <h1 class="hero-main-title">
+            <span class="title-discover">정화의 서재에서</span>
+            <span class="title-world">
+              <span class="highlight-text">동화 세상을</span> 탐험하세요!
+            </span>
+              </h1>
+          
+          <!-- 설명 텍스트 -->
+          <p class="hero-description">
+            전문 작가들이 만든 마법 같은 이야기들이 기다리고 있어요.<br>
+            우리 아이와 함께 꿈과 모험이 가득한 동화나라로 떠나볼까요?
+          </p>
+          
+          <!-- 특징 포인트들 -->
+          <div class="feature-highlights">
+            <div class="highlight-item">
+              <div class="highlight-icon">📚</div>
+              <span>전자동화책</span>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🎭</div>
+              <span>구연동화</span>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">✍️</div>
+              <span>동화만들기</span>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🌟</div>
+              <span>청소년 콘텐츠</span>
+            </div>
+          </div>
+          
+          <!-- 액션 버튼들 -->
+          <div class="hero-actions-animated">
+            <%= link_to courses_path, class: "btn-explore primary" do %>
+              <span class="btn-bg-shine"></span>
+              <span class="btn-content">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">모험 시작하기</span>
+              </span>
+              <% end %>
+              
+            <%= link_to courses_path(category: 'ebook'), class: "btn-explore secondary" do %>
+              <span class="btn-content">
+                <span class="btn-icon">👀</span>
+                <span class="btn-text">둘러보기</span>
+              </span>
+                <% end %>
+              </div>
+          
+          <!-- 하단 통계 -->
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number"><%= Course.published.count %>+</div>
+              <div class="stat-label">동화 콘텐츠</div>
+            </div>
+            <div class="stat-divider">•</div>
+            <div class="stat-item">
+              <div class="stat-number">4.9⭐</div>
+              <div class="stat-label">만족도</div>
+            </div>
+            <div class="stat-divider">•</div>
+            <div class="stat-item">
+              <div class="stat-number">50K+</div>
+              <div class="stat-label">행복한 가족</div>
+            </div>
+          </div>
+                </div>
+              </div>
+      
+      <!-- 오른쪽 캐릭터 영역 -->
+      <div class="col-lg-6">
+        <div class="character-playground">
+          <!-- 점선 경로 -->
+          <svg class="path-decoration-hero" viewBox="0 0 600 600">
+            <path d="M150,500 Q350,200 500,350" 
+                  stroke="rgba(255,255,255,0.4)" 
+                  stroke-width="4" 
+                  fill="none" 
+                  stroke-dasharray="15,10"
+                  class="animated-path"/>
+          </svg>
+          
+          <!-- 정화 대표 (마법봉 정밀 처리 - isnet 모델) -->
+          <div class="main-character">
+            <img src="/images/refined/jeonghwa_refined_isnet-general-use.png?v=<%= Time.current.to_i %>" 
+                 alt="정화 대표 - 정화의 서재 대표" 
+                 class="jeonghwa-hero-image"
+                 onerror="this.src='/images/refined/jeonghwa_magic_wand_refined.png'">
+          </div>
+          
+          <!-- 학생 캐릭터들 (rembg 완전 객체 분리) -->
+          <div class="student-characters">
+            <div class="student student-bear">
+              <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                   alt="곰 학생" 
+                   class="student-image">
+            </div>
+            <div class="student student-rabbit">
+              <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                   alt="토끼 학생" 
+                   class="student-image">
+            </div>
+          </div>
+          
+          <!-- 플로팅 책들 -->
+          <div class="floating-books">
+            <div class="book-item book-1">
+              <img src="/images/generated/hero_final/floating_storybook_1.png?v=<%= Time.current.to_i %>" alt="마법의 책" class="book-image" style="width: 100px !important; height: 100px !important; display: block !important; opacity: 1 !important;">
+              <div class="book-sparkle">✨</div>
+            </div>
+            <div class="book-item book-2">
+              <img src="/images/generated/hero_final/floating_storybook_2.png?v=<%= Time.current.to_i %>" alt="열린 책" class="book-image">
+              <div class="book-sparkle">⭐</div>
+            </div>
+            <div class="book-item book-3">
+              <img src="/images/generated/hero_final/floating_storybook_3.png?v=<%= Time.current.to_i %>" alt="책 스택" class="book-image">
+              <div class="book-sparkle">💫</div>
+            </div>
+            <div class="book-item book-4">
+              <div class="book-icon">📘</div>
+              <div class="book-sparkle">🌟</div>
+            </div>
+            <div class="book-item book-5">
+              <div class="book-icon">📗</div>
+              <div class="book-sparkle">✨</div>
+            </div>
+          </div>
+          
+          <!-- 마법 요소들 -->
+          <div class="magic-elements">
+            <div class="magic-generated-bg">
+              <img src="/images/generated/hero_final/magical_fairy_elements.png?v=<%= Time.current.to_i %>" alt="동화 마법 요소들" class="magic-bg-image">
+            </div>
+            <div class="magic-generated-items">
+              <img src="/images/generated/hero_final/storybook_magic_items.png?v=<%= Time.current.to_i %>" alt="스토리북 마법 아이템들" class="magic-items-image">
+            </div>
+            <div class="magic-star star-1">⭐</div>
+            <div class="magic-star star-2">✨</div>
+            <div class="magic-star star-3">💫</div>
+            <div class="magic-heart heart-1">💖</div>
+            <div class="magic-heart heart-2">💝</div>
+            <div class="magic-note note-1">🎵</div>
+            <div class="magic-note note-2">🎶</div>
+          </div>
+          
+          <!-- 배경 캐릭터들 -->
+          <div class="background-characters">
+            <img src="/images/generated/hero_educational/knowledge_explorer.png?v=<%= Time.current.to_i %>" alt="지식 탐험가" class="bg-char-img char-1">
+            <img src="/images/generated/hero_educational/story_narrator.png?v=<%= Time.current.to_i %>" alt="스토리 나레이터" class="bg-char-img char-2">
+            <div class="bg-char char-3">📚</div>
+          </div>
+          
+          <!-- 플로팅 패스 -->
+          <div class="floating-path">
+            <svg viewBox="0 0 400 300" class="path-svg">
+              <path d="M50,250 Q200,50 350,150" stroke="#ffffff" stroke-width="3" fill="none" stroke-dasharray="10,5" opacity="0.3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 스크롤 인디케이터 -->
+  <div class="scroll-indicator">
+    <div class="scroll-text">아래로 스크롤</div>
+    <div class="scroll-arrow">↓</div>
+  </div>
+</section>
+
+<!-- 주간 컬렉션 섹션 -->
+<section class="collections-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>이번 주 <span class="highlight">컬렉션</span></h2>
+      <p>상황과 무드에 맞춘 추천 묶음</p>
+    </div>
+
+    <!-- 잠자리 컬렉션 -->
+    <div class="collection-block">
+      <div class="collection-header">
+        <span class="collection-badge bedtime">잠자리</span>
+        <h3>포근한 밤, 조용히 듣는 동화</h3>
+      </div>
+      <div class="collection-grid">
+        <% Course.limit(4).each_with_index do |course, i| %>
+          <% 
+            # 제목별 맞춤 이미지 우선 사용 (청소년 콘텐츠 포함)
+            clean_title = course.title.gsub(/[🦁🧚‍♀️🐰🐻🦊🐧🦋🐢🦉🐿️🎭🏰🐺🐷🌹🐸👸🏃🍎🦢📝🎨📚🏆✏️🎭🌈📖💡🎪\s]/, '_').gsub(/__+/, '_').gsub(/^_|_$/, '')
+            teen_title_specific_path = "generated/teen_title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+            title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+            title_matched_path = ThumbnailMatcherHelper.get_title_specific_thumbnail(course.title, course.id) if defined?(ThumbnailMatcherHelper)
+            fallback_thumb = "generated/abstract/korean_neutral_baby_#{(i % 3) + 1}.jpg"
+            
+            thumb = if course.age == 'teen' && Rails.application.assets&.find_asset(teen_title_specific_path)
+              teen_title_specific_path
+            elsif Rails.application.assets&.find_asset(title_specific_vertex_path)
+              title_specific_vertex_path
+            elsif title_matched_path && Rails.application.assets&.find_asset(title_matched_path)
+              title_matched_path
+            else
+              fallback_thumb
+            end
+          %>
+          <%= link_to course_path(course), class: "collection-card" do %>
+            <div class="collection-thumb">
+              <% if Rails.application.assets && Rails.application.assets.find_asset(thumb) %>
+                <%= image_tag thumb, alt: course.title %>
+              <% end %>
+              <span class="chip small"><%= course.duration.to_i <= 7 ? '짧게' : '차분히' %></span>
+            </div>
+            <div class="collection-info">
+              <h4><%= course.title.truncate(18) %></h4>
+              <p>달·별·자장가 무드</p>
+            </div>
+          <% end %>
+        <% end %>
+                </div>
+              </div>
+
+    <!-- 숲·바람 컬렉션 -->
+    <div class="collection-block">
+      <div class="collection-header">
+        <span class="collection-badge nature">숲·바람</span>
+        <h3>자연의 색과 소리로 떠나는 산책</h3>
+      </div>
+      <div class="collection-grid">
+        <% Course.offset(4).limit(5).each_with_index do |course, i| %>
+          <% 
+            # 제목별 맞춤 이미지 우선 사용 (청소년 콘텐츠 포함)
+            clean_title = course.title.gsub(/[🦁🧚‍♀️🐰🐻🦊🐧🦋🐢🦉🐿️🎭🏰🐺🐷🌹🐸👸🏃🍎🦢📝🎨📚🏆✏️🎭🌈📖💡🎪\s]/, '_').gsub(/__+/, '_').gsub(/^_|_$/, '')
+            teen_title_specific_path = "generated/teen_title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+            title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+            title_matched_path = ThumbnailMatcherHelper.get_title_specific_thumbnail(course.title, course.id) if defined?(ThumbnailMatcherHelper)
+            fallback_thumb = "generated/abstract/korean_neutral_toddler_#{(i % 3) + 1}.jpg"
+            
+            thumb = if course.age == 'teen' && Rails.application.assets&.find_asset(teen_title_specific_path)
+              teen_title_specific_path
+            elsif Rails.application.assets&.find_asset(title_specific_vertex_path)
+              title_specific_vertex_path
+            elsif title_matched_path && Rails.application.assets&.find_asset(title_matched_path)
+              title_matched_path
+            else
+              fallback_thumb
+            end
+          %>
+          <%= link_to course_path(course), class: "collection-card" do %>
+            <div class="collection-thumb">
+              <% if Rails.application.assets && Rails.application.assets.find_asset(thumb) %>
+                <%= image_tag thumb, alt: course.title %>
+              <% end %>
+              <span class="chip small">자연</span>
+            </div>
+            <div class="collection-info">
+              <h4><%= course.title.truncate(18) %></h4>
+              <p>숲·바람·비 무드</p>
+            </div>
+          <% end %>
+        <% end %>
+          </div>
+        </div>
+
+    <!-- 무지개 컬렉션 -->
+    <div class="collection-block">
+      <div class="collection-header">
+        <h3>따뜻하고 밝은 희망의 이야기</h3>
+      </div>
+      <div class="collection-grid">
+        <% Course.offset(8).limit(5).each_with_index do |course, i| %>
+          <% 
+            # 제목별 맞춤 이미지 우선 사용 (청소년 콘텐츠 포함)
+            clean_title = course.title.gsub(/[🦁🧚‍♀️🐰🐻🦊🐧🦋🐢🦉🐿️🎭🏰🐺🐷🌹🐸👸🏃🍎🦢📝🎨📚🏆✏️🎭🌈📖💡🎪\s]/, '_').gsub(/__+/, '_').gsub(/^_|_$/, '')
+            teen_title_specific_path = "generated/teen_title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+            title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+            title_matched_path = ThumbnailMatcherHelper.get_title_specific_thumbnail(course.title, course.id) if defined?(ThumbnailMatcherHelper)
+            fallback_thumb = "generated/abstract/korean_fantasy_elementary_#{(i % 3) + 1}.jpg"
+            
+            thumb = if course.age == 'teen' && Rails.application.assets&.find_asset(teen_title_specific_path)
+              teen_title_specific_path
+            elsif Rails.application.assets&.find_asset(title_specific_vertex_path)
+              title_specific_vertex_path
+            elsif title_matched_path && Rails.application.assets&.find_asset(title_matched_path)
+              title_matched_path
+            else
+              fallback_thumb
+            end
+          %>
+          <%= link_to course_path(course), class: "collection-card" do %>
+            <div class="collection-thumb">
+              <% if Rails.application.assets && Rails.application.assets.find_asset(thumb) %>
+                <%= image_tag thumb, alt: course.title %>
+              <% end %>
+              <span class="chip small">따뜻함</span>
+            </div>
+            <div class="collection-info">
+              <h4><%= course.title.truncate(18) %></h4>
+              <p>무지개·햇살 무드</p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 빠른 진입 섹션 -->
+<section class="quick-entry-section">
+  <div class="container">
+    <div class="quick-entry-grid">
+      <%= link_to courses_path(category: 'ebook'), class: 'quick-entry-card qe-ebook' do %>
+        <div class="qe-icon">📖</div>
+        <div class="qe-text">
+          <h3>전자동화책</h3>
+          <p>읽고 듣는 마법의 책</p>
+                </div>
+      <% end %>
+      <%= link_to courses_path(category: 'storytelling'), class: 'quick-entry-card qe-video' do %>
+        <div class="qe-icon">🎬</div>
+        <div class="qe-text">
+          <h3>구연동화</h3>
+          <p>영상으로 만나는 이야기</p>
+              </div>
+      <% end %>
+      <%= link_to courses_path(category: 'education'), class: 'quick-entry-card qe-make' do %>
+        <div class="qe-icon">🎨</div>
+        <div class="qe-text">
+          <h3>동화 만들기</h3>
+          <p>손으로 완성하는 우리 동화</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+</section>
+
+
+<!-- 연령별 맞춤 콘텐츠 -->
+<section class="age-selection-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>우리 아이 연령에 맞는 <span class="highlight">맞춤 콘텐츠</span></h2>
+      <p>아이의 성장 단계에 딱 맞는 동화책을 만나보세요</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="age-card baby-card">
+          <div class="age-icon">
+            <span class="age-emoji">👶</span>
+          </div>
+          <h3>0-3세</h3>
+          <p class="age-desc">영유아</p>
+          <ul class="age-features">
+            <li>• 단순한 그림과 색상</li>
+            <li>• 촉감 놀이 콘텐츠</li>
+            <li>• 자장가와 동요</li>
+          </ul>
+          <%= link_to "영유아 콘텐츠 보기", courses_path(age: 'baby'), class: "btn-age baby" %>
+        </div>
+      </div>
+      
+      <div class="col-lg-3 col-md-6">
+        <div class="age-card toddler-card">
+          <div class="age-icon">
+            <span class="age-emoji">🧒</span>
+          </div>
+          <h3>4-7세</h3>
+          <p class="age-desc">유아</p>
+          <ul class="age-features">
+            <li>• 재미있는 캐릭터</li>
+            <li>• 상상력 자극 스토리</li>
+            <li>• 기초 학습 콘텐츠</li>
+          </ul>
+          <%= link_to "유아 콘텐츠 보기", courses_path(age: 'toddler'), class: "btn-age toddler" %>
+        </div>
+      </div>
+      
+      <div class="col-lg-3 col-md-6">
+        <div class="age-card elementary-card">
+          <div class="age-icon">
+            <span class="age-emoji">👦</span>
+          </div>
+          <h3>8-12세</h3>
+          <p class="age-desc">초등학생</p>
+          <ul class="age-features">
+            <li>• 모험과 판타지</li>
+            <li>• 교과 연계 학습</li>
+            <li>• 창작 활동 지원</li>
+          </ul>
+          <%= link_to "초등 콘텐츠 보기", courses_path(age: 'elementary'), class: "btn-age elementary" %>
+        </div>
+            </div>
+      
+      <div class="col-lg-3 col-md-6">
+        <div class="age-card teen-card">
+          <div class="age-icon">
+            <span class="age-emoji">🧑‍🎓</span>
+          </div>
+          <h3>14-16세</h3>
+          <p class="age-desc">청소년</p>
+          <ul class="age-features">
+            <li>• 만화/웹툰 스타일</li>
+            <li>• 애니메이션 콘텐츠</li>
+            <li>• 성장과 자아탐색</li>
+          </ul>
+          <%= link_to "청소년 콘텐츠 보기", courses_path(age: 'teen'), class: "btn-age teen" %>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 스크롤 인디케이터 -->
+    <div class="scroll-indicator-hero">
+      <span class="scroll-text-hero">SCROLL DOWN</span>
+      <div class="scroll-arrow-hero">↓</div>
+    </div>
+완전 제거됨
+-->
+
+<!-- 우리가 제공하는 서비스 -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>우리 아이를 위한 <span class="highlight">특별한 서비스</span></h2>
+      <p>정화의 서재가 준비한 세 가지 마법 같은 선물 🎁</p>
+    </div>
+    
+    <div class="services-grid">
+      <div class="service-card ebook-card">
+        <div class="card-decoration">
+          <span class="sparkle">✨</span>
+        </div>
+        <div class="service-icon">
+          <div class="icon-circle ebook">
+            <span class="icon-emoji">📖</span>
+          </div>
+        </div>
+        <h3>전자동화책</h3>
+        <p class="service-desc">손가락으로 터치하면 살아나는<br>마법의 동화책</p>
+        <ul class="service-features">
+          <li>🎵 재미있는 효과음과 음악</li>
+          <li>🗣️ 전문 성우의 따뜻한 목소리</li>
+          <li>📱 언제 어디서나 읽기</li>
+        </ul>
+        <%= link_to courses_path(category: 'ebook'), class: "service-link" do %>
+          <span>1,000권의 동화책 만나기</span>
+          <span class="arrow">→</span>
+              <% end %>
+            </div>
+            
+      <div class="service-card storytelling-card">
+        <div class="card-decoration">
+          <span class="sparkle">🌟</span>
+        </div>
+        <div class="service-icon">
+          <div class="icon-circle storytelling">
+            <span class="icon-emoji">🎭</span>
+          </div>
+              </div>
+        <h3>구연동화 영상</h3>
+        <p class="service-desc">눈으로 보고 귀로 듣는<br>생생한 동화 극장</p>
+        <ul class="service-features">
+          <li>🎬 HD 고화질 애니메이션</li>
+          <li>🎨 아름다운 일러스트</li>
+          <li>🆕 매주 새로운 이야기</li>
+        </ul>
+        <%= link_to courses_path(category: 'storytelling'), class: "service-link" do %>
+          <span>동화 극장 입장하기</span>
+          <span class="arrow">→</span>
+                  <% end %>
+              </div>
+              
+      <div class="service-card education-card">
+        <div class="card-decoration">
+          <span class="sparkle">💫</span>
+              </div>
+        <div class="service-icon">
+          <div class="icon-circle education">
+            <span class="icon-emoji">🎨</span>
+          </div>
+        </div>
+        <h3>부모님과 함께 만들기</h3>
+        <p class="service-desc">우리 아이만의 특별한<br>동화책 만들기</p>
+        <ul class="service-features">
+          <li>👨‍👩‍👧 가족이 함께하는 시간</li>
+          <li>📝 나만의 이야기 만들기</li>
+          <li>🏆 완성작 전시회 참여</li>
+        </ul>
+        <%= link_to courses_path(category: 'education'), class: "service-link" do %>
+          <span>동화 작가 되어보기</span>
+          <span class="arrow">→</span>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 인기 동화책 콘텐츠 -->
+<section class="content-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>인기 동화책 콘텐츠</h2>
+      <p>이번 주 가장 사랑받은 동화책</p>
+      
+      <!-- 필터 탭들 -->
+      <div class="filter-section">
+        <!-- 연령 필터 탭 -->
+        <div class="filter-group">
+          <span class="filter-label">연령대</span>
+          <div class="age-filter-tabs">
+            <button class="age-tab active" data-age="all">전체</button>
+            <button class="age-tab" data-age="baby">0-3세</button>
+            <button class="age-tab" data-age="toddler">4-7세</button>
+            <button class="age-tab" data-age="elementary">8-12세</button>
+          </div>
+        </div>
+        
+        <!-- 주제 필터 탭 -->
+        <div class="filter-group">
+          <span class="filter-label">주제</span>
+          <div class="theme-filter-tabs">
+            <button class="theme-tab active" data-theme="all">전체</button>
+            <button class="theme-tab" data-theme="nature">동물/자연</button>
+            <button class="theme-tab" data-theme="adventure">모험/탐험</button>
+            <button class="theme-tab" data-theme="fantasy">판타지/요정</button>
+            <button class="theme-tab" data-theme="daily">일상/우정</button>
+            <button class="theme-tab" data-theme="emotion">감정/사회성</button>
+            <button class="theme-tab" data-theme="tradition">명절/전통</button>
+          </div>
+        </div>
+        
+        <!-- 학습목표 필터 탭 -->
+        <div class="filter-group">
+          <span class="filter-label">학습목표</span>
+          <div class="goal-filter-tabs">
+            <button class="goal-tab active" data-goal="all">전체</button>
+            <button class="goal-tab" data-goal="language">언어/어휘</button>
+            <button class="goal-tab" data-goal="thinking">사고력/문해</button>
+            <button class="goal-tab" data-goal="emotion">감정/규칙</button>
+            <button class="goal-tab" data-goal="creativity">창의/미술</button>
+            <button class="goal-tab" data-goal="science">기초과학/관찰</button>
+            <button class="goal-tab" data-goal="habit">생활습관</button>
+          </div>
+        </div>
+
+        <!-- 길이/난이도 필터 탭 -->
+        <div class="filter-group">
+          <span class="filter-label">길이</span>
+          <div class="length-filter-tabs">
+            <button class="length-tab active" data-length="all">전체</button>
+            <button class="length-tab" data-length="short">3분 미만</button>
+            <button class="length-tab" data-length="medium">3-7분</button>
+            <button class="length-tab" data-length="long">8-15분</button>
+            <button class="length-tab" data-length="xl">15분+</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">난이도</span>
+          <div class="level-filter-tabs">
+            <button class="level-tab active" data-level="all">전체</button>
+            <button class="level-tab" data-level="easy">아주쉬움/쉬움</button>
+            <button class="level-tab" data-level="normal">보통</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-grid">
+      <% 
+        # 문화권별로 그룹화하여 정리정돈된 레이아웃
+        age_groups = ['baby', 'toddler', 'elementary']
+        cultures = ['korean', 'japanese', 'western']
+        preferences = ['neutral', 'adventure', 'fantasy']
+        
+        # 각 문화권별로 9개씩 (3개 연령대 × 3개 성향)
+        courses_by_culture = {
+          'korean' => Course.limit(9),
+          'japanese' => Course.limit(9),
+          'western' => Course.limit(9)
+        }
+        
+        cultures.each do |culture|
+          courses_by_culture[culture].each_with_index do |course, idx|
+            age_group = age_groups[idx % 3]
+            preference = preferences[(idx / 3) % 3]
+      %>
+        <%= link_to course_path(course), class: "content-card culture-#{culture}", 
+             data: {
+               age_group: age_group,
+               theme: (theme_map = %w[nature adventure fantasy daily emotion tradition]; theme_map[idx % theme_map.length]),
+               goal: (goal_map = %w[language thinking emotion creativity science habit]; goal_map[(idx / 2) % goal_map.length]),
+               length: (length_key = if course.duration.to_i < 3
+                 'short'
+               elsif course.duration.to_i <= 7
+                 'medium'
+               elsif course.duration.to_i <= 15
+                 'long'
+               else
+                 'xl'
+               end; length_key),
+               level: (course.level == 'beginner' ? 'easy' : 'normal')
+             } do %>
+          <div class="content-thumbnail">
+            <% 
+              category = if course.category == "전자동화책" || course.category == "ebook"
+                "ebook"
+              elsif course.category == "구연동화" || course.category == "storytelling"
+                "storytelling"
+              else
+                "education"
+              end
+              
+              # 제목별 구체적인 썸네일 사용 (안전한 처리)
+              begin
+                title_key = course.title.to_s.gsub(/[^\w가-힣]/, '_').gsub(/_+/, '_')
+                title_specific_path = "generated/title_specific/#{culture}_#{preference}_#{age_group}_#{title_key}.jpg"
+              rescue => e
+                title_specific_path = nil
+              end
+              abstract_thumbnail_path = "generated/abstract/#{culture}_#{preference}_#{age_group}_#{(idx % 3) + 1}.jpg"
+              storybook_thumbnail_path = "generated/storybook/#{culture}_#{preference}_#{age_group}_#{(idx % 3) + 1}.jpg"
+              cultural_thumbnail_path = "generated/cultural/#{culture}_#{preference}_#{age_group}_1.jpg"
+              cultural_svg_path = "generated/cultural/#{culture}_#{preference}_#{age_group}_1.svg"
+              age_thumbnail_path = "generated/age_groups/#{age_group}_#{category}_#{(idx % 3) + 1}.jpg"
+              kids_thumbnail_path = "generated/kids/#{category}_#{(course.id % 6) + 1}.jpg"
+              
+              # 제목별 맞춤 Vertex AI 이미지 최우선 적용
+              clean_title = course.title.gsub(/[^\w\s가-힣]/, '').strip.gsub(/\s+/, '_')
+              title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{course.id}.jpg"
+              title_matched_path = ThumbnailMatcherHelper.get_title_specific_thumbnail(course.title, course.id)
+              
+              if Rails.application.assets && Rails.application.assets.find_asset(title_specific_vertex_path)
+                thumbnail_path = title_specific_vertex_path
+              elsif title_matched_path && Rails.application.assets && Rails.application.assets.find_asset(title_matched_path)
+                thumbnail_path = title_matched_path
+              elsif title_specific_path && Rails.application.assets && Rails.application.assets.find_asset(title_specific_path)
+                thumbnail_path = title_specific_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(abstract_thumbnail_path)
+                thumbnail_path = abstract_thumbnail_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(storybook_thumbnail_path)
+                thumbnail_path = storybook_thumbnail_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(cultural_thumbnail_path)
+                thumbnail_path = cultural_thumbnail_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(cultural_svg_path)
+                thumbnail_path = cultural_svg_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(age_thumbnail_path)
+                thumbnail_path = age_thumbnail_path
+              elsif Rails.application.assets && Rails.application.assets.find_asset(kids_thumbnail_path)
+                thumbnail_path = kids_thumbnail_path
+              else
+                thumbnail_path = "generated/courses/#{category}_#{(course.id % 6) + 1}.jpg"
+              end
+            %>
+            
+            <% if course.category == "전자동화책" || course.category == "ebook" %>
+              <div class="thumbnail-badge ebook">전자책</div>
+            <% elsif course.category == "구연동화" || course.category == "storytelling" %>
+              <div class="thumbnail-badge storytelling">구연동화</div>
+            <% else %>
+              <div class="thumbnail-badge education">교육</div>
+            <% end %>
+            
+            <% if Rails.application.assets && Rails.application.assets.find_asset(thumbnail_path) %>
+              <%= image_tag thumbnail_path, alt: course.title, class: "thumbnail-image" %>
+            <% else %>
+              <div class="thumbnail-placeholder">
+                <span class="thumbnail-icon">
+                  <%= course.category == "education" ? "✏️" : (course.category == "storytelling" ? "🎭" : "📖") %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="content-info">
+            <h4><%= course.title.truncate(20) %></h4>
+            <p class="content-author"><%= course.instructor.name %></p>
+            <div class="content-footer">
+              <span class="content-rating">
+                <% if course.reviews.any? %>
+                  ⭐ <%= course.reviews.average(:rating).round(1) %>
+                <% else %>
+                  <span class="text-muted">평가 없음</span>
+                <% end %>
+              </span>
+              <span class="content-price">
+                <% if course.price == 0 %>
+                  무료
+                <% else %>
+                  <%= number_to_currency(course.price, unit: "", precision: 0) %>원
+                <% end %>
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age"><%= age_group == 'baby' ? '0-3' : (age_group == 'toddler' ? '4-7' : '8-12') %></span>
+              <span class="chip length"><%=
+                {'short'=>'<3m','medium'=>'3-7m','long'=>'8-15m','xl'=>'>15m'}[length_key]
+              %></span>
+              <% if course.price.to_i == 0 %>
+                <span class="chip free">무료</span>
+              <% end %>
+              <% if course.reviews.count.to_i >= 5 %>
+                <span class="chip popular">인기</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <% end %>
+    </div>
+    
+    <div class="section-footer">
+      <%= link_to "전체 콘텐츠 보기 →", courses_path, class: "btn-modern outline" %>
+    </div>
+  </div>
+</section>
+
+<!-- 구독 플랜 -->
+<section class="pricing-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>구독 플랜</h2>
+      <p>정화의 서재와 함께 시작하세요</p>
+    </div>
+    
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>무료 체험</h3>
+          <div class="pricing-amount">
+            <span class="currency">₩</span>
+            <span class="price">0</span>
+            <span class="period">/7일</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>✓ 전자동화책 10권</li>
+          <li>✓ 구연동화 5편</li>
+          <li>✓ 기본 학습 자료</li>
+          <li class="disabled">✗ 오프라인 다운로드</li>
+          <li class="disabled">✗ 프리미엄 콘텐츠</li>
+        </ul>
+        <button class="btn-modern secondary full">무료 시작하기</button>
+            </div>
+      
+      <div class="pricing-card featured">
+        <div class="pricing-badge">인기</div>
+        <div class="pricing-header">
+          <h3>프리미엄</h3>
+          <div class="pricing-amount">
+            <span class="currency">₩</span>
+            <span class="price">9,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>✓ 전자동화책 무제한</li>
+          <li>✓ 구연동화 무제한</li>
+          <li>✓ 모든 학습 자료</li>
+          <li>✓ 오프라인 다운로드</li>
+          <li>✓ 프리미엄 콘텐츠</li>
+        </ul>
+        <button class="btn-modern primary full">구독 시작하기</button>
+            </div>
+      
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>패밀리</h3>
+          <div class="pricing-amount">
+            <span class="currency">₩</span>
+            <span class="price">14,900</span>
+            <span class="period">/월</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>✓ 최대 5명 동시 이용</li>
+          <li>✓ 개인별 프로필</li>
+          <li>✓ 부모 관리 기능</li>
+          <li>✓ 학습 리포트</li>
+          <li>✓ 우선 고객 지원</li>
+        </ul>
+        <button class="btn-modern secondary full">패밀리 구독</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* 키즈 친화적 디자인 시스템 */
+:root {
+  --primary-color: #7C3AED;
+  --secondary-color: #EC4899;
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --info-color: #3B82F6;
+  
+  --pink: #FFC0E3;
+  --purple: #DDB7FF;
+  --blue: #B3D9FF;
+  --yellow: #FFE4A1;
+  --mint: #A7F3D0;
+  
+  --dark: #1F2937;
+  --gray-100: #F9FAFB;
+  --gray-200: #F3F4F6;
+  --gray-300: #E5E7EB;
+  --gray-400: #D1D5DB;
+  --gray-500: #9CA3AF;
+  --gray-600: #6B7280;
+  
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+  --radius: 16px;
+  --radius-lg: 24px;
+}
+
+/* 키즈 히어로 섹션 */
+.kids-hero {
+  position: relative;
+  padding: 100px 0 120px;
+  background: linear-gradient(180deg, #FFF5F7 0%, #E7F3FF 50%, #FFF9E6 100%);
+  overflow: hidden;
+}
+
+.hero-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background-image: 
+    radial-gradient(circle at 20% 80%, white 2px, transparent 2px),
+    radial-gradient(circle at 80% 20%, white 2px, transparent 2px);
+  background-size: 50px 50px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 24px;
+  font-size: 14px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-title {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* 모던 버튼 */
+.btn-modern {
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-modern.primary {
+  background: white;
+  color: var(--primary-color);
+}
+
+.btn-modern.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.btn-modern.secondary {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-modern.secondary:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.btn-modern.outline {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-modern.full {
+  width: 100%;
+}
+
+/* 서비스 섹션 */
+.services-section {
+  padding: 80px 0;
+  background: var(--gray-100);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-header h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--dark);
+}
+
+.section-header p {
+  font-size: 18px;
+  color: var(--gray-600);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.service-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.service-icon {
+  margin-bottom: 24px;
+}
+
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.icon-circle.ebook {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.icon-circle.storytelling {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+.icon-circle.education {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.service-card h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--dark);
+}
+
+.service-card p {
+  color: var(--gray-600);
+  margin-bottom: 24px;
+}
+
+.service-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.service-features li {
+  padding: 8px 0;
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+.service-features li::before {
+  content: "✓ ";
+  color: var(--success-color);
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.service-link {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* 콘텐츠 섹션 */
+.content-section {
+  padding: 80px 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.content-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.content-thumbnail {
+  position: relative;
+  height: 280px;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.thumbnail-badge.ebook {
+  background: var(--primary-color);
+}
+
+.thumbnail-badge.storytelling {
+  background: var(--secondary-color);
+}
+
+.thumbnail-badge.education {
+  background: var(--success-color);
+}
+
+.thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-icon {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.content-info {
+  padding: 16px;
+}
+
+.content-info h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: var(--dark);
+}
+
+.content-author {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.content-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-rating {
+  font-size: 14px;
+  color: var(--warning-color);
+}
+
+.content-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 가격 섹션 */
+.pricing-section {
+  padding: 80px 0;
+  background: var(--gray-100);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 40px;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.pricing-card.featured {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--primary-color);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-color);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.pricing-header h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--dark);
+}
+
+.pricing-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.currency {
+  font-size: 20px;
+  color: var(--gray-500);
+}
+
+.price {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.period {
+  font-size: 16px;
+  color: var(--gray-500);
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.pricing-features li {
+  padding: 12px 0;
+  color: var(--gray-600);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.pricing-features li.disabled {
+  opacity: 0.5;
+}
+
+.section-footer {
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+  
+  .hero-subtitle {
+    font-size: 16px;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-modern {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .services-grid,
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .content-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .pricing-card.featured {
+    transform: none;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 필터 상태 저장
+  let filters = {
+    age: 'all',
+    theme: 'all',
+    goal: 'all',
+    length: 'all',
+    level: 'all'
+  };
+  
+  // 카드 필터링 함수
+  function filterCards() {
+    const contentCards = document.querySelectorAll('.content-card');
+    
+    contentCards.forEach(card => {
+      const ageMatch = filters.age === 'all' || card.dataset.ageGroup === filters.age;
+      const themeMatch = filters.theme === 'all' || card.dataset.theme === filters.theme;
+      const goalMatch = filters.goal === 'all' || card.dataset.goal === filters.goal;
+      const lengthMatch = filters.length === 'all' || card.dataset.length === filters.length;
+      const levelMatch = filters.level === 'all' || card.dataset.level === filters.level;
+      
+      if (ageMatch && themeMatch && goalMatch && lengthMatch && levelMatch) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+  
+  // 연령 필터 탭 기능
+  const ageTabs = document.querySelectorAll('.age-tab');
+  ageTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      ageTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      filters.age = this.dataset.age;
+      filterCards();
+    });
+  });
+  
+  // 주제 필터 탭 기능
+  const themeTabs = document.querySelectorAll('.theme-tab');
+  themeTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      themeTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      filters.theme = this.dataset.theme;
+      filterCards();
+    });
+  });
+  
+  // 학습목표 필터 탭 기능
+  const goalTabs = document.querySelectorAll('.goal-tab');
+  goalTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      goalTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      filters.goal = this.dataset.goal;
+      filterCards();
+    });
+  });
+
+  // 길이 필터 탭 기능
+  const lengthTabs = document.querySelectorAll('.length-tab');
+  lengthTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      lengthTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      filters.length = this.dataset.length;
+      filterCards();
+    });
+  });
+
+  // 난이도 필터 탭 기능
+  const levelTabs = document.querySelectorAll('.level-tab');
+  levelTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      levelTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      filters.level = this.dataset.level;
+      filterCards();
+    });
+  });
+  
+  // 초기 상태: 모든 카드 표시
+  filterCards();
+});
+</script>

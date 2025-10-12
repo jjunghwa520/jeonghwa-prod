@@ -1,0 +1,524 @@
+<!-- 영화같은 동적 히어로 섹션 -->
+<section class="cinematic-hero-section">
+  <!-- 슬라이드 컨테이너 -->
+  <div class="hero-slides-container">
+    
+    <!-- 슬라이드 1: 새로운 콘텐츠 소개 -->
+    <div class="hero-slide active" data-slide="1">
+      <div class="container-fluid">
+        <div class="row align-items-center min-vh-100">
+          <!-- 왼쪽 캐릭터 시네마틱 영역 -->
+          <div class="col-lg-5">
+            <div class="cinematic-stage">
+              <!-- 정화 대표 - 걸어나오며 안내 -->
+              <div class="character-sequence jeonghwa-entrance">
+                <img src="/images/refined/jeonghwa_refined_isnet-general-use.png?v=<%= Time.current.to_i %>" 
+                     alt="정화 대표" 
+                     class="cinematic-character main-character-walking"
+                     data-character="jeonghwa">
+                
+                <!-- 동적 말풍선 -->
+                <div class="dynamic-speech-bubble" data-message="새로운 동화책이 도착했어요! 📚✨">
+                  <div class="bubble-content">
+                    <span class="typing-text"></span>
+                  </div>
+                  <div class="bubble-tail"></div>
+                </div>
+              </div>
+              
+              <!-- 학생 캐릭터들 - 반응 -->
+              <div class="students-reaction">
+                <div class="student-character bear-reaction">
+                  <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="곰 학생" 
+                       class="cinematic-character student-excited">
+                  <div class="excitement-bubble">와! 🎉</div>
+                </div>
+                
+                <div class="student-character rabbit-reaction">
+                  <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="토끼 학생" 
+                       class="cinematic-character student-curious">
+                  <div class="excitement-bubble">읽고싶어요!</div>
+                </div>
+              </div>
+              
+              <!-- 마법 효과들 -->
+              <div class="magic-effects">
+                <div class="sparkle sparkle-1">✨</div>
+                <div class="sparkle sparkle-2">🌟</div>
+                <div class="sparkle sparkle-3">💫</div>
+                <div class="floating-book">📚</div>
+                <div class="floating-book">📖</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 오른쪽 콘텐츠 영역 -->
+          <div class="col-lg-7">
+            <div class="hero-content-cinematic">
+              <div class="content-badge animate-badge">🆕 NEW ARRIVAL</div>
+              <h1 class="cinematic-title">
+                이번 주 <span class="highlight-gradient">새로운 동화책</span>
+              </h1>
+              <p class="cinematic-description">
+                아이들이 가장 사랑하는 새로운 이야기들이 도착했어요!<br>
+                매주 업데이트되는 신선한 콘텐츠를 만나보세요.
+              </p>
+              
+              <!-- 새 콘텐츠 카드들 -->
+              <div class="content-cards-showcase">
+                <div class="showcase-card" data-delay="0.2s">
+                  <div class="card-icon">📖</div>
+                  <h4>마법의 숲 모험</h4>
+                  <p>신비로운 숲에서 펼쳐지는 모험</p>
+                </div>
+                <div class="showcase-card" data-delay="0.4s">
+                  <div class="card-icon">🦄</div>
+                  <h4>유니콘과 친구들</h4>
+                  <p>환상적인 유니콘 왕국 이야기</p>
+                </div>
+                <div class="showcase-card" data-delay="0.6s">
+                  <div class="card-icon">🌟</div>
+                  <h4>별빛 왕국</h4>
+                  <p>별들이 들려주는 아름다운 이야기</p>
+                </div>
+              </div>
+              
+              <div class="cinematic-actions">
+                <a href="/courses?category=new" class="btn-cinematic primary">
+                  <span class="btn-glow"></span>
+                  <span class="btn-text">새 콘텐츠 탐험하기</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 슬라이드 2: 교육 프로그램 소개 -->
+    <div class="hero-slide" data-slide="2">
+      <div class="container-fluid">
+        <div class="row align-items-center min-vh-100">
+          <!-- 왼쪽 캐릭터 시네마틱 영역 -->
+          <div class="col-lg-5">
+            <div class="cinematic-stage">
+              <!-- 정화 대표 - 교육 시연 -->
+              <div class="character-sequence jeonghwa-teaching">
+                <img src="/images/refined/jeonghwa_refined_u2net_human_seg.png?v=<%= Time.current.to_i %>" 
+                     alt="정화 대표" 
+                     class="cinematic-character main-character-teaching"
+                     data-character="jeonghwa">
+                
+                <div class="dynamic-speech-bubble" data-message="함께 배우고 성장해요! 🎓📝">
+                  <div class="bubble-content">
+                    <span class="typing-text"></span>
+                  </div>
+                  <div class="bubble-tail"></div>
+                </div>
+              </div>
+              
+              <!-- 학습 중인 학생들 -->
+              <div class="students-learning">
+                <div class="student-character bear-studying">
+                  <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="공부하는 곰" 
+                       class="cinematic-character student-focused">
+                  <div class="study-bubble">배우는 중! 📚</div>
+                </div>
+                
+                <div class="student-character rabbit-creating">
+                  <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="창작하는 토끼" 
+                       class="cinematic-character student-creative">
+                  <div class="study-bubble">만들어요! ✏️</div>
+                </div>
+              </div>
+              
+              <!-- 교육 효과들 -->
+              <div class="education-effects">
+                <div class="knowledge-spark">💡</div>
+                <div class="knowledge-spark">🧠</div>
+                <div class="floating-tools">✏️</div>
+                <div class="floating-tools">🎨</div>
+                <div class="floating-tools">📐</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 오른쪽 콘텐츠 영역 -->
+          <div class="col-lg-7">
+            <div class="hero-content-cinematic">
+              <div class="content-badge animate-badge">🎓 EDUCATION</div>
+              <h1 class="cinematic-title">
+                체계적인 <span class="highlight-gradient">교육 프로그램</span>
+              </h1>
+              <p class="cinematic-description">
+                연령별 맞춤 교육과정으로 아이의 창의력과 사고력을 키워주세요.<br>
+                전문 교육자가 설계한 단계별 학습 시스템입니다.
+              </p>
+              
+              <!-- 교육 과정 카드들 -->
+              <div class="content-cards-showcase">
+                <div class="showcase-card" data-delay="0.2s">
+                  <div class="card-icon">✏️</div>
+                  <h4>창작 동화 만들기</h4>
+                  <p>상상력을 현실로 만드는 창작 교육</p>
+                </div>
+                <div class="showcase-card" data-delay="0.4s">
+                  <div class="card-icon">🎨</div>
+                  <h4>그림책 일러스트</h4>
+                  <p>아름다운 그림으로 표현하는 법</p>
+                </div>
+                <div class="showcase-card" data-delay="0.6s">
+                  <div class="card-icon">🎭</div>
+                  <h4>스토리텔링 기법</h4>
+                  <p>감동적인 이야기 전달 방법</p>
+                </div>
+              </div>
+              
+              <div class="cinematic-actions">
+                <a href="/courses?category=education" class="btn-cinematic primary">
+                  <span class="btn-glow"></span>
+                  <span class="btn-text">교육 과정 시작하기</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 슬라이드 3: 성공 사례 & 후기 -->
+    <div class="hero-slide" data-slide="3">
+      <div class="container-fluid">
+        <div class="row align-items-center min-vh-100">
+          <!-- 왼쪽 캐릭터 시네마틱 영역 -->
+          <div class="col-lg-5">
+            <div class="cinematic-stage">
+              <!-- 정화 대표 - 자랑스러운 발표 -->
+              <div class="character-sequence jeonghwa-proud">
+                <img src="/images/refined/jeonghwa_magic_wand_refined.png?v=<%= Time.current.to_i %>" 
+                     alt="정화 대표" 
+                     class="cinematic-character main-character-presenting"
+                     data-character="jeonghwa">
+                
+                <div class="dynamic-speech-bubble" data-message="우리 아이들의 성장 이야기! 🌟💝">
+                  <div class="bubble-content">
+                    <span class="typing-text"></span>
+                  </div>
+                  <div class="bubble-tail"></div>
+                </div>
+              </div>
+              
+              <!-- 성공한 학생들 -->
+              <div class="students-success">
+                <div class="student-character bear-achiever">
+                  <img src="/images/separated/bear_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="성공한 곰" 
+                       class="cinematic-character student-proud">
+                  <div class="achievement-bubble">성장했어요! 🏆</div>
+                </div>
+                
+                <div class="student-character rabbit-dreamer">
+                  <img src="/images/separated/rabbit_separated.png?v=<%= Time.current.to_i %>" 
+                       alt="꿈을 찾은 토끼" 
+                       class="cinematic-character student-confident">
+                  <div class="achievement-bubble">꿈을 찾았어요! 🌟</div>
+                </div>
+              </div>
+              
+              <!-- 성공 효과들 -->
+              <div class="success-effects">
+                <div class="achievement-star">🏆</div>
+                <div class="achievement-star">🌟</div>
+                <div class="achievement-star">💎</div>
+                <div class="growth-arrow">📈</div>
+                <div class="celebration">🎉</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 오른쪽 콘텐츠 영역 -->
+          <div class="col-lg-7">
+            <div class="hero-content-cinematic">
+              <div class="content-badge animate-badge">⭐ SUCCESS STORY</div>
+              <h1 class="cinematic-title">
+                아이들의 <span class="highlight-gradient">성장 이야기</span>
+              </h1>
+              <p class="cinematic-description">
+                정화의 서재와 함께한 아이들의 놀라운 변화와 성장을 확인해보세요.<br>
+                창의력, 표현력, 자신감이 쑥쑥 자라는 교육의 힘을 경험하세요.
+              </p>
+              
+              <!-- 성공 사례 카드들 -->
+              <div class="content-cards-showcase">
+                <div class="showcase-card" data-delay="0.2s">
+                  <div class="card-icon">🏆</div>
+                  <h4>창작 대회 수상</h4>
+                  <p>전국 동화 창작 대회에서 입상</p>
+                </div>
+                <div class="showcase-card" data-delay="0.4s">
+                  <div class="card-icon">📈</div>
+                  <h4>읽기 능력 향상</h4>
+                  <p>3개월 만에 2학년 수준 향상</p>
+                </div>
+                <div class="showcase-card" data-delay="0.6s">
+                  <div class="card-icon">💝</div>
+                  <h4>자신감 증진</h4>
+                  <p>발표와 표현력이 크게 향상</p>
+                </div>
+              </div>
+              
+              <div class="cinematic-actions">
+                <a href="/reviews" class="btn-cinematic primary">
+                  <span class="btn-glow"></span>
+                  <span class="btn-text">성공 사례 보기</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 시네마틱 컨트롤 -->
+  <div class="cinematic-controls">
+    <div class="slide-indicators">
+      <button class="indicator active" data-slide="1" title="새로운 콘텐츠"></button>
+      <button class="indicator" data-slide="2" title="교육 프로그램"></button>
+      <button class="indicator" data-slide="3" title="성공 사례"></button>
+    </div>
+    
+    <div class="slide-progress">
+      <div class="progress-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 시네마틱 히어로 JavaScript -->
+<script>
+class CinematicHero {
+  constructor() {
+    this.currentSlide = 1;
+    this.totalSlides = 3;
+    this.slideInterval = 4000; // 4초
+    this.isAutoPlaying = true;
+    this.intervalId = null;
+    
+    this.messages = {
+      1: "새로운 동화책이 도착했어요! 📚✨",
+      2: "함께 배우고 성장해요! 🎓📝", 
+      3: "우리 아이들의 성장 이야기! 🌟💝"
+    };
+    
+    this.init();
+  }
+  
+  init() {
+    this.startAutoSlide();
+    this.bindEvents();
+    this.startCinematicSequence();
+  }
+  
+  startCinematicSequence() {
+    // 첫 번째 슬라이드 시네마틱 시작
+    this.playCharacterSequence(1);
+  }
+  
+  playCharacterSequence(slideNumber) {
+    const slide = document.querySelector(`[data-slide="${slideNumber}"]`);
+    if (!slide) return;
+    
+    // 정화 캐릭터 입장 애니메이션
+    const jeonghwaChar = slide.querySelector('.main-character-walking, .main-character-teaching, .main-character-presenting');
+    if (jeonghwaChar) {
+      jeonghwaChar.style.animation = 'character-entrance 2s ease-out forwards';
+    }
+    
+    // 0.5초 후 말풍선 타이핑 시작
+    setTimeout(() => {
+      this.startTypingMessage(slideNumber);
+    }, 500);
+    
+    // 1초 후 학생들 반응 시작
+    setTimeout(() => {
+      this.triggerStudentReactions(slide);
+    }, 1000);
+    
+    // 1.5초 후 마법 효과 시작
+    setTimeout(() => {
+      this.triggerMagicEffects(slide);
+    }, 1500);
+    
+    // 2초 후 콘텐츠 카드 순차 등장
+    setTimeout(() => {
+      this.animateContentCards(slide);
+    }, 2000);
+  }
+  
+  startTypingMessage(slideNumber) {
+    const message = this.messages[slideNumber];
+    const typingElement = document.querySelector(`[data-slide="${slideNumber}"] .typing-text`);
+    
+    if (!typingElement || !message) return;
+    
+    typingElement.textContent = '';
+    let charIndex = 0;
+    
+    const typeInterval = setInterval(() => {
+      if (charIndex < message.length) {
+        typingElement.textContent += message[charIndex];
+        charIndex++;
+      } else {
+        clearInterval(typeInterval);
+        // 타이핑 완료 후 말풍선 강조
+        typingElement.parentElement.parentElement.classList.add('message-complete');
+      }
+    }, 80); // 80ms마다 한 글자씩
+  }
+  
+  triggerStudentReactions(slide) {
+    const students = slide.querySelectorAll('.student-excited, .student-curious, .student-focused, .student-creative, .student-proud, .student-confident');
+    
+    students.forEach((student, index) => {
+      setTimeout(() => {
+        student.style.animation = `student-reaction-${index + 1} 1.5s ease-out forwards`;
+        
+        // 흥분 말풍선 표시
+        const bubble = student.parentElement.querySelector('.excitement-bubble, .study-bubble, .achievement-bubble');
+        if (bubble) {
+          bubble.style.animation = 'bubble-pop 0.8s ease-out forwards';
+        }
+      }, index * 300);
+    });
+  }
+  
+  triggerMagicEffects(slide) {
+    const effects = slide.querySelectorAll('.sparkle, .floating-book, .knowledge-spark, .floating-tools, .achievement-star, .growth-arrow, .celebration');
+    
+    effects.forEach((effect, index) => {
+      setTimeout(() => {
+        effect.style.animation = `magic-appear-${(index % 3) + 1} 1s ease-out forwards`;
+      }, index * 200);
+    });
+  }
+  
+  animateContentCards(slide) {
+    const cards = slide.querySelectorAll('.showcase-card');
+    
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.style.animation = 'card-slide-in 0.8s ease-out forwards';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 200);
+    });
+  }
+  
+  startAutoSlide() {
+    this.intervalId = setInterval(() => {
+      if (this.isAutoPlaying) {
+        this.nextSlide();
+      }
+    }, this.slideInterval);
+  }
+  
+  nextSlide() {
+    this.currentSlide = this.currentSlide >= this.totalSlides ? 1 : this.currentSlide + 1;
+    this.showSlide(this.currentSlide);
+  }
+  
+  showSlide(slideNumber) {
+    // 모든 슬라이드 숨기기
+    document.querySelectorAll('.hero-slide').forEach(slide => {
+      slide.classList.remove('active');
+      // 애니메이션 리셋
+      slide.querySelectorAll('.cinematic-character').forEach(char => {
+        char.style.animation = 'none';
+      });
+    });
+    
+    // 모든 인디케이터 비활성화
+    document.querySelectorAll('.indicator').forEach(indicator => {
+      indicator.classList.remove('active');
+    });
+    
+    // 현재 슬라이드 표시
+    const currentSlideEl = document.querySelector(`[data-slide="${slideNumber}"]`);
+    if (currentSlideEl) {
+      currentSlideEl.classList.add('active');
+    }
+    
+    // 현재 인디케이터 활성화
+    const currentIndicator = document.querySelector(`.indicator[data-slide="${slideNumber}"]`);
+    if (currentIndicator) {
+      currentIndicator.classList.add('active');
+    }
+    
+    // 진행 바 리셋
+    this.resetProgressBar();
+    
+    // 시네마틱 시퀀스 시작
+    setTimeout(() => {
+      this.playCharacterSequence(slideNumber);
+    }, 300);
+    
+    console.log(`시네마틱 슬라이드 ${slideNumber} 시작`);
+  }
+  
+  resetProgressBar() {
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+      progressBar.style.animation = 'none';
+      progressBar.offsetHeight;
+      progressBar.style.animation = `slide-progress ${this.slideInterval}ms linear`;
+    }
+  }
+  
+  bindEvents() {
+    // 인디케이터 클릭 이벤트
+    document.querySelectorAll('.indicator').forEach(indicator => {
+      indicator.addEventListener('click', (e) => {
+        const slideNumber = parseInt(e.target.dataset.slide);
+        this.currentSlide = slideNumber;
+        this.showSlide(slideNumber);
+        
+        // 자동 재생 잠시 중지
+        this.pauseAutoPlay();
+        setTimeout(() => this.resumeAutoPlay(), 6000);
+      });
+    });
+    
+    // 마우스 호버 시 자동 재생 일시 중지
+    const heroSection = document.querySelector('.cinematic-hero-section');
+    if (heroSection) {
+      heroSection.addEventListener('mouseenter', () => this.pauseAutoPlay());
+      heroSection.addEventListener('mouseleave', () => this.resumeAutoPlay());
+    }
+  }
+  
+  pauseAutoPlay() {
+    this.isAutoPlaying = false;
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+  
+  resumeAutoPlay() {
+    this.isAutoPlaying = true;
+    this.startAutoSlide();
+  }
+}
+
+// 페이지 로드 시 시네마틱 히어로 시작
+document.addEventListener('DOMContentLoaded', () => {
+  new CinematicHero();
+});
+</script>
+

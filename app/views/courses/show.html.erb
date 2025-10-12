@@ -1,0 +1,646 @@
+<% content_for :title, "#{@course.title} - 정화의 서재" %>
+
+<div class="container">
+  <div class="row">
+    <!-- 메인 컨텐츠 -->
+    <div class="col-lg-8">
+      <!-- 강의 헤더 -->
+      <div class="mb-4">
+        <div class="book-cover lg <%= @course.category.in?(%w[전자동화책 ebook]) ? 'category-ebook' : (@course.category.in?(%w[구연동화 storytelling]) ? 'category-storytelling' : (@course.category.in?(%w[동화만들기 education]) ? 'category-education' : '')) %> mb-3">
+          <span class="spine"></span>
+          <span class="pages"></span>
+          <% if @course.thumbnail.present? %>
+            <%= image_tag @course.thumbnail, alt: @course.title %>
+          <% end %>
+          <% category_label = if @course.category.in?(%w[전자동화책 ebook])
+                                 '전자책'
+                               elsif @course.category.in?(%w[구연동화 storytelling])
+                                 '구연동화'
+                               elsif @course.category.in?(%w[동화만들기 education])
+                                 '만들기'
+                               else
+                                 @course.category
+                               end %>
+          <span class="ribbon <%= @course.category.in?(%w[전자동화책 ebook]) ? 'ribbon-ebook' : (@course.category.in?(%w[구연동화 storytelling]) ? 'ribbon-storytelling' : (@course.category.in?(%w[동화만들기 education]) ? 'ribbon-education' : '')) %>"><%= category_label %></span>
+          <% if @course.reviews.count.to_i >= 10 %>
+            <span class="stamp stamp-primary">PREMIUM</span>
+          <% end %>
+          <div class="title"><%= @course.title %></div>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><%= link_to "홈", root_path %></li>
+            <li class="breadcrumb-item"><%= link_to "목록", courses_path %></li>
+            <li class="breadcrumb-item active"><%= @course.category %></li>
+          </ol>
+        </nav>
+        
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <span class="badge bg-primary rounded-pill"><%= @course.category %></span>
+          <span class="badge bg-secondary">
+            <%= case @course.level
+                when 'beginner' then '초급'
+                when 'intermediate' then '중급'
+                when 'advanced' then '고급'
+                else @course.level
+                end %>
+          </span>
+        </div>
+        
+        <h1 class="fw-bold mb-3"><%= @course.title %></h1>
+        
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-4">
+            <i class="bi bi-person-circle"></i>
+            <%= link_to @course.instructor.name, @course.instructor, class: "text-decoration-none fw-semibold" %>
+          </div>
+          
+          <div class="me-4">
+            <div class="d-flex align-items-center">
+              <div class="rating me-2">
+                <% 5.times do |i| %>
+                  <i class="bi bi-star<%= i < @course.average_rating ? '-fill' : '' %> text-warning"></i>
+                <% end %>
+              </div>
+              <span class="fw-semibold"><%= @course.average_rating %></span>
+              <small class="text-muted ms-1">(<%= @course.reviews.count %>개 리뷰)</small>
+            </div>
+          </div>
+          
+          <div class="me-4">
+            <i class="bi bi-people"></i>
+            <span><%= @course.total_students %>명 수강</span>
+          </div>
+          
+          <div>
+            <i class="bi bi-clock"></i>
+            <span><%= @course.duration / 60 %>시간 <%= @course.duration % 60 %>분</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 강의 썸네일 -->
+      <div class="mb-4">
+        <div class="ratio ratio-16x9">
+          <% if @course.thumbnail.present? %>
+            <%= image_tag @course.thumbnail, class: "rounded", style: "object-fit: cover;" %>
+          <% else %>
+            <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded">
+              <i class="bi bi-play-circle display-1"></i>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 강의 설명 -->
+      <div class="mb-5">
+        <h3 class="fw-bold mb-3">강의 소개</h3>
+        <div class="bg-light p-4 rounded">
+          <p class="mb-0"><%= simple_format(@course.description) %></p>
+        </div>
+      </div>
+
+      <!-- 강사 정보 -->
+      <div class="mb-5">
+        <h3 class="fw-bold mb-3">강사 정보</h3>
+        <div class="card border-0 bg-light">
+          <div class="card-body">
+            <div class="d-flex align-items-start">
+              <div class="me-3">
+                <i class="bi bi-person-circle display-4 text-primary"></i>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="fw-bold mb-2"><%= @course.instructor.name %></h5>
+                <p class="text-muted mb-2">
+                  <i class="bi bi-mortarboard"></i> 
+                  <%= @course.instructor.taught_courses.count %>개 강의
+                </p>
+                <% if @course.instructor.bio.present? %>
+                  <p class="mb-0"><%= simple_format(@course.instructor.bio) %></p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 리뷰 섹션 -->
+      <div class="mb-5">
+        <h3 class="fw-bold mb-4">수강생 리뷰 (<%= @course.reviews.count %>)</h3>
+        
+        <!-- 리뷰 작성 폼 (수강생만) -->
+        <% if logged_in? && @is_enrolled && !@course.reviews.exists?(user: current_user) %>
+          <div class="card border-0 <%= @course.age == 'teen' ? 'bg-gradient-teen' : 'bg-light' %> mb-4">
+            <div class="card-body">
+              <h6 class="fw-semibold mb-3">
+                <% if @course.age == 'teen' %>
+                  🌟 나의 후기 남기기
+                <% else %>
+                  리뷰 작성
+                <% end %>
+              </h6>
+              <%= form_with model: [@course, @review], local: true do |f| %>
+                <div class="mb-3">
+                  <%= f.label :rating, "평점", class: "form-label" %>
+                  <% if @course.age == 'teen' %>
+                    <div class="teen-rating-selector mb-2">
+                      <% 5.times do |i| %>
+                        <label class="rating-star" data-rating="<%= i + 1 %>">
+                          <input type="radio" name="review[rating]" value="<%= i + 1 %>" <%= 'checked' if i == 4 %>>
+                          <span class="star-icon">⭐</span>
+                        </label>
+                      <% end %>
+                    </div>
+                    <small class="text-muted">별을 클릭해서 평점을 선택하세요!</small>
+                  <% else %>
+                    <%= f.select :rating, options_for_select((1..5).map {|i| [i, i]}, 5), {}, 
+                                { class: "form-select" } %>
+                  <% end %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= f.label :content, @course.age == 'teen' ? "솔직한 후기" : "리뷰 내용", class: "form-label" %>
+                  <%= f.text_area :content, class: "form-control", rows: 4, 
+                                  placeholder: @course.age == 'teen' ? 
+                                    "이 강의 어땠나요? 친구들에게 추천하고 싶은 점을 알려주세요! 😊" : 
+                                    "강의에 대한 솔직한 리뷰를 작성해주세요" %>
+                </div>
+                
+                <% if @course.age == 'teen' %>
+                  <div class="mb-3">
+                    <label class="form-label">추천 태그 (선택사항)</label>
+                    <div class="teen-tags">
+                      <% teen_tags = ['재미있어요', '유익해요', '쉬워요', '창의적이에요', '실용적이에요', '트렌디해요'] %>
+                      <% teen_tags.each do |tag| %>
+                        <label class="tag-checkbox">
+                          <input type="checkbox" name="review[tags][]" value="<%= tag %>">
+                          <span class="tag-label">#<%= tag %></span>
+                        </label>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+                
+                <%= f.submit @course.age == 'teen' ? "후기 공유하기 🚀" : "리뷰 작성", 
+                            class: "btn #{@course.age == 'teen' ? 'btn-teen-primary' : 'btn-primary'}" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- 리뷰 목록 -->
+        <% if @reviews.any? %>
+          <% @reviews.each do |review| %>
+            <div class="review-item">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <div class="review-author"><%= review.user.name %></div>
+                  <div class="review-rating">
+                    <% review.rating.times do %>
+                      <i class="bi bi-star-fill"></i>
+                    <% end %>
+                    <% (5 - review.rating).times do %>
+                      <i class="bi bi-star"></i>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="review-date">
+                  <%= time_ago_in_words(review.created_at) %> 전
+                </div>
+              </div>
+              <p class="mb-0"><%= simple_format(review.content) %></p>
+              
+              <% if logged_in? && (current_user == review.user || current_user.admin?) %>
+                <div class="mt-2">
+                  <%= link_to "삭제", [@course, review], data: { turbo_method: :delete }, 
+                              class: "btn btn-sm btn-outline-danger",
+                              data: { turbo_confirm: "정말 삭제하시겠습니까?" } %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="text-center py-4 text-muted">
+            <i class="bi bi-chat-quote display-4 mb-3"></i>
+            <p>아직 리뷰가 없습니다. 첫 번째 리뷰를 작성해보세요!</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <div class="col-lg-4">
+      <div class="sticky-top" style="top: 100px;">
+        <div class="card border-0 shadow">
+          <div class="card-body">
+            <!-- 가격 -->
+            <div class="text-center mb-4">
+              <h3 class="fw-bold text-primary mb-0">
+                ₩<%= number_with_delimiter(@course.price) %>
+              </h3>
+            </div>
+
+            <!-- 액션 버튼들 -->
+            <% if logged_in? %>
+              <% if @is_enrolled %>
+                <div class="d-grid gap-2 mb-3">
+                  <%= link_to course_watch_path(@course), class: "btn btn-success btn-lg" do %>
+                    <i class="bi bi-play-circle"></i> 수강하기
+                  <% end %>
+                </div>
+                <p class="text-center text-muted small mb-0">
+                  <i class="bi bi-check-circle text-success"></i> 수강 중인 강의입니다
+                </p>
+              <% elsif @in_cart %>
+                <div class="d-grid gap-2 mb-3">
+                  <%= link_to cart_items_path, class: "btn btn-warning btn-lg" do %>
+                    <i class="bi bi-cart-check"></i> 장바구니에서 확인
+                  <% end %>
+                </div>
+                <p class="text-center text-muted small mb-0">
+                  <i class="bi bi-cart"></i> 장바구니에 담긴 강의입니다
+                </p>
+              <% else %>
+                <div class="d-grid gap-2 mb-3">
+                  <form class="cart-add-form" data-course-title="<%= @course.title %>" data-course-id="<%= @course.id %>">
+                    <button type="submit" class="btn btn-primary btn-lg cart-add-btn">🛒 장바구니에 담기</button>
+                  </form>
+                  <%= form_with url: enroll_course_path(@course), method: :post, local: true,
+                              data: { turbo_confirm: "바로 수강하시겠습니까?" } do |form| %>
+                    <%= form.submit "▶️ 바로 수강하기", class: "btn btn-success btn-lg" %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="d-grid gap-2 mb-3">
+                <%= link_to login_path, class: "btn btn-primary btn-lg" do %>
+                  <i class="bi bi-box-arrow-in-right"></i> 로그인 후 수강
+                <% end %>
+              </div>
+              <p class="text-center text-muted small">
+                로그인 후 강의를 수강할 수 있습니다
+              </p>
+            <% end %>
+
+            <hr>
+
+            <!-- 강의 정보 -->
+            <div class="mb-3">
+              <h6 class="fw-semibold mb-3">강의 정보</h6>
+              
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">총 길이</span>
+                <span><%= @course.duration / 60 %>시간 <%= @course.duration % 60 %>분</span>
+              </div>
+              
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">수강생</span>
+                <span><%= @course.total_students %>명</span>
+              </div>
+              
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">레벨</span>
+                <span>
+                  <%= case @course.level
+                      when 'beginner' then '초급'
+                      when 'intermediate' then '중급'
+                      when 'advanced' then '고급'
+                      else @course.level
+                      end %>
+                </span>
+              </div>
+              
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">언어</span>
+                <span>한국어</span>
+              </div>
+            </div>
+
+            <!-- 강사 액션 버튼 -->
+            <% if logged_in? && current_user == @course.instructor %>
+              <hr>
+              <div class="d-grid gap-2">
+                <%= link_to "강의 수정", edit_course_path(@course), class: "btn btn-outline-primary" %>
+                <%= link_to "강의 삭제", @course, data: { turbo_method: :delete }, 
+                            class: "btn btn-outline-danger", 
+                            data: { turbo_confirm: "정말 삭제하시겠습니까?" } %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 장바구니 추가 성공 토스트 - body에 직접 추가됨 -->
+
+<style>
+.cart-toast-dynamic {
+  position: fixed !important;
+  top: 100px !important;
+  right: 20px !important;
+  background: white !important;
+  border-radius: 12px !important;
+  padding: 1.25rem !important;
+  min-width: 340px !important;
+  max-width: 420px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+  border-left: 4px solid #28a745 !important;
+  z-index: 9999 !important;
+  transform: translateX(100%) !important;
+  opacity: 0 !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.cart-toast-dynamic.show {
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+}
+
+.cart-toast-dynamic.hide {
+  transform: translateX(100%) !important;
+  opacity: 0 !important;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1.125rem;
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.toast-text {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.toast-text strong {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.toast-actions {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.toast-actions .btn {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.toast-actions .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.toast-actions .btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.toast-actions .btn-primary:hover {
+  background: #0056b3;
+}
+
+.toast-actions .btn-outline-secondary {
+  background: transparent;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.toast-actions .btn-outline-secondary:hover {
+  background: #f8f9fa;
+  color: #495057;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .cart-toast {
+    right: 15px;
+    left: 15px;
+    min-width: auto;
+    max-width: none;
+    padding: 1rem;
+  }
+  
+  .toast-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+</style>
+
+<script>
+let cartToastTimeout;
+
+// 장바구니 추가 폼 이벤트 처리
+document.addEventListener('DOMContentLoaded', function() {
+  const cartForms = document.querySelectorAll('.cart-add-form');
+  
+  cartForms.forEach(form => {
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault(); // 기본 폼 제출 방지
+      
+      const courseId = form.dataset.courseId;
+      const courseTitle = form.dataset.courseTitle;
+      const button = form.querySelector('.cart-add-btn');
+      
+      // 버튼 비활성화
+      button.disabled = true;
+      button.textContent = '추가중...';
+      
+      try {
+        const formData = new FormData();
+        formData.append('course_id', courseId);
+        formData.append('authenticity_token', document.querySelector('[name="csrf-token"]').content);
+        
+        const response = await fetch('<%= cart_items_path %>', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showCartToast(data.course_title);
+          updateCartCount(data.cart_count);
+          
+          // 버튼 상태 변경 - 상세 페이지에서는 전체 섹션 업데이트
+          const parentDiv = form.closest('.d-grid');
+          if (parentDiv) {
+            if (data.enrolled) {
+              // 수강 중인 경우
+              parentDiv.innerHTML = `
+                <div class="d-grid gap-2 mb-3">
+                  <a href="<%= @course ? watch_course_path(@course) : '#' %>" class="btn btn-success btn-lg">
+                    <i class="bi bi-play-circle"></i> 수강하기
+                  </a>
+                </div>
+              `;
+            } else if (data.in_cart) {
+              // 장바구니에 있는 경우
+              parentDiv.innerHTML = `
+                <div class="d-grid gap-2 mb-3">
+                  <a href="<%= cart_items_path %>" class="btn btn-outline-success btn-lg">
+                    <i class="bi bi-cart-check"></i> 장바구니에서 확인
+                  </a>
+                </div>
+                <p class="text-center text-muted small mb-0">
+                  <i class="bi bi-cart"></i> 장바구니에 담긴 강의입니다
+                </p>
+              `;
+            }
+          }
+        } else {
+          // 에러 처리
+          alert(data.message || '장바구니 추가에 실패했습니다.');
+          button.disabled = false;
+          button.textContent = '🛒 장바구니에 담기';
+        }
+      } catch (error) {
+        console.error('장바구니 추가 중 오류:', error);
+        alert('장바구니 추가에 실패했습니다.');
+        button.disabled = false;
+        button.textContent = '🛒 장바구니에 담기';
+      }
+    });
+  });
+});
+
+function showCartToast(courseTitle) {
+  console.log('🍞 showCartToast 함수 호출됨, 강의명:', courseTitle);
+  
+  // 기존 토스트 제거
+  const existingToast = document.getElementById('cart-success-toast');
+  if (existingToast) {
+    existingToast.remove();
+  }
+  
+  // 새 토스트 생성
+  const toast = document.createElement('div');
+  toast.id = 'cart-success-toast';
+  toast.className = 'cart-toast-dynamic';
+  toast.innerHTML = `
+    <div class="toast-content">
+      <div class="toast-icon">✅</div>
+      <div class="toast-text">
+        <strong>${courseTitle}</strong>이(가) 장바구니에 추가되었습니다
+      </div>
+    </div>
+    <div class="toast-actions">
+      <button class="btn btn-primary btn-sm" onclick="location.href='<%= cart_items_path %>'">장바구니 보기</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="hideCartToast()">계속 쇼핑</button>
+    </div>
+  `;
+  
+  // body에 직접 추가
+  document.body.appendChild(toast);
+  
+  console.log('👁️ 토스트 표시 중...');
+  
+  // 약간의 지연 후 애니메이션 시작
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
+  
+  // 기존 타이머 제거
+  if (cartToastTimeout) {
+    clearTimeout(cartToastTimeout);
+  }
+  
+  // 4초 후 자동으로 사라지며 강의 목록으로 이동
+  cartToastTimeout = setTimeout(function() {
+    console.log('⏰ 토스트 자동 숨김 타이머 실행');
+    hideCartToast();
+    // 현재 페이지가 강의 목록이 아니라면 이동
+    if (!window.location.pathname.includes('/courses') || window.location.pathname.includes('/courses/')) {
+      window.location.href = '<%= courses_path %>';
+    }
+  }, 4000);
+  
+  console.log('✅ showCartToast 완료');
+}
+
+function hideCartToast() {
+  const toast = document.getElementById('cart-success-toast');
+  if (toast) {
+    toast.classList.remove('show');
+    toast.classList.add('hide');
+    
+    setTimeout(function() {
+      toast.remove();
+    }, 300);
+  }
+  
+  if (cartToastTimeout) {
+    clearTimeout(cartToastTimeout);
+  }
+}
+
+function updateCartCount(count) {
+  // 네비게이션바의 장바구니 카운트 업데이트
+  const cartBadges = document.querySelectorAll('.nav-link .badge');
+  cartBadges.forEach(badge => {
+    if (badge.parentElement.querySelector('.bi-cart, .bi-cart3')) {
+      if (count > 0) {
+        badge.textContent = count;
+        badge.style.display = 'inline';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  });
+}
+
+// ESC 키로 토스트 닫기
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const toast = document.getElementById('cart-success-toast');
+    if (toast.style.display === 'block') {
+      hideCartToast();
+    }
+  }
+});
+</script>

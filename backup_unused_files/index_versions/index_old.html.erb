@@ -1,0 +1,1162 @@
+<% content_for :title, "정화의 서재 - 마법 같은 동화책 세상" %>
+
+<!-- 깔끔한 프리미엄 히어로 -->
+<%= render 'clean_hero' %>
+
+<!-- 기존 숨김 히어로 블록 제거 -->
+
+<!-- 추가 스타일 -->
+<style>
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* 키즈 타이틀 스타일 */
+.kids-hero-title {
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: gentle-bounce 3s ease-in-out infinite;
+}
+
+.kids-brand {
+  background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #45b7d1);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-text 4s ease-in-out infinite;
+}
+
+.kids-description {
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* 키즈 버튼 스타일 */
+.kids-btn-primary, .kids-btn-secondary, .kids-search-btn {
+  border-radius: 25px;
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.kids-btn-primary:hover, .kids-btn-secondary:hover, .kids-search-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.kids-search-input {
+  border-radius: 25px;
+  border: 3px solid #ffd93d;
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.kids-search-input:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
+
+/* 키즈 통계 카드 */
+.kids-stat-card {
+  transition: all 0.3s ease;
+}
+
+.kids-stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.kids-stat-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  animation: bounce-icon 2s ease-in-out infinite;
+}
+
+/* 키즈 일러스트레이션 */
+.kids-main-icon {
+  font-size: 8rem;
+  animation: castle-bounce 4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+.rainbow-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  border: 4px solid;
+  border-image: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #45b7d1, #a8e6cf) 1;
+  border-radius: 50%;
+  animation: rainbow-ring 3s linear infinite;
+}
+
+.floating-emoji {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: float-kids 4s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.emoji-1 { top: -30px; left: -40px; animation-delay: 0s; }
+.emoji-2 { top: -10px; right: -50px; animation-delay: 0.5s; }
+.emoji-3 { top: 50px; left: -60px; animation-delay: 1s; }
+.emoji-4 { top: 80px; right: -40px; animation-delay: 1.5s; }
+.emoji-5 { bottom: 50px; left: -30px; animation-delay: 2s; }
+.emoji-6 { bottom: 20px; right: -60px; animation-delay: 2.5s; }
+.emoji-7 { bottom: -20px; left: 20px; animation-delay: 3s; }
+.emoji-8 { bottom: -10px; right: 10px; animation-delay: 3.5s; }
+
+/* 애니메이션 */
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes rainbow-text {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes bounce-icon {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.1); }
+}
+
+@keyframes castle-bounce {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(1deg); }
+  75% { transform: translateY(-5px) rotate(-1deg); }
+}
+
+@keyframes rainbow-ring {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes float-kids {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(5deg); }
+  66% { transform: translateY(-8px) rotate(-5deg); }
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+  .kids-hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .kids-main-icon {
+    font-size: 6rem;
+  }
+  
+  .floating-emoji {
+    font-size: 2rem;
+  }
+  
+  .rainbow-ring {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* 키즈 카드 스타일 */
+.kids-card-title {
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  animation: title-wiggle 3s ease-in-out infinite;
+}
+
+.kids-age-badge {
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  font-weight: bold;
+  border-radius: 20px;
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+.kids-section-title {
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  color: #ff6b6b;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.kids-emoji-feature {
+  font-size: 1.5rem;
+  margin-right: 8px;
+  animation: emoji-dance 3s ease-in-out infinite;
+}
+
+.kids-feature-item {
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.kids-feature-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.kids-magic-btn {
+  font-family: 'Comic Sans MS', 'Noto Sans KR', sans-serif;
+  font-weight: bold;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+  border: none;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  animation: magic-glow 3s ease-in-out infinite;
+}
+
+.kids-magic-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  background: linear-gradient(45deg, #ffd93d, #ff6b6b);
+}
+
+/* 키즈 애니메이션 */
+@keyframes title-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes emoji-dance {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(5deg) scale(1.1); }
+  50% { transform: rotate(0deg) scale(1.05); }
+  75% { transform: rotate(-5deg) scale(1.1); }
+}
+
+@keyframes magic-glow {
+  0%, 100% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); }
+  50% { box-shadow: 0 4px 20px rgba(255, 215, 61, 0.4); }
+}
+
+.main-icon-container {
+  z-index: 10;
+}
+</style>
+
+<script>
+function scrollToLibrary() {
+  document.getElementById('library').scrollIntoView({ 
+    behavior: 'smooth' 
+  });
+}
+</script>
+
+<!-- 서재 소개 섹션 -->
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="pe-lg-5">
+          <h2 class="fw-bold mb-4">🏰 정화의 서재 동화책 출판사</h2>
+          <p class="lead text-muted mb-4">
+            아이들의 꿈과 상상력을 키우는 전문 동화책 출판사입니다. 
+            창의적인 스토리텔링과 아름다운 일러스트로 아이들에게 특별한 경험을 선사합니다.
+          </p>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <span class="fs-3 me-3">📚</span>
+                <div>
+                  <h6 class="mb-1">창작 동화책</h6>
+                  <small class="text-muted">독창적인 오리지널 스토리</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <span class="fs-3 me-3">🎨</span>
+                <div>
+                  <h6 class="mb-1">아름다운 일러스트</h6>
+                  <small class="text-muted">전문 일러스트레이터 작품</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <span class="fs-3 me-3">🎭</span>
+                <div>
+                  <h6 class="mb-1">구연동화 영상</h6>
+                  <small class="text-muted">전문 성우의 생동감 있는 구연</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <span class="fs-3 me-3">✍️</span>
+                <div>
+                  <h6 class="mb-1">동화책 만들기 교육</h6>
+                  <small class="text-muted">아이들이 직접 만드는 나만의 동화</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="text-center">
+          <i class="bi bi-building-fill-gear display-1 text-primary opacity-75"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 서비스 소개 섹션 -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-3">🎪 정화의 서재 3가지 마법</h2>
+      <p class="text-muted fs-5">전자동화책 📖 구연동화 🎭 동화만들기 ✍️</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- 1. 전자동화책 -->
+      <div class="col-lg-4">
+        <div class="card h-100 border-0 shadow-lg course-card">
+          <div class="card-body p-5">
+            <div class="d-flex align-items-center mb-4">
+              <div class="icon-wrapper me-4">
+                <span class="fs-1">📖</span>
+              </div>
+              <div>
+                <h3 class="mb-1">📖 전자동화책</h3>
+                <div class="d-flex gap-2">
+                  <span class="badge bg-primary-subtle text-primary">디지털북</span>
+                  <span class="badge bg-success-subtle text-success">운영 중</span>
+                </div>
+              </div>
+            </div>
+            <div class="pricing-highlight mb-3">
+              <div class="d-flex justify-content-between align-items-center p-3 bg-primary-subtle rounded">
+                <div>
+                  <strong class="text-primary">개별 구매형</strong>
+                  <small class="d-block text-muted">한번 구매하면 평생 소장</small>
+                </div>
+                <div class="text-end">
+                  <span class="h5 text-primary mb-0">5,000원~</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted mb-4 fs-6">
+              <strong>인터랙티브 기능</strong>이 포함된 디지털 동화책.<br>
+              터치하고 듣고 읽는 새로운 독서 경험을 제공합니다.
+            </p>
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-primary me-2">📱</span>
+                  <small>모바일 최적화</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-primary me-2">🎬</span>
+                  <small>인터랙티브 기능</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-primary me-2">🔊</span>
+                  <small>나레이션 음성</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-primary me-2">⬇️</span>
+                  <small>오프라인 다운로드</small>
+                </div>
+              </div>
+            </div>
+            <%= link_to courses_path(category: 'ebook'), class: "btn btn-primary btn-lg w-100" do %>
+              📖 전자동화책 보러가기
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 2. 구연동화 영상 -->
+      <div class="col-lg-4">
+        <div class="card h-100 border-0 shadow-lg course-card">
+          <div class="card-body p-5">
+            <div class="d-flex align-items-center mb-4">
+              <div class="icon-wrapper me-4">
+                <span class="fs-1">🎭</span>
+              </div>
+              <div>
+                <h3 class="mb-1">🎭 구연동화 영상</h3>
+                <div class="d-flex gap-2">
+                  <span class="badge bg-warning-subtle text-warning">스트리밍</span>
+                  <span class="badge bg-success-subtle text-success">운영 중</span>
+                </div>
+              </div>
+            </div>
+            <div class="pricing-highlight mb-3">
+              <div class="d-flex justify-content-between align-items-center p-3 bg-warning-subtle rounded">
+                <div>
+                  <strong class="text-warning">월간 구독형</strong>
+                  <small class="d-block text-muted">매월 새로운 구연동화 무제한</small>
+                </div>
+                <div class="text-end">
+                  <span class="h5 text-warning mb-0">9,900원/월</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted mb-4 fs-6">
+              <strong>전문 성우와 배우들</strong>이 들려주는 생동감 넘치는 구연동화.<br>
+              아이들의 상상력과 언어 발달을 돕는 최고의 콘텐츠입니다.
+            </p>
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-warning me-2">🎤</span>
+                  <small>전문 성우 구연</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-warning me-2">🎬</span>
+                  <small>영상 애니메이션</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-warning me-2">🎵</span>
+                  <small>배경 음악 효과</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-warning me-2">📱</span>
+                  <small>모바일 전용 앱</small>
+                </div>
+              </div>
+            </div>
+            <%= link_to courses_path(category: 'storytelling'), class: "btn btn-warning btn-lg w-100" do %>
+              🎭 구연동화 보러가기
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 3. 동화만들기 교육 -->
+      <div class="col-lg-4">
+        <div class="card h-100 border-0 shadow-lg course-card">
+          <div class="card-body p-5">
+            <div class="d-flex align-items-center mb-4">
+              <div class="icon-wrapper me-4">
+                <span class="fs-1">✍️</span>
+              </div>
+              <div>
+                <h3 class="mb-1">✍️ 동화만들기 교육</h3>
+                <div class="d-flex gap-2">
+                  <span class="badge bg-success-subtle text-success">교육과정</span>
+                  <span class="badge bg-success-subtle text-success">운영 중</span>
+                </div>
+              </div>
+            </div>
+            <div class="pricing-highlight mb-3">
+              <div class="d-flex justify-content-between align-items-center p-3 bg-success-subtle rounded">
+                <div>
+                  <strong class="text-success">완주형 과정</strong>
+                  <small class="d-block text-muted">나만의 동화책 완성까지</small>
+                </div>
+                <div class="text-end">
+                  <span class="h5 text-success mb-0">150,000원</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted mb-4 fs-6">
+              <strong>아이들과 함께 만드는</strong> 특별한 동화책 창작 과정.<br>
+              전문 작가가 직접 지도하는 1:1 맞춤 교육입니다.
+            </p>
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-success me-2">📝</span>
+                  <small>스토리 기획법</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-success me-2">🎨</span>
+                  <small>일러스트 기법</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-success me-2">📚</span>
+                  <small>출판 가이드</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-item">
+                  <span class="text-success me-2">🏆</span>
+                  <small>완성작 전시회</small>
+                </div>
+              </div>
+            </div>
+            <%= link_to courses_path(category: 'education'), class: "btn btn-success btn-lg w-100" do %>
+              ✍️ 동화만들기 배우러가기
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 인기 동화책 콘텐츠 섹션 -->
+<section id="popular-content" class="py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="d-flex justify-content-center align-items-center mb-3">
+        <span class="fs-1 me-3">📚</span>
+        <span class="fs-2">🎭</span>
+        <span class="fs-3 ms-2">✍️</span>
+      </div>
+      <h2 class="fw-bold mb-3">🌟 인기 동화책 콘텐츠</h2>
+      <p class="text-muted">아이들이 가장 좋아하는 베스트 동화책들</p>
+    </div>
+    
+    <!-- 전자동화책 섹션 -->
+    <div class="mb-5">
+      <h3 class="fw-bold mb-4 text-primary">📖 인기 전자동화책</h3>
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="storybook-thumbnail bg-gradient-primary text-center p-4">
+              <span class="fs-1">🦁</span>
+              <h6 class="text-white mt-2 fw-bold">용감한 사자왕</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">용감한 사자왕의 모험</h6>
+              <small class="text-muted">정화 작가</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.9</span>
+                <span class="text-primary fw-bold">5,000원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="storybook-thumbnail bg-gradient-success text-center p-4">
+              <span class="fs-1">🧚‍♀️</span>
+              <h6 class="text-white mt-2 fw-bold">마법 요정</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">마법 숲의 작은 요정</h6>
+              <small class="text-muted">서재 작가</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.8</span>
+                <span class="text-primary fw-bold">4,500원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="storybook-thumbnail bg-gradient-warning text-center p-4">
+              <span class="fs-1">🐰</span>
+              <h6 class="text-white mt-2 fw-bold">토끼의 꿈</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">달나라 토끼의 꿈</h6>
+              <small class="text-muted">동화 작가</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.7</span>
+                <span class="text-primary fw-bold">6,000원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="storybook-thumbnail bg-gradient-info text-center p-4">
+              <span class="fs-1">🐻</span>
+              <h6 class="text-white mt-2 fw-bold">곰돌이 친구</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">곰돌이와 꿀벌 친구들</h6>
+              <small class="text-muted">이야기 작가</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.9</span>
+                <span class="text-primary fw-bold">5,500원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 구연동화 영상 섹션 -->
+    <div class="mb-5">
+      <h3 class="fw-bold mb-4 text-warning">🎭 인기 구연동화 영상</h3>
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="video-thumbnail bg-dark text-center p-4 position-relative">
+              <span class="fs-1 text-white">▶️</span>
+              <div class="video-overlay">
+                <span class="fs-2 text-warning">🎭</span>
+              </div>
+              <div class="video-duration position-absolute top-0 end-0 m-2 bg-dark text-white px-2 py-1 rounded">12:34</div>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">백설공주와 일곱 난쟁이</h6>
+              <small class="text-muted">김성우 성우</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.9</span>
+                <span class="text-muted">👀 12.3K</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="video-thumbnail bg-dark text-center p-4 position-relative">
+              <span class="fs-1 text-white">▶️</span>
+              <div class="video-overlay">
+                <span class="fs-2 text-warning">🏰</span>
+              </div>
+              <div class="video-duration position-absolute top-0 end-0 m-2 bg-dark text-white px-2 py-1 rounded">15:22</div>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">신데렐라의 유리구두</h6>
+              <small class="text-muted">박연기 성우</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.8</span>
+                <span class="text-muted">👀 8.7K</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="video-thumbnail bg-dark text-center p-4 position-relative">
+              <span class="fs-1 text-white">▶️</span>
+              <div class="video-overlay">
+                <span class="fs-2 text-warning">🐺</span>
+              </div>
+              <div class="video-duration position-absolute top-0 end-0 m-2 bg-dark text-white px-2 py-1 rounded">10:45</div>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">빨간모자와 늑대</h6>
+              <small class="text-muted">최목소리 성우</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.7</span>
+                <span class="text-muted">👀 15.1K</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="video-thumbnail bg-dark text-center p-4 position-relative">
+              <span class="fs-1 text-white">▶️</span>
+              <div class="video-overlay">
+                <span class="fs-2 text-warning">🐷</span>
+              </div>
+              <div class="video-duration position-absolute top-0 end-0 m-2 bg-dark text-white px-2 py-1 rounded">13:18</div>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">아기돼지 삼형제</h6>
+              <small class="text-muted">이소리 성우</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.9</span>
+                <span class="text-muted">👀 20.5K</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 동화만들기 교육 섹션 -->
+    <div class="mb-5">
+      <h3 class="fw-bold mb-4 text-success">✍️ 인기 동화만들기 교육</h3>
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="education-thumbnail bg-gradient-success text-center p-4">
+              <span class="fs-1">📝</span>
+              <h6 class="text-white mt-2 fw-bold">기초 과정</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">동화 스토리 기획하기</h6>
+              <small class="text-muted">김작가 강사</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.9</span>
+                <span class="text-success fw-bold">30,000원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="education-thumbnail bg-gradient-primary text-center p-4">
+              <span class="fs-1">🎨</span>
+              <h6 class="text-white mt-2 fw-bold">일러스트</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">동화 일러스트 그리기</h6>
+              <small class="text-muted">박그림 강사</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.8</span>
+                <span class="text-success fw-bold">45,000원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="education-thumbnail bg-gradient-warning text-center p-4">
+              <span class="fs-1">📚</span>
+              <h6 class="text-white mt-2 fw-bold">출판 과정</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">동화책 출판 완성하기</h6>
+              <small class="text-muted">최출간 강사</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 4.7</span>
+                <span class="text-success fw-bold">60,000원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm storybook-card">
+            <div class="education-thumbnail bg-gradient-info text-center p-4">
+              <span class="fs-1">🏆</span>
+              <h6 class="text-white mt-2 fw-bold">종합 과정</h6>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="fw-bold">동화작가 마스터 과정</h6>
+              <small class="text-muted">이전문 강사</small>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-warning">⭐ 5.0</span>
+                <span class="text-success fw-bold">150,000원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-5">
+      <p class="text-muted mb-3">더 많은 동화책 콘텐츠가 기다리고 있어요!</p>
+      <%= link_to courses_path, class: "btn btn-primary btn-lg" do %>
+        🎪 모든 콘텐츠 둘러보기
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- 연령별 카테고리 섹션 -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-3">👨‍👩‍👧‍👦 연령별 맞춤 서비스</h2>
+      <p class="text-muted fs-5">성장 단계에 맞는 최적의 학습 경험을 제공합니다</p>
+    </div>
+    
+    <div class="row g-5">
+      <!-- 성인 카테고리 -->
+      <div class="col-lg-6">
+        <div class="age-category-card h-100">
+          <div class="card border-0 shadow-lg h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body p-5 text-white">
+              <div class="d-flex align-items-center mb-4">
+                <div class="age-icon-wrapper me-4">
+                  <i class="bi bi-person-workspace display-4"></i>
+                </div>
+                <div>
+                  <h3 class="mb-1">👨‍💼 성인 전용</h3>
+                  <span class="badge bg-light text-dark">18세 이상</span>
+                </div>
+              </div>
+              
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <h5 class="fw-bold mb-3">🎓 전문 강의</h5>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-briefcase me-2"></i>
+                    <small>비즈니스 스킬</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-code-slash me-2"></i>
+                    <small>IT/개발</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-graph-up-arrow me-2"></i>
+                    <small>자기계발</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-award me-2"></i>
+                    <small>전문자격</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <h5 class="fw-bold mb-3">📚 전문 도서</h5>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-bank me-2"></i>
+                    <small>비즈니스서</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-lightbulb me-2"></i>
+                    <small>자기계발서</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-gear me-2"></i>
+                    <small>전문서적</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <i class="bi bi-book me-2"></i>
+                    <small>교양서</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="d-grid gap-2">
+                <%= link_to courses_path(age_category: 'adult'), class: "btn btn-light btn-lg" do %>
+                  <i class="bi bi-arrow-right-circle me-2"></i>성인 전용 콘텐츠 보기
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 아이들 카테고리 -->
+      <div class="col-lg-6">
+        <div class="age-category-card h-100">
+          <div class="card border-0 shadow-lg h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="card-body p-5 text-white">
+              <div class="d-flex align-items-center mb-4">
+                <div class="age-icon-wrapper me-4">
+                  <i class="bi bi-emoji-smile display-4"></i>
+                </div>
+                <div>
+                  <h3 class="mb-1 kids-card-title">🎪 어린이 동화책</h3>
+                  <span class="badge bg-warning text-dark kids-age-badge">3-12세 전용</span>
+                </div>
+              </div>
+              
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <h5 class="fw-bold mb-3 kids-section-title">🎨 창작 동화책</h5>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🤴</span>
+                    <small>용가 이야기</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🧚</span>
+                    <small>마법 동화</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🐱</span>
+                    <small>동물 친구</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🌈</span>
+                    <small>모험 이야기</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <h5 class="fw-bold mb-3 kids-section-title">📚 동화나라</h5>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🦄</span>
+                    <small>판타지동화</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🌈</span>
+                    <small>모험이야기</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">👑</span>
+                    <small>공주왕자</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="feature-item">
+                    <span class="kids-emoji-feature">🐻</span>
+                    <small>동물친구</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="d-grid gap-2">
+                <%= link_to courses_path(age_category: 'kids'), class: "btn btn-warning btn-lg kids-magic-btn" do %>
+                  📚 어린이 동화책 보러가기! 🎪
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 추천 강의 섹션 -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <h2 class="fw-bold mb-2">추천 강의</h2>
+        <p class="text-muted">엄선된 고품질 강의를 만나보세요</p>
+      </div>
+      <%= link_to "전체 보기", courses_path, class: "btn btn-outline-primary" %>
+    </div>
+    
+    <div class="row g-4">
+      <% @featured_courses.each do |course| %>
+        <div class="col-lg-4 col-md-6">
+          <div class="card course-card h-100 border-0 shadow-sm">
+            <div class="course-thumbnail position-relative">
+              <% category_class =
+                  if course.category == "전자동화책" || course.category == "ebook" then 'category-ebook'
+                  elsif course.category == "구연동화" || course.category == "storytelling" then 'category-storytelling'
+                  elsif course.category == "동화만들기" || course.category == "education" then 'category-education'
+                  else '' end %>
+
+              <div class="book-cover <%= category_class %>">
+                <span class="spine"></span>
+                <span class="pages"></span>
+              <% 
+                category = course.category&.downcase || 'ebook'
+                index = course.id % 6 + 1
+                thumbnail_path = "generated/thumbnails/#{category}_#{index}.svg"
+                
+                if Rails.application.assets && Rails.application.assets.find_asset(thumbnail_path)
+              %>
+                <%= image_tag thumbnail_path, alt: course.title, style: "width: 100%; height: 100%; object-fit: cover;" %>
+              <% elsif course.thumbnail.present? %>
+                <%= image_tag course.thumbnail, alt: course.title %>
+              <% end %>
+                <span class="ribbon <%= "ribbon-#{category_class.split('-').last}" %>"><%= course.category %></span>
+                <span class="stamp stamp-primary">PREMIUM</span>
+                <div class="title"><%= course.title %></div>
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-primary rounded-pill"><%= course.category %></span>
+                <span class="badge bg-secondary"><%= course.level %></span>
+              </div>
+              
+              <h5 class="card-title">
+                <%= link_to course.title, course, class: "text-decoration-none text-dark" %>
+              </h5>
+              
+              <p class="text-muted course-instructor mb-2">
+                <i class="bi bi-person"></i> <%= course.instructor.name %>
+              </p>
+              
+              <div class="d-flex align-items-center mb-2">
+                <div class="rating me-2">
+                  <% 5.times do |i| %>
+                    <i class="bi bi-star<%= i < course.average_rating ? '-fill' : '' %>"></i>
+                  <% end %>
+                </div>
+                <small class="text-muted">(<%= course.reviews.count %>)</small>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="course-price">₩<%= number_with_delimiter(course.price) %></span>
+                <small class="text-muted">
+                  <i class="bi bi-people"></i> <%= course.total_students %>명 수강
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- 인기 강의 섹션 -->
+<% if @popular_courses.any? %>
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-3">인기 강의</h2>
+      <p class="text-muted">많은 학습자들이 선택한 강의</p>
+    </div>
+    
+    <div class="row g-4">
+      <% @popular_courses.each do |course| %>
+        <div class="col-lg-3 col-md-6">
+          <div class="card course-card h-100 border-0 shadow-sm">
+            <div class="course-thumbnail position-relative">
+              <% category_class =
+                  if course.category == "전자동화책" || course.category == "ebook" then 'category-ebook'
+                  elsif course.category == "구연동화" || course.category == "storytelling" then 'category-storytelling'
+                  elsif course.category == "동화만들기" || course.category == "education" then 'category-education'
+                  else '' end %>
+
+              <div class="book-cover <%= category_class %>">
+                <span class="spine"></span>
+                <span class="pages"></span>
+              <% 
+                category = course.category&.downcase || 'ebook'
+                index = course.id % 6 + 1
+                thumbnail_path = "generated/thumbnails/#{category}_#{index}.svg"
+                
+                if Rails.application.assets && Rails.application.assets.find_asset(thumbnail_path)
+              %>
+                <%= image_tag thumbnail_path, alt: course.title, style: "width: 100%; height: 100%; object-fit: cover;" %>
+              <% elsif course.thumbnail.present? %>
+                <%= image_tag course.thumbnail, alt: course.title %>
+              <% end %>
+                <span class="ribbon <%= "ribbon-#{category_class.split('-').last}" %>"><%= course.category %></span>
+                <span class="stamp stamp-amber">HOT</span>
+                <div class="title"><%= course.title %></div>
+              </div>
+
+              <span class="position-absolute top-0 start-0 m-2 badge bg-danger">
+                <i class="bi bi-fire"></i> HOT
+              </span>
+            </div>
+            
+            <div class="card-body">
+              <h6 class="card-title">
+                <%= link_to course.title, course, class: "text-decoration-none text-dark" %>
+              </h6>
+              
+              <p class="text-muted course-instructor small mb-2">
+                <%= course.instructor.name %>
+              </p>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-primary">₩<%= number_with_delimiter(course.price) %></span>
+                <small class="text-muted">
+                  <i class="bi bi-people"></i> <%= course.total_students %>명
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- CTA 섹션 -->
+<section class="py-5 bg-primary text-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-3">지금 바로 학습을 시작하세요</h2>
+    <p class="lead mb-4">전문가들이 만든 고품질 강의로 새로운 기술을 마스터하세요</p>
+    
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="text-center">
+              <i class="bi bi-play-circle display-4 mb-2"></i>
+              <h5>고품질 강의</h5>
+              <p class="small">전문가가 만든 체계적인 커리큘럼</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center">
+              <i class="bi bi-clock display-4 mb-2"></i>
+              <h5>언제든지 학습</h5>
+              <p class="small">24시간 언제든지 원하는 시간에</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center">
+              <i class="bi bi-certificate display-4 mb-2"></i>
+              <h5>실무 중심</h5>
+              <p class="small">실제 프로젝트로 실력 향상</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-4">
+      <%= link_to "강의 둘러보기", courses_path, class: "btn btn-warning btn-lg me-3" %>
+      <% unless logged_in? %>
+        <%= link_to "무료 회원가입", signup_path, class: "btn btn-outline-light btn-lg" %>
+      <% end %>
+    </div>
+  </div>
+</section>
