@@ -1,8 +1,8 @@
 <!-- Flash 메시지 표시 (고정 헤더 위에) -->
 <% if flash.any? %>
-  <div class="flash-messages-container">
+  <div class="flash-messages-container" role="status" aria-live="polite">
     <% flash.each do |type, message| %>
-      <div class="alert alert-<%= type == 'notice' ? 'success' : type == 'alert' ? 'danger' : 'info' %> alert-dismissible fade show flash-alert" role="alert">
+      <div class="alert alert-<%= type == 'notice' ? 'success' : type == 'alert' ? 'danger' : 'info' %> alert-dismissible fade show flash-alert" role="status" aria-live="polite">
         <% case type %>
         <% when 'notice' %>
           <i class="bi bi-check-circle-fill"></i>

@@ -1,0 +1,43 @@
+name: E2E (Playwright)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: kicda-jh/e2e-playwright
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        working-directory: kicda-jh/e2e-playwright
+        run: npx playwright install --with-deps
+
+      - name: Run tests (BASE_URL)
+        env:
+          BASE_URL: ${{ secrets.E2E_BASE_URL || 'http://localhost:3000' }}
+        working-directory: kicda-jh/e2e-playwright
+        run: npm test --silent
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: kicda-jh/e2e-playwright/playwright-report
+
+

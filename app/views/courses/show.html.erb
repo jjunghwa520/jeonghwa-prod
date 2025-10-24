@@ -1,17 +1,57 @@
-<% content_for :title, "#{@course.title} - 정화의 서재" %>
+<% content_for :title, @course.title %>
+<% content_for :description, truncate(@course.description, length: 160) %>
+<% 
+  category_name = case @course.category
+                  when 'ebook', '전자동화책' then '전자동화책'
+                  when 'storytelling', '구연동화' then '구연동화'
+                  when 'education', '동화만들기' then '동화만들기'
+                  else @course.category
+                  end
+%>
+<% content_for :keywords, meta_keywords([category_name, @course.age, "#{@course.level} 수준"]) %>
+<% 
+  # 강의 썸네일 이미지 찾기
+  clean_title = @course.title.gsub(/[^\w\s가-힣]/, '').strip.gsub(/\s+/, '_')
+  title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{@course.id}.jpg"
+  course_thumbnail = if Rails.application.assets&.find_asset(title_specific_vertex_path)
+    asset_path(title_specific_vertex_path)
+  else
+    nil
+  end
+%>
+<% content_for :og_image, course_thumbnail %>
+<% content_for :og_type, 'article' %>
 
 <div class="container">
   <div class="row">
     <!-- 메인 컨텐츠 -->
     <div class="col-lg-8">
+      <%# 동적 미디어/썸네일 해상 - 제목 기반 이미지/데모 영상 매핑 %>
+      <% clean_title = (defined?(ThumbnailMatcherHelper) ? ThumbnailMatcherHelper.clean_title_for_filename(@course.title) : @course.title.gsub(/[^\w\s가-힣]/, '').strip.gsub(/\s+/, '_')) %>
+      <% title_specific_vertex_path = "generated/title_specific_vertex/#{clean_title}_#{@course.id}.jpg" %>
+      <% title_matched_path = (defined?(ThumbnailMatcherHelper) ? ThumbnailMatcherHelper.get_title_specific_thumbnail(@course.title, @course.id) : nil) %>
+      <% title_specific_exists = Rails.application.assets&.find_asset(title_specific_vertex_path).present? %>
+      <% final_thumb_asset = if title_specific_exists
+          title_specific_vertex_path
+        elsif title_matched_path
+          title_matched_path
+        else
+          'generated/hero_final/storybook_magic_items.png'
+        end %>
+      <% demo_video_src = nil %>
+      <% if @course.title.include?('용감한 사자왕의 모험') %>
+        <% demo_video_src = '/videos/ebook_lion_preview.webm' %>
+      <% elsif @course.title.include?('백설공주와 일곱 난쟁이') %>
+        <% demo_video_src = '/videos/story_snowwhite_demo.webm' %>
+      <% elsif @course.category.in?(%w[구연동화 storytelling]) %>
+        <% demo_video_src = '/videos/character_animations/jeonghwa_gentle.webm' %>
+      <% end %>
       <!-- 강의 헤더 -->
       <div class="mb-4">
         <div class="book-cover lg <%= @course.category.in?(%w[전자동화책 ebook]) ? 'category-ebook' : (@course.category.in?(%w[구연동화 storytelling]) ? 'category-storytelling' : (@course.category.in?(%w[동화만들기 education]) ? 'category-education' : '')) %> mb-3">
           <span class="spine"></span>
           <span class="pages"></span>
-          <% if @course.thumbnail.present? %>
-            <%= image_tag @course.thumbnail, alt: @course.title %>
-          <% end %>
+          <%= image_tag final_thumb_asset, alt: @course.title %>
           <% category_label = if @course.category.in?(%w[전자동화책 ebook])
                                  '전자책'
                                elsif @course.category.in?(%w[구연동화 storytelling])
@@ -82,12 +122,12 @@
       <!-- 강의 썸네일 -->
       <div class="mb-4">
         <div class="ratio ratio-16x9">
-          <% if @course.thumbnail.present? %>
-            <%= image_tag @course.thumbnail, class: "rounded", style: "object-fit: cover;" %>
+          <% if demo_video_src && File.exist?(Rails.root.join('public', demo_video_src.sub(/^\//,''))) %>
+            <video class="rounded w-100" controls playsinline poster="<%= image_path(final_thumb_asset) %>">
+              <source src="<%= demo_video_src %>" type="video/webm">
+            </video>
           <% else %>
-            <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded">
-              <i class="bi bi-play-circle display-1"></i>
-            </div>
+            <%= image_tag final_thumb_asset, class: "rounded", style: "object-fit: cover;" %>
           <% end %>
         </div>
       </div>
@@ -244,8 +284,13 @@
             <% if logged_in? %>
               <% if @is_enrolled %>
                 <div class="d-grid gap-2 mb-3">
-                  <%= link_to course_watch_path(@course), class: "btn btn-success btn-lg" do %>
+                  <%= link_to watch_course_path(@course), class: "btn btn-success btn-lg" do %>
                     <i class="bi bi-play-circle"></i> 수강하기
+                  <% end %>
+                  <% if @course.category.in?(%w[전자동화책 ebook]) %>
+                    <%= link_to read_course_path(@course), class: "btn btn-primary btn-lg" do %>
+                      <i class="bi bi-book"></i> 읽기
+                    <% end %>
                   <% end %>
                 </div>
                 <p class="text-center text-muted small mb-0">
@@ -269,12 +314,30 @@
                               data: { turbo_confirm: "바로 수강하시겠습니까?" } do |form| %>
                     <%= form.submit "▶️ 바로 수강하기", class: "btn btn-success btn-lg" %>
                   <% end %>
+                  <% if @course.category.in?(%w[전자동화책 ebook]) %>
+                    <%= link_to read_course_path(@course), class: "btn btn-outline-secondary btn-lg" do %>
+                      <i class="bi bi-book"></i> 미리 읽어보기(10%)
+                    <% end %>
+                  <% elsif @course.category.in?(%w[구연동화 storytelling]) %>
+                    <%= link_to watch_course_path(@course), class: "btn btn-outline-secondary btn-lg" do %>
+                      <i class="bi bi-play-circle"></i> 미리 시청하기(10%)
+                    <% end %>
+                  <% end %>
                 </div>
               <% end %>
             <% else %>
               <div class="d-grid gap-2 mb-3">
                 <%= link_to login_path, class: "btn btn-primary btn-lg" do %>
                   <i class="bi bi-box-arrow-in-right"></i> 로그인 후 수강
+                <% end %>
+                <% if @course.category.in?(%w[전자동화책 ebook]) %>
+                  <%= link_to read_course_path(@course), class: "btn btn-outline-secondary btn-lg" do %>
+                    <i class="bi bi-book"></i> 미리 읽어보기(10%)
+                  <% end %>
+                <% elsif @course.category.in?(%w[구연동화 storytelling]) %>
+                  <%= link_to watch_course_path(@course), class: "btn btn-outline-secondary btn-lg" do %>
+                    <i class="bi bi-play-circle"></i> 미리 시청하기(10%)
+                  <% end %>
                 <% end %>
               </div>
               <p class="text-center text-muted small">
@@ -332,6 +395,16 @@
     </div>
   </div>
 </div>
+
+<script type="application/ld+json">
+<%= raw({
+  "@context" => "https://schema.org",
+  "@type" => ((@course.category.in?(["구연동화","storytelling"])) ? "VideoObject" : "Course"),
+  "name" => @course.title,
+  "description" => @course.description,
+  "thumbnailUrl" => @course.thumbnail
+}.to_json) %>
+</script>
 
 <!-- 장바구니 추가 성공 토스트 - body에 직접 추가됨 -->
 
@@ -469,7 +542,7 @@
 </style>
 
 <script>
-let cartToastTimeout;
+window._jhCartToast = window._jhCartToast || { timeout: null };
 
 // 장바구니 추가 폼 이벤트 처리
 document.addEventListener('DOMContentLoaded', function() {
@@ -586,12 +659,12 @@ function showCartToast(courseTitle) {
   }, 10);
   
   // 기존 타이머 제거
-  if (cartToastTimeout) {
-    clearTimeout(cartToastTimeout);
+  if (window._jhCartToast.timeout) {
+    clearTimeout(window._jhCartToast.timeout);
   }
   
   // 4초 후 자동으로 사라지며 강의 목록으로 이동
-  cartToastTimeout = setTimeout(function() {
+  window._jhCartToast.timeout = setTimeout(function() {
     console.log('⏰ 토스트 자동 숨김 타이머 실행');
     hideCartToast();
     // 현재 페이지가 강의 목록이 아니라면 이동
@@ -614,8 +687,8 @@ function hideCartToast() {
     }, 300);
   }
   
-  if (cartToastTimeout) {
-    clearTimeout(cartToastTimeout);
+  if (window._jhCartToast.timeout) {
+    clearTimeout(window._jhCartToast.timeout);
   }
 }
 

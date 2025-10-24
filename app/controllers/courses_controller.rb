@@ -115,8 +115,17 @@ class CoursesController < ApplicationController
   end
 
   def show
+    # N+1 최적화: instructor와 students 미리 로드
+    @course = Course.includes(:instructor, :reviews, :students, :authors).find(params[:id])
+    
+    # archived/draft 코스는 관리자만 접근 가능
+    unless @course.published? || current_user&.role == 'admin'
+      redirect_to courses_path, alert: "현재 제공되지 않는 콘텐츠입니다."
+      return
+    end
+    
     @review = Review.new
-    @reviews = @course.reviews.recent.includes(:user)
+    @reviews = @course.reviews.active_only.recent.includes(:user)
     @is_enrolled = current_user&.enrolled_courses&.include?(@course)
     @in_cart = current_user&.cart_items&.exists?(course: @course)
   end
@@ -183,21 +192,30 @@ class CoursesController < ApplicationController
   end
 
   def watch
-    @enrollment = current_user.enrollments.find_by(course: @course)
-    unless @enrollment
-      flash[:alert] = "수강 신청이 필요합니다."
-      redirect_to @course
-    end
+    @is_enrolled = current_user&.enrolled_courses&.include?(@course)
+    @enrollment = current_user&.enrollments&.find_by(course: @course)
+    # 자막 자동탐색
+    video_dir = Rails.root.join('public','videos', @course.id.to_s)
+    @subtitle_tracks = Dir.exist?(video_dir) ? Dir.glob(video_dir.join('*.vtt')) : []
+    # 비디오 URL (마이그레이션 이전 안전 가드)
+    @video_url = @course.respond_to?(:video_url) ? @course.video_url : nil
   end
 
   private
 
   def set_course
-    @course = Course.find(params[:id])
+    # N+1 최적화: 필요한 연관관계 미리 로드
+    @course = Course.includes(:instructor, :students, :reviews).find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to courses_path, alert: "코스를 찾을 수 없습니다."
   end
 
   def course_params
-    params.require(:course).permit(:title, :description, :price, :category, :level, :duration, :thumbnail, :status, :age)
+    base = [:title, :description, :price, :category, :level, :duration, :thumbnail, :status, :age]
+    optional = []
+    optional << :video_url if Course.column_names.include?("video_url")
+    optional << :ebook_pages_root if Course.column_names.include?("ebook_pages_root")
+    params.require(:course).permit(*(base + optional))
   end
 
   def require_course_owner

@@ -35,5 +35,12 @@ module KicdaJh
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     
+    # Rack::Attack middleware for rate limiting
+    config.middleware.use Rack::Attack
+    
+    # 예외 처리: 라우트를 통해 404/500을 커스텀 페이지로 처리할 준비
+    # 실제 핸들러/뷰는 controllers/views에 추가
+    config.exceptions_app = self.routes
+    
   end
 end

@@ -88,6 +88,9 @@ GEM
     brakeman (7.1.0)
       racc
     builder (3.3.0)
+    bullet (8.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     capybara (3.40.0)
       addressable
       matrix
@@ -366,6 +369,8 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.2.1)
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -457,6 +462,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    secure_headers (7.1.0)
     securerandom (0.4.1)
     selenium-webdriver (4.35.0)
       base64 (~> 0.2)
@@ -469,6 +475,8 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 4.0)
       multi_json (~> 1.10)
+    sitemap_generator (6.3.0)
+      builder (~> 3.0)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -527,6 +535,7 @@ GEM
     unicode-display_width (3.1.5)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    uniform_notifier (1.18.0)
     uri (1.0.3)
     useragent (0.16.11)
     web-console (4.2.1)
@@ -559,6 +568,7 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 5.3)
   brakeman
+  bullet
   capybara
   debug
   dotenv-rails
@@ -573,10 +583,13 @@ DEPENDENCIES
   kamal
   kaminari
   puma (>= 5.0)
+  rack-attack
   rails (~> 8.0.2, >= 8.0.2.1)
   rubocop-rails-omakase
   sassc-rails
+  secure_headers
   selenium-webdriver
+  sitemap_generator
   solid_cable
   solid_cache
   solid_queue

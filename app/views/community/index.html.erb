@@ -1,0 +1,88 @@
+<% content_for :title, "커뮤니티 - 정화의 서재" %>
+
+<div class="container py-5">
+  <h1 class="mb-4">👨‍👩‍👧‍👦 커뮤니티</h1>
+
+  <!-- 탭 메뉴 -->
+  <ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button">
+        ⭐ 최근 리뷰
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="challenges-tab" data-bs-toggle="tab" data-bs-target="#challenges" type="button">
+        🏆 독서 챌린지
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="forum-tab" data-bs-toggle="tab" data-bs-target="#forum" type="button">
+        💬 부모 소통방
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- 최근 리뷰 탭 -->
+    <div class="tab-pane fade show active" id="reviews" role="tabpanel">
+      <div class="row">
+        <div class="col-md-8">
+          <h4 class="mb-3">최근 리뷰</h4>
+          <% @recent_reviews.each do |review| %>
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <div>
+                    <strong><%= review.user.name %></strong>
+                    <span class="text-warning ms-2"><%= '⭐' * review.rating %></span>
+                  </div>
+                  <small class="text-muted"><%= review.created_at.strftime('%Y-%m-%d') %></small>
+                </div>
+                <h6>
+                  <%= link_to review.course.title, course_path(review.course) %>
+                </h6>
+                <p class="mb-0"><%= review.content %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">🏅 활발한 리뷰어 Top 10</h6>
+            </div>
+            <div class="card-body">
+              <ol class="list-unstyled mb-0">
+                <% @top_reviewers.each_with_index do |user, idx| %>
+                  <li class="mb-2">
+                    <span class="badge bg-primary"><%= idx + 1 %></span>
+                    <strong><%= user.name %></strong>
+                    <small class="text-muted">(리뷰 <%= user.review_count %>개)</small>
+                  </li>
+                <% end %>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 독서 챌린지 탭 -->
+    <div class="tab-pane fade" id="challenges" role="tabpanel">
+      <div class="alert alert-info">
+        <h5>🎯 독서 챌린지</h5>
+        <p class="mb-0">매달 새로운 독서 챌린지에 참여하고 뱃지를 획득하세요! (Coming Soon)</p>
+      </div>
+    </div>
+
+    <!-- 부모 소통방 탭 -->
+    <div class="tab-pane fade" id="forum" role="tabpanel">
+      <div class="alert alert-info">
+        <h5>💬 부모 소통방</h5>
+        <p class="mb-0">같은 연령대 자녀를 둔 부모님들과 소통하는 공간입니다. (Coming Soon)</p>
+      </div>
+    </div>
+  </div>
+</div>
+

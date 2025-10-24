@@ -1,0 +1,130 @@
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <!-- 뒤로가기 -->
+  <div class="mb-6">
+    <%= link_to user_orders_path(@user), class: "inline-flex items-center text-blue-600 hover:text-blue-700" do %>
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      주문 내역으로 돌아가기
+    <% end %>
+  </div>
+
+  <!-- 주문 상세 -->
+  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+    <!-- 헤더 -->
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold mb-2">주문 상세</h1>
+          <p class="text-blue-100">주문번호: <%= @order.order_id %></p>
+        </div>
+        <span class="px-4 py-2 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
+          <%= order_status_text(@order.status) %>
+        </span>
+      </div>
+    </div>
+
+    <!-- 주문 정보 -->
+    <div class="p-6 space-y-6">
+      <!-- 강의 정보 -->
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          강의 정보
+        </h2>
+        <div class="bg-gray-50 rounded-lg p-4">
+          <div class="flex items-start gap-4">
+            <% if @order.course.thumbnail.present? %>
+              <%= image_tag @order.course.thumbnail.url, class: "w-24 h-24 object-cover rounded-lg", alt: @order.course.title %>
+            <% end %>
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-800 mb-1"><%= @order.course.title %></h3>
+              <p class="text-sm text-gray-600 line-clamp-2"><%= @order.course.description %></p>
+              <% if @order.status == 'completed' %>
+                <%= link_to "강의 보러가기 →", course_path(@order.course), class: "inline-block mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결제 정보 -->
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+          결제 정보
+        </h2>
+        <div class="bg-gray-50 rounded-lg p-4 space-y-2">
+          <div class="flex justify-between">
+            <span class="text-gray-600">결제 금액</span>
+            <span class="font-semibold text-gray-800"><%= number_to_currency(@order.amount, unit: '₩', format: '%n%u', precision: 0) %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">결제 방법</span>
+            <span class="text-gray-800">토스페이먼츠</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">주문 일시</span>
+            <span class="text-gray-800"><%= @order.created_at.strftime('%Y년 %m월 %d일 %H:%M') %></span>
+          </div>
+          <% if @order.approved_at %>
+            <div class="flex justify-between">
+              <span class="text-gray-600">승인 일시</span>
+              <span class="text-gray-800"><%= @order.approved_at.strftime('%Y년 %m월 %d일 %H:%M') %></span>
+            </div>
+          <% end %>
+          <% if @order.status == 'refunded' && @order.refunded_at %>
+            <div class="flex justify-between pt-2 border-t border-gray-200">
+              <span class="text-gray-600">환불 일시</span>
+              <span class="text-red-600 font-medium"><%= @order.refunded_at.strftime('%Y년 %m월 %d일 %H:%M') %></span>
+            </div>
+            <% if @order.refund_reason %>
+              <div class="pt-2 border-t border-gray-200">
+                <span class="text-gray-600 block mb-1">환불 사유</span>
+                <p class="text-gray-800"><%= @order.refund_reason %></p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 환불 신청 -->
+      <% if @order.refundable? %>
+        <div class="border-t border-gray-200 pt-6">
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <h3 class="font-semibold text-yellow-800 mb-2">💡 환불 안내</h3>
+            <ul class="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+              <li>결제 후 7일 이내 환불 가능합니다.</li>
+              <li>환불 처리는 영업일 기준 3-5일이 소요됩니다.</li>
+              <li>환불 시 수강 등록이 자동으로 취소됩니다.</li>
+            </ul>
+          </div>
+          
+          <%= form_with url: refund_payment_path(@order), method: :post, data: { turbo_confirm: "정말 환불하시겠습니까? 환불 후에는 강의를 수강할 수 없습니다." } do |f| %>
+            <div class="mb-4">
+              <%= f.label :refund_reason, "환불 사유", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= f.text_area :refund_reason, 
+                  class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                  rows: 3,
+                  placeholder: "환불 사유를 입력해주세요 (선택사항)" %>
+            </div>
+            
+            <%= f.submit "환불 신청", class: "w-full py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-semibold" %>
+          <% end %>
+        </div>
+      <% elsif @order.status == 'completed' %>
+        <div class="border-t border-gray-200 pt-6">
+          <div class="bg-gray-50 rounded-lg p-4 text-center">
+            <p class="text-gray-600">환불 가능 기간(7일)이 지났습니다.</p>
+            <p class="text-sm text-gray-500 mt-1">환불 문의는 고객센터로 연락해주세요.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

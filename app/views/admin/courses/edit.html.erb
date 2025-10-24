@@ -1,0 +1,630 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>📝 코스 수정</h1>
+      <h4 class="text-muted"><%= @course.title %></h4>
+    </div>
+    <div class="d-flex gap-2">
+      <%= link_to "← 목록", admin_courses_path, class: "btn btn-outline-secondary" %>
+      <%= link_to "👁️ 미리보기", course_path(@course), class: "btn btn-info", target: "_blank" %>
+      <%= link_to "📁 상세보기", admin_course_path(@course), class: "btn btn-outline-primary" %>
+    </div>
+  </div>
+
+  <!-- 콘텐츠 현황 -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h6 class="mb-0">📊 콘텐츠 현황</h6>
+        </div>
+        <div class="card-body">
+          <% if @course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+            <p class="mb-2">
+              <strong>페이지 이미지:</strong> 
+              <span class="badge bg-<%= @content_status[:page_count] >= 10 ? 'success' : 'warning' %>">
+                <%= @content_status[:page_count] %>개
+              </span>
+            </p>
+            <p class="mb-0">
+              <strong>캡션:</strong>
+              <span class="badge bg-<%= @content_status[:caption_count] >= 10 ? 'success' : 'secondary' %>">
+                <%= @content_status[:caption_count] %>개
+              </span>
+            </p>
+          <% else %>
+            <p class="mb-0">
+              <strong>비디오:</strong>
+              <span class="badge bg-<%= @content_status[:has_video] ? 'success' : 'danger' %>">
+                <%= @content_status[:has_video] ? '있음' : '없음' %>
+              </span>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h6 class="mb-0">ℹ️ 코스 정보</h6>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>ID:</strong> <%= @course.id %></p>
+          <p class="mb-1"><strong>카테고리:</strong> <%= @course.category %></p>
+          <p class="mb-1"><strong>상태:</strong> <%= @course.status %></p>
+          <p class="mb-0"><strong>등록일:</strong> <%= @course.created_at.strftime('%Y-%m-%d') %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭 네비게이션 -->
+  <ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#basic-info">기본 정보</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#files">파일 관리</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- 기본 정보 탭 -->
+    <div class="tab-pane fade show active" id="basic-info">
+      <%= form_with model: [:admin, @course], html: { class: 'needs-validation' } do |f| %>
+        <div class="row g-3">
+          <!-- 제목 & 부제목 -->
+          <div class="col-md-8">
+            <%= f.label :title, '제목 *', class: 'form-label' %>
+            <%= f.text_field :title, class: 'form-control', required: true %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :subtitle, '부제목', class: 'form-label' %>
+            <%= f.text_field :subtitle, class: 'form-control' %>
+          </div>
+
+          <!-- 시리즈 -->
+          <div class="col-md-8">
+            <%= f.label :series_name, '시리즈', class: 'form-label' %>
+            <%= f.text_field :series_name, class: 'form-control', list: 'series-list' %>
+            <datalist id="series-list">
+              <% Course.distinct.pluck(:series_name).compact.each do |series| %>
+                <option value="<%= series %>">
+              <% end %>
+            </datalist>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :series_order, '순서', class: 'form-label' %>
+            <%= f.number_field :series_order, class: 'form-control', min: 1 %>
+          </div>
+
+          <!-- 카테고리 & 연령 -->
+          <div class="col-md-4">
+            <%= f.label :category, '카테고리 *', class: 'form-label' %>
+            <%= f.select :category,
+              options_for_select([
+                ['전래동화', '전래동화'],
+                ['명작동화', '명작동화'],
+                ['창작동화', '창작동화'],
+                ['전자동화책', '전자동화책'],
+                ['구연동화', '구연동화'],
+                ['교육자료', '교육자료']
+              ], @course.category),
+              {},
+              class: 'form-select',
+              required: true
+            %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :age, '연령 *', class: 'form-label' %>
+            <%= f.select :age,
+              options_for_select([
+                ['아기 (0-2세)', 'baby'],
+                ['유아 (3-5세)', 'toddler'],
+                ['초등 (6-13세)', 'elementary'],
+                ['청소년 (14-16세)', 'teen']
+              ], @course.age),
+              {},
+              class: 'form-select',
+              required: true
+            %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :difficulty, '난이도', class: 'form-label' %>
+            <div class="difficulty-selector">
+              <% (1..5).each do |level| %>
+                <%= f.radio_button :difficulty, level, id: "difficulty_#{level}", checked: (@course.difficulty == level) %>
+                <label for="difficulty_<%= level %>">⭐</label>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- 가격 & 할인 -->
+          <div class="col-md-4">
+            <%= f.label :price, '가격 (원) *', class: 'form-label' %>
+            <%= f.number_field :price, class: 'form-control', step: '100', required: true %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :discount_percentage, '할인율 (%)', class: 'form-label' %>
+            <%= f.number_field :discount_percentage, class: 'form-control', min: 0, max: 100 %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :level, '레벨 *', class: 'form-label' %>
+            <%= f.select :level,
+              options_for_select([
+                ['초급', 'beginner'],
+                ['중급', 'intermediate'],
+                ['고급', 'advanced']
+              ], @course.level),
+              {},
+              class: 'form-select',
+              required: true
+            %>
+          </div>
+
+          <!-- 소요시간 & 제작일 -->
+          <div class="col-md-6">
+            <%= f.label :duration, '소요시간 (분) *', class: 'form-label' %>
+            <%= f.number_field :duration, class: 'form-control', required: true %>
+          </div>
+          <div class="col-md-6">
+            <%= f.label :production_date, '제작일', class: 'form-label' %>
+            <%= f.date_field :production_date, class: 'form-control' %>
+          </div>
+
+          <!-- 태그 -->
+          <div class="col-12">
+            <%= f.label :tags, '태그', class: 'form-label' %>
+            <%= f.text_field :tags, class: 'form-control', placeholder: '#동물, #우정, #교훈' %>
+            <small class="form-text text-muted">쉼표로 구분</small>
+          </div>
+
+          <!-- 설명 -->
+          <div class="col-12">
+            <%= f.label :description, '설명 *', class: 'form-label' %>
+            <%= f.text_area :description, rows: 5, class: 'form-control', required: true %>
+          </div>
+
+          <!-- 제작진 -->
+          <div class="col-12">
+            <h5 class="mt-3">👥 제작진</h5>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">작가</label>
+            <%= select_tag 'course[writer_id]',
+              options_from_collection_for_select(@authors.writers, :id, :name, @course.writer&.id),
+              { include_blank: '선택하세요', class: 'form-select' }
+            %>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">일러스트레이터</label>
+            <%= select_tag 'course[illustrator_id]',
+              options_from_collection_for_select(@authors.illustrators, :id, :name, @course.illustrator&.id),
+              { include_blank: '선택하세요', class: 'form-select' }
+            %>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">성우</label>
+            <%= select_tag 'course[narrator_id]',
+              options_from_collection_for_select(@authors.narrators, :id, :name, @course.narrator&.id),
+              { include_blank: '선택하세요', class: 'form-select' }
+            %>
+          </div>
+
+          <!-- 썸네일 & 상태 -->
+          <div class="col-md-8">
+            <%= f.label :thumbnail, '썸네일 URL', class: 'form-label' %>
+            <%= f.url_field :thumbnail, class: 'form-control' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.label :status, '상태', class: 'form-label' %>
+            <%= f.select :status,
+              options_for_select([
+                ['발행됨', 'published'],
+                ['임시저장', 'draft'],
+                ['보관됨', 'archived']
+              ], @course.status),
+              {},
+              class: 'form-select'
+            %>
+          </div>
+
+          <!-- 제출 -->
+          <div class="col-12 mt-4">
+            <%= f.submit "💾 저장", class: "btn btn-primary btn-lg" %>
+            <%= link_to "취소", admin_course_path(@course), class: "btn btn-outline-secondary btn-lg" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 파일 관리 탭 -->
+    <div class="tab-pane fade" id="files">
+      <div class="row">
+        <!-- 기존 파일 목록 -->
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+              <h6 class="mb-0">📁 기존 파일</h6>
+            </div>
+            <div class="card-body">
+              <% if @course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+                <!-- 이미지 파일 -->
+                <h6 class="mt-2">페이지 이미지 (<%= @existing_files[:images].count %>개)</h6>
+                <div class="list-group mb-3">
+                  <% @existing_files[:images].each do |file| %>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="bi bi-file-image"></i>
+                        <%= file[:name] %>
+                        <small class="text-muted">(<%= number_to_human_size(file[:size]) %>)</small>
+                      </div>
+                      <button class="btn btn-sm btn-outline-danger" onclick="deleteFile('<%= file[:path] %>')">
+                        🗑️
+                      </button>
+                    </div>
+                  <% end %>
+                </div>
+
+                <!-- 캡션 파일 -->
+                <h6 class="mt-3">캡션 (<%= @existing_files[:captions].count %>개)</h6>
+                <div class="list-group">
+                  <% @existing_files[:captions].each do |file| %>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="bi bi-file-text"></i>
+                        <%= file[:name] %>
+                        <small class="text-muted">(<%= number_to_human_size(file[:size]) %>)</small>
+                      </div>
+                      <button class="btn btn-sm btn-outline-danger" onclick="deleteFile('<%= file[:path] %>')">
+                        🗑️
+                      </button>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <!-- 비디오 파일 -->
+                <h6>비디오 파일 (<%= @existing_files[:videos].count %>개)</h6>
+                <div class="list-group mb-3">
+                  <% @existing_files[:videos].each do |file| %>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="bi bi-file-play"></i>
+                        <%= file[:name] %>
+                        <small class="text-muted">(<%= number_to_human_size(file[:size]) %>)</small>
+                      </div>
+                      <button class="btn btn-sm btn-outline-danger" onclick="deleteFile('<%= file[:path] %>')">
+                        🗑️
+                      </button>
+                    </div>
+                  <% end %>
+                </div>
+
+                <!-- 자막 파일 -->
+                <h6 class="mt-3">자막 (<%= @existing_files[:subtitles].count %>개)</h6>
+                <div class="list-group">
+                  <% @existing_files[:subtitles].each do |file| %>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="bi bi-file-earmark-text"></i>
+                        <%= file[:name] %>
+                        <small class="text-muted">(<%= number_to_human_size(file[:size]) %>)</small>
+                      </div>
+                      <button class="btn btn-sm btn-outline-danger" onclick="deleteFile('<%= file[:path] %>')">
+                        🗑️
+                      </button>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- 파일 추가 -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h6 class="mb-0">➕ 파일 추가</h6>
+            </div>
+            <div class="card-body">
+              <form id="file-upload-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label class="form-label">파일 종류</label>
+                  <select id="content-type-select" class="form-select">
+                    <% if @course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+                      <option value="ebook_images">페이지 이미지 (.jpg, .png)</option>
+                      <option value="captions">캡션 (.txt)</option>
+                    <% else %>
+                      <option value="video">비디오 (.mp4, .webm)</option>
+                      <option value="subtitle">자막 (.vtt, .srt)</option>
+                      <option value="hls">HLS (.ts, .m3u8)</option>
+                    <% end %>
+                  </select>
+                </div>
+
+                <div class="file-upload-dropzone" id="edit-file-dropzone">
+                  <div class="text-center">
+                    <i class="bi bi-cloud-upload display-4 text-muted"></i>
+                    <p class="mt-3">파일을 드래그하거나 클릭하여 선택</p>
+                    <input type="file" id="edit-file-input" multiple style="display: none;">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('edit-file-input').click()">
+                      파일 선택
+                    </button>
+                  </div>
+                  <div id="edit-file-list" class="mt-3" style="display: none;"></div>
+                </div>
+
+                <button type="button" id="upload-files-btn" class="btn btn-success w-100 mt-3" disabled>
+                  📤 업로드
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 파일 삭제
+async function deleteFile(path) {
+  if (!confirm('이 파일을 삭제하시겠습니까?')) return;
+
+  try {
+    const response = await fetch(`/admin/courses/<%= @course.id %>/delete_file`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ file_path: path })
+    });
+
+    if (response.ok) {
+      alert('파일이 삭제되었습니다');
+      location.reload();
+    } else {
+      alert('파일 삭제에 실패했습니다');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('오류가 발생했습니다');
+  }
+}
+
+// 파일 업로드 (수정 페이지용)
+document.addEventListener('DOMContentLoaded', function() {
+  const dropzone = document.getElementById('edit-file-dropzone');
+  const fileInput = document.getElementById('edit-file-input');
+  const fileList = document.getElementById('edit-file-list');
+  const uploadBtn = document.getElementById('upload-files-btn');
+  const contentTypeSelect = document.getElementById('content-type-select');
+  let selectedFiles = [];
+
+  if (!dropzone) return;
+
+  dropzone.addEventListener('click', function(e) {
+    if (e.target.tagName !== 'BUTTON') {
+      fileInput.click();
+    }
+  });
+
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+
+  dropzone.addEventListener('dragleave', () => {
+    dropzone.classList.remove('dragover');
+  });
+
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    selectedFiles = Array.from(e.dataTransfer.files);
+    displayFiles();
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    selectedFiles = Array.from(e.target.files);
+    displayFiles();
+  });
+
+  function displayFiles() {
+    if (selectedFiles.length === 0) {
+      fileList.style.display = 'none';
+      uploadBtn.disabled = true;
+      return;
+    }
+
+    fileList.style.display = 'block';
+    fileList.innerHTML = '<h6>선택된 파일:</h6>';
+    
+    const listGroup = document.createElement('div');
+    listGroup.className = 'list-group';
+    
+    selectedFiles.forEach(file => {
+      const item = document.createElement('div');
+      item.className = 'list-group-item';
+      item.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      listGroup.appendChild(item);
+    });
+    
+    fileList.appendChild(listGroup);
+    uploadBtn.disabled = false;
+  }
+
+  uploadBtn.addEventListener('click', async function() {
+    const formData = new FormData();
+    formData.append('content_type', contentTypeSelect.value);
+    selectedFiles.forEach(file => {
+      formData.append('files[]', file);
+    });
+
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>업로드 중...';
+    
+    // 진행률 표시
+    const progressDiv = document.createElement('div');
+    progressDiv.className = 'mt-3';
+    progressDiv.innerHTML = `
+      <div class="progress">
+        <div id="upload-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%">0%</div>
+      </div>
+    `;
+    uploadBtn.parentElement.insertBefore(progressDiv, uploadBtn.nextSibling);
+    const progressBar = progressDiv.querySelector('#upload-progress');
+
+    try {
+      const xhr = new XMLHttpRequest();
+      
+      // 진행률 모니터링
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = (e.loaded / e.total) * 100;
+          progressBar.style.width = percentComplete + '%';
+          progressBar.textContent = Math.round(percentComplete) + '%';
+        }
+      });
+      
+      xhr.addEventListener('load', function() {
+        if (xhr.status === 200) {
+          showToast('파일이 업로드되었습니다', 'success');
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          const data = JSON.parse(xhr.responseText);
+          showToast('업로드 실패: ' + (data.errors || ['알 수 없는 오류']).join(', '), 'error');
+        }
+      });
+      
+      xhr.addEventListener('error', function() {
+        showToast('네트워크 오류가 발생했습니다', 'error');
+      });
+      
+      xhr.open('POST', '/admin/courses/<%= @course.id %>/upload_files');
+      xhr.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').content);
+      xhr.send(formData);
+      
+    } catch (error) {
+      console.error('Error:', error);
+      showToast('오류가 발생했습니다', 'error');
+    } finally {
+      setTimeout(() => {
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = '📤 업로드';
+        if (progressDiv) progressDiv.remove();
+      }, 2000);
+    }
+  });
+  
+  // Toast 알림 시스템
+  window.showToast = function(message, type = 'info') {
+    const toastContainer = document.getElementById('toast-container') || createToastContainer();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    
+    setTimeout(() => toast.remove(), 5000);
+  };
+
+  function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container position-fixed top-0 end-0 p-3';
+    container.style.zIndex = '9999';
+    document.body.appendChild(container);
+    return container;
+  }
+});
+</script>
+
+<style>
+.difficulty-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.difficulty-selector input[type="radio"] {
+  display: none;
+}
+
+.difficulty-selector label {
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.difficulty-selector input:checked ~ label,
+.difficulty-selector input:checked + label {
+  opacity: 1;
+}
+
+.file-upload-dropzone {
+  border: 2px dashed #dee2e6;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.file-upload-dropzone.dragover {
+  border-color: #0d6efd;
+  background-color: #e7f1ff;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .difficulty-selector label {
+    font-size: 1.2rem;
+  }
+  
+  .form-control, .form-select {
+    font-size: 16px !important;
+  }
+}
+</style>
+
+<script>
+// 데이터 손실 방지
+let isDirty = false;
+let isSubmitting = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('change', () => isDirty = true);
+  });
+  
+  window.addEventListener('beforeunload', (e) => {
+    if (isDirty && !isSubmitting) {
+      e.preventDefault();
+      e.returnValue = '수정 중인 내용이 저장되지 않았습니다. 정말 나가시겠습니까?';
+    }
+  });
+  
+  // 폼 제출 시
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      isSubmitting = true;
+      isDirty = false;
+    });
+  }
+});
+</script>

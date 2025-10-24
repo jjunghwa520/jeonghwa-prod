@@ -67,29 +67,6 @@
             <% end %>
           </div>
 
-          <!-- 테스트 계정 정보 -->
-          <div class="test-accounts glass-card">
-            <h6 class="text-center mb-3">
-              <span class="badge badge-modern badge-gradient">테스트 계정</span>
-            </h6>
-            <div class="account-list">
-              <div class="account-item">
-                <span class="account-type">👨‍👩‍👧 부모</span>
-                <code>parent1@jeonghwa.com</code>
-              </div>
-              <div class="account-item">
-                <span class="account-type">✍️ 작가</span>
-                <code>author1@jeonghwa.com</code>
-              </div>
-              <div class="account-item">
-                <span class="account-type">👑 관리자</span>
-                <code>admin@jeonghwa.com</code>
-              </div>
-              <small class="text-muted d-block text-center mt-2">
-                비밀번호: password123
-              </small>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -167,40 +144,7 @@
   font-size: 14px;
 }
 
-.test-accounts {
-  padding: 20px;
-  margin-top: 30px;
-  border-radius: 16px;
-}
-
-.account-list {
-  font-size: 14px;
-}
-
-.account-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.account-item:last-of-type {
-  border-bottom: none;
-}
-
-.account-type {
-  font-weight: 600;
-  color: #4a5568;
-}
-
-code {
-  background: #f7fafc;
-  padding: 4px 8px;
-  border-radius: 6px;
-  color: #667eea;
-  font-size: 13px;
-}
+/* 테스트 계정 UI 제거로 관련 스타일 삭제 */
 
 .hover-link {
   transition: all 0.3s ease;
@@ -247,21 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // 테스트 계정 클릭시 자동 입력
-  const accountItems = document.querySelectorAll('.account-item');
-  accountItems.forEach(item => {
-    item.style.cursor = 'pointer';
-    item.addEventListener('click', function() {
-      const email = this.querySelector('code').textContent;
-      document.querySelector('#email').value = email;
-      document.querySelector('#password').value = 'password123';
-      
-      // 피드백 애니메이션
-      this.style.background = 'rgba(102, 126, 234, 0.1)';
-      setTimeout(() => {
-        this.style.background = 'transparent';
-      }, 300);
-    });
-  });
+  // 테스트 계정 자동 입력 기능 제거
 });
 </script>

@@ -5,9 +5,11 @@
 #   gem "sqlite3"
 #
 default: &default
-  adapter: sqlite3
+  adapter: <%= ENV.fetch("DB_ADAPTER", Rails.env.production? ? "postgresql" : "sqlite3") %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
+  encoding: unicode
+  url: <%= ENV["DATABASE_URL"] %>
 
 development:
   <<: *default
@@ -26,7 +28,16 @@ test:
 production:
   primary:
     <<: *default
-    database: storage/production.sqlite3
+    <% if ENV["DATABASE_URL"].present? %>
+    # Use DATABASE_URL when provided (recommended)
+    <% else %>
+    adapter: postgresql
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    database: <%= ENV.fetch("DB_NAME", "kicda_production") %>
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    <% end %>
   cache:
     <<: *default
     database: storage/production_cache.sqlite3

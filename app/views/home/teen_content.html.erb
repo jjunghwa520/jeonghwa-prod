@@ -1,81 +1,30 @@
 <% content_for :title, "청소년 콘텐츠 - 정화의 서재" %>
 
-<!-- 청소년 전용 히어로 섹션 -->
-<section class="modern-hero-section teen-hero">
-  <div class="hero-background">
-    <div class="hero-pattern"></div>
-    <div class="hero-gradient"></div>
-  </div>
-  
+<!-- 청소년 전용 히어로 섹션 (전면 교체) -->
+<section class="hero-neo hero-neo--teen">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 col-md-12 order-2 order-lg-1">
-        <div class="hero-content">
-          <div class="hero-badge">
-            <span class="badge-icon">🎯</span>
-            <span class="badge-text">14-16세 전용</span>
-          </div>
-          
-          <h1 class="hero-title">
-            청소년을 위한<br>
-            <span class="title-highlight">특별한 콘텐츠</span>
-          </h1>
-          
-          <p class="hero-description">
-            꿈을 키우고 재능을 발견하는 청소년 맞춤 프로그램.<br>
-            또래들과 함께 성장하는 특별한 경험을 시작하세요.
-          </p>
-          
-          <div class="hero-stats">
-            <div class="stat-card">
-              <div class="stat-number"><%= Course.where(age: 'teen').count %></div>
-              <div class="stat-label">전체 콘텐츠</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number"><%= Course.where(category: '청소년콘텐츠').count %></div>
-              <div class="stat-label">엔터테인먼트</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number"><%= Course.where(category: '청소년교육').count %></div>
-              <div class="stat-label">교육 과정</div>
-            </div>
-          </div>
-          
-          <div class="hero-actions">
-            <%= link_to courses_path(category: 'teen_content'), class: "btn-modern primary" do %>
-              <span class="btn-icon">🚀</span>
-              <span class="btn-text">콘텐츠 탐색하기</span>
-            <% end %>
-            <%= link_to courses_path(category: 'teen_education'), class: "btn-modern secondary" do %>
-              <span class="btn-icon">📚</span>
-              <span class="btn-text">교육 과정 보기</span>
-            <% end %>
-          </div>
+    <div class="grid-neo">
+      <div class="neo-left">
+        <div class="neo-stage">
+          <img src="/images/refined/jeonghwa_refined_isnet-general-use.png" alt="정화 선생님" class="neo-character">
         </div>
       </div>
-      
-      <div class="col-lg-6 col-md-12 order-1 order-lg-2">
-        <div class="hero-visual">
-          <div class="visual-container">
-            <div class="main-visual">
-              <div class="visual-card card-1">
-                <div class="card-icon">📱</div>
-                <div class="card-title">웹툰 & 만화</div>
-              </div>
-              <div class="visual-card card-2">
-                <div class="card-icon">🎮</div>
-                <div class="card-title">게임 개발</div>
-              </div>
-              <div class="visual-card card-3">
-                <div class="card-icon">🎨</div>
-                <div class="card-title">창작 & 디자인</div>
-              </div>
-              <div class="visual-card card-4">
-                <div class="card-icon">🌟</div>
-                <div class="card-title">진로 탐색</div>
-              </div>
-            </div>
-          </div>
+      <div class="neo-right">
+        <div class="neo-badge">14–16세</div>
+        <h1 class="neo-title">청소년을 위한 <span class="accent">특별한 콘텐츠</span></h1>
+        <p class="neo-desc">꿈을 키우고 재능을 발견하는 청소년 맞춤 프로그램. 또래들과 함께 성장하는 특별한 경험을 시작하세요.</p>
+        <ul class="neo-list">
+          <li>전체 콘텐츠 <strong><%= Course.where(age: 'teen').count %></strong></li>
+          <li>엔터테인먼트 <strong><%= Course.where(category: '청소년콘텐츠').count %></strong></li>
+          <li>교육 과정 <strong><%= Course.where(category: '청소년교육').count %></strong></li>
+        </ul>
+        <div class="neo-cta">
+          <%= link_to courses_path(category: 'teen_content'), class: "btn-neo primary" do %>
+            <span>콘텐츠 탐색하기</span>
+          <% end %>
+          <%= link_to courses_path(category: 'teen_education'), class: "btn-neo ghost" do %>
+            <span>교육 과정 보기</span>
+          <% end %>
         </div>
       </div>
     </div>

@@ -1,0 +1,1091 @@
+<!-- BEGIN app/views/layouts/application.html.erb --><!DOCTYPE html>
+<html lang="ko" class="">
+  <head>
+    <title>🎭 구연동화 영상 - 정화의 서재</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="description" content="아이들을 위한 특별한 동화책 플랫폼">
+    <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="MzAc14jc3lSUVWsHj9TllDnbwx7Cek1Ia6daDuxuJ04ESb17m1UcmGWJsOCKGE9eap7W0a4WNl7ViskUbDOuBw" />
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- AOS Animation (removed) -->
+    
+    <link rel="stylesheet" href="/assets/application.css" data-turbo-track="reload" />
+    <script type="importmap" data-turbo-track="reload">{
+  "imports": {
+    "application": "/assets/application.js",
+    "@hotwired/turbo-rails": "/assets/turbo.min.js",
+    "@hotwired/stimulus": "/assets/stimulus.min.js",
+    "bootstrap": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js",
+    "controllers/application": "/assets/controllers/application.js",
+    "controllers/hello_controller": "/assets/controllers/hello_controller.js",
+    "controllers": "/assets/controllers/index.js"
+  }
+}</script>
+<link rel="modulepreload" href="/assets/application.js">
+<link rel="modulepreload" href="/assets/turbo.min.js">
+<link rel="modulepreload" href="/assets/stimulus.min.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+<link rel="modulepreload" href="/assets/controllers/application.js">
+<link rel="modulepreload" href="/assets/controllers/hello_controller.js">
+<link rel="modulepreload" href="/assets/controllers/index.js">
+<script type="module">import "application"</script>
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">본문 바로가기</a>
+    <!-- 모던 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg nav-premium" id="mainNav">
+      <div class="container">
+        <!-- 브랜드 로고 -->
+        <a class="navbar-brand" href="/">
+          <div class="brand-wrapper">
+            <div class="brand-info">
+              <h1 class="brand-name" style="background:none;-webkit-text-fill-color:initial;">정화의 서재</h1>
+              <p class="brand-tagline">동화책 플랫폼</p>
+            </div>
+          </div>
+</a>        
+        <!-- 모바일 토글 버튼 -->
+        <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+          <span class="toggler-icon"></span>
+          <span class="toggler-icon"></span>
+          <span class="toggler-icon"></span>
+        </button>
+        
+        <!-- 네비게이션 메뉴 -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-premium-link " href="/">홈</a></li>
+            <li class="nav-item"><a class="nav-premium-link " href="/courses?category=ebook">전자동화책</a></li>
+            <li class="nav-item"><a class="nav-premium-link active" href="/courses?category=storytelling">구연동화</a></li>
+            <li class="nav-item"><a class="nav-premium-link " href="/courses?category=education">동화만들기</a></li>
+            <li class="nav-item"><a class="nav-premium-link " href="/teen_content">청소년 콘텐츠</a></li>
+          </ul>
+          
+          <!-- 우측 메뉴 -->
+          <ul class="navbar-nav">
+              <li class="nav-item"><a class="btn-minimal btn-minimal-secondary me-2" href="/login">로그인</a></li>
+              <li class="nav-item"><a class="btn-minimal btn-minimal-primary" href="/signup">회원가입</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 플래시 메시지 -->
+
+    <!-- 메인 콘텐츠 -->
+    <main id="main" class="main-content">
+      <!-- BEGIN app/views/courses/index.html.erb -->
+<!-- 동화 콘텐츠 히어로 섹션 -->
+  <!-- 일반 동화 콘텐츠 히어로 섹션 -->
+  <section class="hero-section-small hero-section-small--storytelling">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <!-- 매력적인 배지 추가 -->
+          <div class="hero-badge-general mb-3">
+            <span class="badge-icon">🎪</span>
+            <span class="badge-text">모든 연령대</span>
+          </div>
+          
+          <h1 class="hero-title-general mb-3">🎭 구연동화 영상</h1>
+          <p class="hero-description-general mb-4">전문 성우가 들려주는 생생한 구연동화</p>
+          
+          <!-- 특징 아이콘들 추가 -->
+          <div class="hero-features-general mb-4">
+            <div class="feature-item-general">
+              <span class="feature-icon">📚</span>
+              <span>1000+ 동화책</span>
+            </div>
+            <div class="feature-item-general">
+              <span class="feature-icon">🎵</span>
+              <span>전문 성우</span>
+            </div>
+            <div class="feature-item-general">
+              <span class="feature-icon">🎨</span>
+              <span>고품질 일러스트</span>
+            </div>
+          </div>
+          
+          <!-- 카테고리 탭 (미니멀) -->
+          <div class="d-flex justify-content-center gap-2 flex-wrap mb-3">
+            <a class="btn-minimal btn-minimal-secondary btn-minimal-lg" href="/courses">전체</a>
+            <a class="btn-minimal btn-minimal-secondary btn-minimal-lg" href="/courses?category=ebook">전자동화책</a>
+            <a class="btn-minimal btn-minimal-primary btn-minimal-lg" href="/courses?category=storytelling">구연동화</a>
+            <a class="btn-minimal btn-minimal-secondary btn-minimal-lg" href="/courses?category=education">동화만들기</a>
+          </div>
+          
+          <!-- 청소년 콘텐츠로 이동 링크 -->
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <small class="text-muted me-3 align-self-center">청소년 전용:</small>
+            <a class="btn-minimal btn-minimal-secondary btn-minimal-sm" href="/teen_content">📱 콘텐츠</a>
+            <a class="btn-minimal btn-minimal-secondary btn-minimal-sm" href="/courses?category=teen_education">🎓 교육</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<div class="container-fluid py-5">
+  <div class="container">
+  
+  <!-- 카테고리별 안내 배너 -->
+    <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+      <span class="fs-2 me-3">🎭</span>
+      <div>
+        <h5 class="alert-heading mb-1">구연동화 구독 안내</h5>
+        <p class="mb-0">월 9,900원으로 모든 구연동화를 무제한 시청! 매달 새로운 이야기가 추가됩니다.</p>
+      </div>
+    </div>
+
+  <!-- 강의 목록 -->
+  <div class="content-grid">
+        <a class="content-card" href="/courses/11">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🎭 백설공주와 일곱 난쟁이" class="thumbnail-image" src="/assets/generated/title_specific_vertex/백설공주와_일곱_난쟁이_11.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🎭 백설공주와 일곱 난쟁이</h4>
+            <p class="content-author">정마법</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/12">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🏰 신데렐라의 유리구두" class="thumbnail-image" src="/assets/generated/title_specific_vertex/신데렐라의_유리구두_12.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🏰 신데렐라의 유리구두</h4>
+            <p class="content-author">이이야기</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/13">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <div class="thumbnail-placeholder">
+                <span class="thumbnail-icon">
+                  📖
+                </span>
+              </div>
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🐺 빨간모자와 늑대</h4>
+            <p class="content-author">정마법</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                8-12세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/14">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🐷 아기돼지 삼형제" class="thumbnail-image" src="/assets/generated/title_specific_vertex/아기돼지_삼형제_14.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🐷 아기돼지 삼형제</h4>
+            <p class="content-author">이이야기</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/15">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🌹 미녀와 야수" class="thumbnail-image" src="/assets/generated/title_specific_vertex/미녀와_야수_15.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🌹 미녀와 야수</h4>
+            <p class="content-author">정마법</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/16">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🐸 개구리 왕자" class="thumbnail-image" src="/assets/generated/title_specific_vertex/개구리_왕자_16.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🐸 개구리 왕자</h4>
+            <p class="content-author">정마법</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/17">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="👸 잠자는 숲속의 공주" class="thumbnail-image" src="/assets/generated/title_specific_vertex/잠자는_숲속의_공주_17.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>👸 잠자는 숲속의 공주</h4>
+            <p class="content-author">김동화</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                8-12세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/18">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <div class="thumbnail-placeholder">
+                <span class="thumbnail-icon">
+                  📖
+                </span>
+              </div>
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🏃 잭과 콩나무</h4>
+            <p class="content-author">정마법</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/19">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🍎 독이 든 사과" class="thumbnail-image" src="/assets/generated/title_specific_vertex/독이_든_사과_19.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🍎 독이 든 사과</h4>
+            <p class="content-author">박그림</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                8-12세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>        <a class="content-card" href="/courses/20">
+          <!-- 썸네일 영역 -->
+          <div class="content-thumbnail">
+            
+              <img alt="🦢 미운 오리 새끼" class="thumbnail-image" src="/assets/generated/title_specific_vertex/미운_오리_새끼_20.jpg" />
+            
+            <!-- 카테고리 배지 -->
+            <div class="thumbnail-badge storytelling">
+              구연동화
+            </div>
+          </div>
+          
+          <!-- 카드 정보 -->
+          <div class="content-info">
+            <h4>🦢 미운 오리 새끼</h4>
+            <p class="content-author">이이야기</p>
+            <div class="content-footer">
+              <span class="content-rating">
+                  <span class="text-muted">평가 없음</span>
+              </span>
+              <span class="content-price">
+                  무료
+              </span>
+            </div>
+            <div class="content-chips">
+              <span class="chip age">
+                4-7세
+              </span>
+              <span class="chip length">
+                8-15분
+              </span>
+                <span class="chip free">무료</span>
+            </div>
+          </div>
+</a>  </div>
+  </div>
+</div>
+
+<!-- 인라인 스타일 제거: hero-section-small 배경/효과는 unified_hero_design.scss에서 관리 -->
+
+<!-- 장바구니 추가 스크립트 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 장바구니 추가 폼 처리
+  document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const courseId = this.dataset.courseId;
+      const button = this.querySelector('button');
+      const originalContent = button.innerHTML;
+      
+      // 로딩 상태 표시
+      button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+      button.disabled = true;
+      
+      try {
+        const response = await fetch('/cart_items', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('[name="authenticity_token"]').value,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ course_id: courseId })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // 버튼을 "담김" 상태로 변경
+          button.innerHTML = '<i class="bi bi-cart-check"></i>';
+          button.classList.remove('btn-outline-primary');
+          button.classList.add('btn-success');
+          
+          // 토스트 알림 표시
+          showToast('✅ 동화책 보관함에 추가되었습니다!', data.course_title || '');
+        } else {
+          throw new Error(data.error || '오류가 발생했습니다');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        button.innerHTML = originalContent;
+        showToast('❌ 오류가 발생했습니다', error.message, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+  
+  // 토스트 알림 함수
+  function showToast(title, message, type = 'success') {
+    const toastHtml = `
+      <div class="toast-notification ${type}">
+        <div class="toast-header">
+          <strong>${title}</strong>
+          <button class="toast-close">&times;</button>
+        </div>
+        ${message ? `<div class="toast-body">${message}</div>` : ''}
+      </div>
+    `;
+    
+    const toastContainer = document.getElementById('toast-container') || createToastContainer();
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    const toast = toastContainer.lastElementChild;
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // 닫기 버튼
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    });
+    
+    // 자동 제거
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+  
+  function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+    document.body.appendChild(container);
+    return container;
+  }
+});
+</script>
+
+<style>
+.toast-notification {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 10px;
+  min-width: 300px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-notification.success {
+  border-left: 4px solid #28a745;
+}
+
+.toast-notification.error {
+  border-left: 4px solid #dc3545;
+}
+
+.toast-header {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toast-body {
+  padding: 12px;
+  color: #666;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.toast-close:hover {
+  color: #333;
+}
+</style><!-- END app/views/courses/index.html.erb -->
+    </main>
+
+    <!-- 모던 푸터 -->
+    <footer class="footer-modern">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4">
+            <div class="footer-brand">
+              <h3 class="gradient-text mb-3">🏰 정화의 서재</h3>
+              <p class="text-muted">
+                아이들의 상상력을 키우는<br>
+                특별한 동화책 플랫폼
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="social-link"><i class="bi bi-youtube"></i></a>
+                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 mb-4">
+            <h5 class="footer-title">서비스</h5>
+            <ul class="footer-links">
+              <li><a href="/courses?category=ebook">전자동화책</a></li>
+              <li><a href="/courses?category=storytelling">구연동화</a></li>
+              <li><a href="/courses?category=education">동화만들기</a></li>
+              <li><a href="/teen_content">청소년 콘텐츠</a></li>
+              <li><a href="/courses">전체 콘텐츠</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 mb-4">
+            <h5 class="footer-title">고객지원</h5>
+            <ul class="footer-links">
+              <li><a href="#">자주 묻는 질문</a></li>
+              <li><a href="#">이용 가이드</a></li>
+              <li><a href="#">문의하기</a></li>
+              <li><a href="#">공지사항</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 mb-4">
+            <h5 class="footer-title">회사</h5>
+            <ul class="footer-links">
+              <li><a href="#">회사 소개</a></li>
+              <li><a href="#">이용약관</a></li>
+              <li><a href="#">개인정보처리방침</a></li>
+              <li><a href="#">작가 모집</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-lg-2 mb-4">
+            <h5 class="footer-title">연락처</h5>
+            <ul class="footer-contact">
+              <li><i class="bi bi-envelope"></i> info@jeonghwa.com</li>
+              <li><i class="bi bi-telephone"></i> 02-1234-5678</li>
+              <li><i class="bi bi-clock"></i> 평일 09:00 - 18:00</li>
+            </ul>
+          </div>
+        </div>
+        
+        <hr class="footer-divider">
+        
+        <div class="footer-business">
+          <div class="biz-title"><span class="biz-icon">📖</span> 정화의 서재</div>
+          <ul class="biz-list">
+            <li>대표이사: 권정화</li>
+            <li>사업자등록번호: 869-30-01778</li>
+            <li>상호: 정화의서재</li>
+            <li>통신판매업 신고번호: 2025-인천부평-2012호</li>
+            <li>주소: 인천광역시 부평구 마장로 264번길 33</li>
+          </ul>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="mb-0">© 2024 정화의 서재. All rights reserved.</p>
+          <p class="mb-0 small text-muted">Made with ❤️ for children's imagination</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 스크롤 투 탑 버튼 -->
+    <button id="scrollTop" class="scroll-top-btn">
+      <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- AOS 초기화 -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+      });
+    </script>
+
+    <!-- 커스텀 스크립트 -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // 네비게이션 스크롤 효과
+        const navbar = document.getElementById('mainNav');
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        });
+        
+        // 스크롤 투 탑
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 300) {
+            scrollTopBtn.classList.add('show');
+          } else {
+            scrollTopBtn.classList.remove('show');
+          }
+        });
+        
+        scrollTopBtn.addEventListener('click', function() {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+        
+        // 토스트 자동 숨김
+        const toasts = document.querySelectorAll('.toast-modern');
+        toasts.forEach(toast => {
+          setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+          }, 5000);
+        });
+      });
+    </script>
+
+    <style>
+      /* 접근성 스킵링크 */
+      .skip-link {
+        position: absolute; left: -9999px; top: 0; padding: 8px 12px; background: #000; color: #fff; z-index: 10000; border-radius: 6px;
+      }
+      .skip-link:focus { left: 10px; top: 10px; outline: 3px solid #ffd60a; }
+
+      /* 네비게이션 스타일 */
+      .navbar-modern {
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+      }
+      
+      .navbar-modern.scrolled {
+        padding: 0.5rem 0;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      }
+      
+      .brand-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      
+      .brand-icon {
+        font-size: 2rem;
+        animation: float 3s ease-in-out infinite;
+      }
+      
+      .brand-name {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0;
+        line-height: 1;
+      }
+      
+      .brand-tagline {
+        font-size: 0.75rem;
+        color: #718096;
+        margin: 0;
+      }
+      
+      .nav-link-modern {
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 12px;
+        font-weight: 500;
+        color: #4a5568;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      
+      .nav-link-modern:hover {
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        transform: translateY(-2px);
+      }
+      
+      .nav-link-modern.active {
+        background: var(--primary-gradient);
+        color: white;
+      }
+      
+      
+      .nav-icon {
+        font-size: 1.2rem;
+      }
+      
+      .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #f56565;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+      
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        background: var(--primary-gradient);
+        color: white;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+      
+      .dropdown-menu-modern {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      
+      .dropdown-item {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.2s ease;
+      }
+      
+      .dropdown-item:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: translateX(4px);
+      }
+      
+      /* 커스텀 토글러 */
+      .custom-toggler {
+        border: none;
+        padding: 4px 8px;
+      }
+      
+      .toggler-icon {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background: #4a5568;
+        margin: 5px 0;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+      }
+      
+      .navbar-toggler:focus {
+        box-shadow: none;
+      }
+      
+      /* 메인 콘텐츠 */
+      .main-content {
+        min-height: calc(100vh - 80px);
+        padding-top: 80px;
+      }
+      
+      /* 푸터 */
+      .footer-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 0 30px;
+        margin-top: 80px;
+      }
+      
+      .footer-title {
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      
+      .footer-links {
+        list-style: none;
+        padding: 0;
+      }
+      
+      .footer-links li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      
+      .footer-links a:hover {
+        color: white;
+        transform: translateX(4px);
+        display: inline-block;
+      }
+      
+      .footer-contact {
+        list-style: none;
+        padding: 0;
+      }
+      
+      .footer-contact li {
+        margin-bottom: 0.5rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      
+      .footer-contact i {
+        margin-right: 8px;
+      }
+      
+      .social-links {
+        display: flex;
+        gap: 12px;
+      }
+      
+      .social-link {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      
+      .social-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-4px);
+      }
+      
+      .footer-divider {
+        border-color: rgba(255, 255, 255, 0.2);
+        margin: 40px 0 20px;
+      }
+      
+      .footer-bottom {
+        text-align: center;
+      }
+
+      /* 사업자 정보 */
+      .footer-business { 
+        text-align: center; 
+        margin: 24px 0; 
+      }
+      .footer-business .biz-title { 
+        font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 8px; 
+      }
+      .footer-business .biz-icon { font-size: 1.2rem; }
+      .footer-business .biz-list { 
+        list-style: none; padding: 0; margin: 0; color: rgba(255,255,255,0.9); 
+      }
+      .footer-business .biz-list li { margin: 4px 0; }
+      
+      /* 스크롤 투 탑 */
+      .scroll-top-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+      
+      .scroll-top-btn.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .scroll-top-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+      
+      /* 토스트 컨테이너 */
+      .toast-container {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        z-index: 10000;
+      }
+      
+      /* 반응형 */
+      @media (max-width: 768px) {
+        .main-content {
+          padding-top: 70px;
+        }
+        
+        .brand-name {
+          font-size: 1.2rem;
+        }
+        
+        .brand-tagline {
+          display: none;
+        }
+        
+        .nav-link-modern {
+          padding: 0.75rem;
+        }
+      }
+    </style>
+  </body>
+</html><!-- END app/views/layouts/application.html.erb -->

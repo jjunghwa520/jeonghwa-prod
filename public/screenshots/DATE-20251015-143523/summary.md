@@ -1,0 +1,7 @@
+# Test Summary
+- durationMs: 6699
+- readerErrors: 0
+- playerErrors: 0
+- mobileReaderOverflow: false
+- mobilePlayerOverflow: false
+- positionRestoreAccuracy: ≤1s

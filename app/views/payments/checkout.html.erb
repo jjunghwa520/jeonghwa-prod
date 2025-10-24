@@ -1,0 +1,108 @@
+<% content_for :title, "결제 - #{@course.title}" %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">💳 결제하기</h4>
+        </div>
+        <div class="card-body">
+          <h5 class="mb-3"><%= @course.title %></h5>
+          
+          <div class="d-flex justify-content-between mb-4 pb-3 border-bottom">
+            <strong>결제 금액</strong>
+            <h3 class="text-primary mb-0">₩<%= number_with_delimiter(@course.price) %></h3>
+          </div>
+          
+          <!-- 약관 동의 -->
+          <div class="mb-4 p-3 bg-light rounded">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="agree-all">
+              <label class="form-check-label fw-bold" for="agree-all">
+                전체 동의
+              </label>
+            </div>
+            <hr class="my-2">
+            <div class="form-check mb-2">
+              <input class="form-check-input terms-check" type="checkbox" id="agree-terms" required>
+              <label class="form-check-label" for="agree-terms">
+                <%= link_to "이용약관", terms_path, target: "_blank", class: "text-decoration-none" %> 동의 (필수)
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input terms-check" type="checkbox" id="agree-privacy" required>
+              <label class="form-check-label" for="agree-privacy">
+                <%= link_to "개인정보처리방침", privacy_path, target: "_blank", class: "text-decoration-none" %> 동의 (필수)
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input terms-check" type="checkbox" id="agree-refund" required>
+              <label class="form-check-label" for="agree-refund">
+                환불 정책 확인 및 동의 (필수)
+                <small class="d-block text-muted">결제 후 7일 이내 전액 환불 가능</small>
+              </label>
+            </div>
+          </div>
+          
+          <button id="payment-button" class="btn btn-primary btn-lg w-100" disabled>
+            토스페이먼츠로 결제하기
+          </button>
+          
+          <%= link_to "취소", @course, class: "btn btn-outline-secondary w-100 mt-2" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://js.tosspayments.com/v1"></script>
+<script>
+  const clientKey = '<%= @toss_client_key %>';
+  const tossPayments = TossPayments(clientKey);
+  const paymentButton = document.getElementById('payment-button');
+  const agreeAll = document.getElementById('agree-all');
+  const termsChecks = document.querySelectorAll('.terms-check');
+  
+  // 전체 동의 체크박스
+  agreeAll.addEventListener('change', function() {
+    termsChecks.forEach(check => {
+      check.checked = this.checked;
+    });
+    updatePaymentButton();
+  });
+  
+  // 개별 체크박스
+  termsChecks.forEach(check => {
+    check.addEventListener('change', function() {
+      const allChecked = Array.from(termsChecks).every(c => c.checked);
+      agreeAll.checked = allChecked;
+      updatePaymentButton();
+    });
+  });
+  
+  // 결제 버튼 활성화/비활성화
+  function updatePaymentButton() {
+    const allChecked = Array.from(termsChecks).every(c => c.checked);
+    paymentButton.disabled = !allChecked;
+  }
+  
+  // 결제 버튼 클릭
+  paymentButton.addEventListener('click', function() {
+    if (!Array.from(termsChecks).every(c => c.checked)) {
+      alert('필수 약관에 모두 동의해주세요.');
+      return;
+    }
+    
+    tossPayments.requestPayment('카드', {
+      amount: <%= @course.price.to_i %>,
+      orderId: '<%= @order.order_id %>',
+      orderName: '<%= @order_name %>',
+      customerName: '<%= current_user.name %>',
+      customerEmail: '<%= current_user.email %>',
+      successUrl: '<%= confirm_payment_url(course_id: @course.id) %>',
+      failUrl: '<%= fail_payment_url %>'
+    });
+  });
+</script>
+

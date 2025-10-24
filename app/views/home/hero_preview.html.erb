@@ -1,0 +1,50 @@
+<div class="container py-4">
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <strong>Design</strong>
+    <% %w[a b c d e f g h i].each do |d| %>
+      <%= link_to d.upcase, hero_preview_path(design: d, variant: params[:variant], style: params[:style]), class: "btn btn-sm #{params[:design].to_s == d ? 'btn-primary' : 'btn-outline-primary'}" %>
+    <% end %>
+
+    <strong class="ms-3">Style</strong>
+    <% %w[clean soft editorial dark minimal storytelling].each do |s| %>
+      <%= link_to s, hero_preview_path(design: params[:design], variant: params[:variant], style: s), class: "btn btn-sm #{params[:style].to_s == s ? 'btn-success' : 'btn-outline-success'}" %>
+    <% end %>
+
+    <strong class="ms-3">Viewport</strong>
+    <% [[1440,'Desktop'],[768,'Tablet'],[390,'Mobile']].each do |w,label| %>
+      <a href="#" class="btn btn-sm btn-outline-secondary" data-width="<%= w %>"><%= label %></a>
+    <% end %>
+
+    <strong class="ms-3">Layout</strong>
+    <% %w[split center poster].each do |l| %>
+      <%= link_to l, hero_preview_path(design: params[:design], style: params[:style], layout: l), class: "btn btn-sm #{params[:layout].to_s == l ? 'btn-dark' : 'btn-outline-dark'}" %>
+    <% end %>
+  </div>
+
+  <div class="border rounded-3 p-3 position-relative" id="preview-root" style="background:#f8fafc;">
+    <div class="mx-auto" id="preview-stage" style="max-width:1200px;">
+      <% html_class = ["design-#{@design}", ("style-#{@style}" if @style.present?)].compact.join(' ') %>
+      <div class="<%= html_class %>">
+        <%= render "home/heroes/hero_#{@design}" rescue render "home/heroes/hero_a" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function bindPreviewControls(){
+    const root = document.getElementById('preview-stage');
+    document.querySelectorAll('[data-width]').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        const w = this.getAttribute('data-width');
+        root.style.maxWidth = w + 'px';
+      });
+    });
+  }
+  document.addEventListener('turbo:load', bindPreviewControls);
+  document.addEventListener('DOMContentLoaded', bindPreviewControls);
+</script>
+
+
+

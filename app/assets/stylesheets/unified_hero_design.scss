@@ -49,9 +49,11 @@
   position: relative;
   overflow: hidden;
   margin: 0 !important;
-  padding: 3.5rem 0 !important; /* 여백 최적화 */
+  padding: clamp(1.5rem, 3vh, 2.5rem) 0 !important; /* 반응형 여백 축소 */
   margin-top: -50px !important;
-  min-height: 55vh; /* 더 컴팩트한 높이 */
+  margin-bottom: 0 !important; /* 하단 여백 제거 */
+  min-height: clamp(400px, 45vh, 550px) !important; /* 반응형 높이 */
+  max-height: 70vh !important; /* 최대 높이 제한 */
   z-index: 1 !important;
   
   /* 배경은 미니멀하게 */
@@ -379,7 +381,8 @@
 /* 일반 코스 인덱스 히어로 섹션 - 원래 설정 복구 */
 .hero-section-small {
   @extend .hero-section-base;
-  min-height: 50vh; /* 원래 높이 복구 */
+  min-height: clamp(300px, 35vh, 420px) !important; /* 반응형 높이 */
+  max-height: 50vh !important; /* 최대 높이 제한 */
   background: var(--gradient-kids);
   
   &::before {
@@ -533,6 +536,8 @@
 /* 청소년 전용 히어로 (courses 인덱스) - 원래 설정 복구 */
 section.teen-courses-hero {
   @extend .hero-section-base;
+  min-height: clamp(320px, 38vh, 440px) !important; /* 반응형 높이 */
+  max-height: 55vh !important; /* 최대 높이 제한 */
   background: var(--gradient-teen) !important;
   
   &::before {
@@ -655,13 +660,13 @@ section.teen-courses-hero {
   font-size: 0.938rem !important; /* 15px - 최적 가독성 */
   
   @media (max-width: 768px) {
-    min-height: 44px;
+    min-height: var(--btn-min-height);
     padding: 0.75rem 1.5rem !important;
     font-size: 0.875rem !important; /* 14px */
   }
   
   @media (max-width: 576px) {
-    min-height: 44px;
+    min-height: var(--btn-min-height);
     padding: 0.688rem 1.25rem !important;
     font-size: 0.813rem !important; /* 13px */
   }
@@ -718,6 +723,38 @@ section.teen-courses-hero {
     position: relative;
     z-index: 1;
   }
+}
+
+/* Unified button accessibility tokens */
+.btn-hero,
+.btn-modern,
+.btn-age,
+.service-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-min-height);
+  border-radius: var(--btn-radius-neo) !important;
+}
+
+.btn-hero:focus-visible,
+.btn-modern:focus-visible,
+.btn-age:focus-visible,
+.service-link:focus-visible {
+  outline: 0;
+}
+
+.btn-hero:focus-visible::after,
+.btn-modern:focus-visible::after,
+.btn-age:focus-visible::after,
+.service-link:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--focus-ring-color);
+  pointer-events: none;
 }
 
 /* 캐릭터 스테이지 레이아웃 개선 */
@@ -1269,9 +1306,27 @@ section.teen-courses-hero {
   .btn-modern,
   .btn-teen-tab,
   .btn-filter {
-    min-height: 44px;
+    min-height: var(--btn-min-height);
     padding: 0.75rem 1.25rem;
     font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    .btn-hero,
+    .btn-modern,
+    .btn-age,
+    .service-link {
+      min-height: var(--btn-min-height) !important; /* enforce ≥48px */
+    }
+  }
+
+  @media (max-width: 576px) {
+    .btn-hero,
+    .btn-modern,
+    .btn-age,
+    .service-link {
+      min-height: var(--btn-min-height) !important; /* enforce ≥48px */
+    }
   }
 }
 
@@ -1314,5 +1369,81 @@ section.teen-courses-hero {
   .hero-section-base::after,
   .character-stage .character {
     animation: none;
+  }
+}
+
+/* ===================================
+   세로 긴 화면 최적화 (2025-10-23 추가)
+   =================================== */
+
+/* 세로 높이 900px 이상: 태블릿 세로, 작은 세로 모니터 */
+@media (min-height: 900px) {
+  .hero-section-base {
+    min-height: 380px !important;
+    max-height: 450px !important;
+    padding: clamp(1rem, 2vh, 2rem) 0 !important;
+  }
+  
+  .hero-section-small {
+    min-height: 320px !important;
+    max-height: 400px !important;
+  }
+  
+  section.teen-courses-hero {
+    min-height: 340px !important;
+    max-height: 420px !important;
+  }
+  
+  .hero-carousel-section {
+    min-height: 420px !important;
+    max-height: 500px !important;
+  }
+}
+
+/* 세로 높이 1080px 이상: 일반 세로 모니터 */
+@media (min-height: 1080px) {
+  .hero-section-base {
+    min-height: 400px !important;
+    max-height: 480px !important;
+  }
+  
+  .hero-section-small {
+    min-height: 340px !important;
+    max-height: 420px !important;
+  }
+  
+  section.teen-courses-hero {
+    min-height: 360px !important;
+    max-height: 440px !important;
+  }
+}
+
+/* 세로 높이 1440px 이상: 큰 세로 모니터 */
+@media (min-height: 1440px) {
+  .hero-section-base {
+    min-height: 420px !important;
+    max-height: 500px !important;
+  }
+  
+  .hero-section-small {
+    min-height: 360px !important;
+    max-height: 440px !important;
+  }
+  
+  section.teen-courses-hero {
+    min-height: 380px !important;
+    max-height: 460px !important;
+  }
+}
+
+/* 세로 높이 1920px 이상: 매우 큰 세로 모니터 */
+@media (min-height: 1920px) {
+  .hero-section-base,
+  .hero-section-small,
+  section.teen-courses-hero {
+    /* 최대값으로 고정하여 더 이상 확장 방지 */
+    min-height: 400px !important;
+    max-height: 480px !important;
+    padding: 2rem 0 !important;
   }
 }

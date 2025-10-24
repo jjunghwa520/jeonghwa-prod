@@ -1,0 +1,39 @@
+<% if flash.any? %>
+  <div class="flash-messages">
+    <% flash.each do |type, message| %>
+      <% next if message.blank? %>
+      <% 
+        bootstrap_class = case type.to_sym
+        when :notice then 'success'
+        when :alert then 'danger'
+        when :warning then 'warning'
+        when :info then 'info'
+        else 'primary'
+        end
+      %>
+      
+      <div class="alert alert-<%= bootstrap_class %> alert-dismissible fade show" role="alert">
+        <% icon = type.to_sym == :notice ? '✅' : type.to_sym == :alert ? '⚠️' : 'ℹ️' %>
+        <%= icon %> <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+  </div>
+  
+  <script>
+    // Flash 메시지를 Toast로 자동 변환 (옵션)
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.flash-messages .alert').forEach(alert => {
+          alert.setAttribute('role', 'status');
+          alert.setAttribute('aria-live', 'polite');
+          setTimeout(() => {
+            const bsAlert = bootstrap.Alert.getInstance(alert);
+            if (bsAlert) bsAlert.close();
+          }, 5000);
+        });
+      }, 100);
+    });
+  </script>
+<% end %>
+

@@ -1,0 +1,359 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>📝 코스 관리</h1>
+      <p class="text-muted mb-0">
+        <small>
+          💡 단축키: 
+          <kbd>Ctrl/Cmd + N</kbd> 신규 등록 | 
+          <kbd>Ctrl/Cmd + F</kbd> 검색
+        </small>
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-danger" id="bulk-delete-btn" style="display: none;">
+        🗑️ 선택 삭제 (<span id="selected-count">0</span>)
+      </button>
+      <%= link_to '➕ 신규 코스 등록', new_admin_course_path, class: 'btn btn-primary btn-lg' %>
+    </div>
+  </div>
+
+  <!-- 검색 & 필터 -->
+  <div class="card mb-4">
+    <div class="card-header bg-light">
+      <h6 class="mb-0">🔍 검색 및 필터</h6>
+    </div>
+    <div class="card-body">
+      <form class="row g-3" id="filter-form">
+        <!-- 검색 -->
+        <div class="col-md-4">
+          <label class="form-label">검색</label>
+          <input type="text" name="search" class="form-control" placeholder="제목 또는 설명 검색..." value="<%= params[:search] %>">
+        </div>
+        
+        <!-- 카테고리 -->
+        <div class="col-md-2">
+          <label class="form-label">카테고리</label>
+          <select name="category" class="form-select">
+            <option value="">전체</option>
+            <option value="전자동화책" <%= 'selected' if params[:category] == '전자동화책' %>>📚 전자동화책</option>
+            <option value="구연동화" <%= 'selected' if params[:category] == '구연동화' %>>🎬 구연동화</option>
+            <option value="교육자료" <%= 'selected' if params[:category] == '교육자료' %>>📖 교육자료</option>
+            <option value="전래동화" <%= 'selected' if params[:category] == '전래동화' %>>전래동화</option>
+            <option value="명작동화" <%= 'selected' if params[:category] == '명작동화' %>>명작동화</option>
+          </select>
+        </div>
+        
+        <!-- 상태 -->
+        <div class="col-md-2">
+          <label class="form-label">발행 상태</label>
+          <select name="status" class="form-select">
+            <option value="">전체</option>
+            <option value="published" <%= 'selected' if params[:status] == 'published' %>>✅ 발행됨</option>
+            <option value="draft" <%= 'selected' if params[:status] == 'draft' %>>📝 임시저장</option>
+            <option value="archived" <%= 'selected' if params[:status] == 'archived' %>>📦 보관됨</option>
+          </select>
+        </div>
+        
+        <!-- 콘텐츠 상태 -->
+        <div class="col-md-2">
+          <label class="form-label">콘텐츠 상태</label>
+          <select name="content_status" class="form-select">
+            <option value="">전체</option>
+            <option value="complete" <%= 'selected' if params[:content_status] == 'complete' %>>✓ 완성</option>
+            <option value="partial" <%= 'selected' if params[:content_status] == 'partial' %>>⚠ 부분</option>
+            <option value="missing" <%= 'selected' if params[:content_status] == 'missing' %>>✗ 없음</option>
+          </select>
+        </div>
+        
+        <!-- 버튼 -->
+        <div class="col-md-2">
+          <label class="form-label">&nbsp;</label>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">검색</button>
+            <%= link_to '초기화', admin_courses_path, class: 'btn btn-outline-secondary btn-sm' %>
+          </div>
+        </div>
+      </form>
+      
+      <!-- 정렬 옵션 -->
+      <div class="mt-3 d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          총 <strong><%= @courses.count %></strong>개 코스
+        </div>
+        <div class="btn-group btn-group-sm" role="group">
+          <%= link_to '최신순', admin_courses_path(sort: 'recent', **params.except(:sort).permit!), 
+              class: "btn btn-outline-secondary #{params[:sort] == 'recent' || params[:sort].blank? ? 'active' : ''}" %>
+          <%= link_to '인기순', admin_courses_path(sort: 'popular', **params.except(:sort).permit!), 
+              class: "btn btn-outline-secondary #{params[:sort] == 'popular' ? 'active' : ''}" %>
+          <%= link_to '가격순', admin_courses_path(sort: 'price', **params.except(:sort).permit!), 
+              class: "btn btn-outline-secondary #{params[:sort] == 'price' ? 'active' : ''}" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 코스 목록 -->
+  <div class="row g-3">
+    <% @courses.each do |course| %>
+      <% status = @content_status[course.id] %>
+      <div class="col-lg-6 col-xl-4">
+        <div class="card course-card h-100 <%= 'border-success' if status[:status] == 'complete' %>" data-course-id="<%= course.id %>">
+          <!-- 선택 체크박스 -->
+          <div class="position-absolute top-0 start-0 m-2" style="z-index: 100;">
+            <input type="checkbox" class="form-check-input course-checkbox" value="<%= course.id %>" style="width: 20px; height: 20px;">
+          </div>
+          <!-- 썸네일 -->
+          <div class="course-thumbnail">
+            <% if course.thumbnail.present? %>
+              <%= image_tag course.thumbnail, alt: course.title, class: 'card-img-top' %>
+            <% else %>
+              <div class="placeholder-thumbnail">
+                <span>📚</span>
+              </div>
+            <% end %>
+            
+            <!-- 상태 배지 -->
+            <div class="status-badges">
+              <span class="badge <%= course.status == 'published' ? 'bg-success' : 'bg-secondary' %>">
+                <%= course.status == 'published' ? '발행' : course.status == 'draft' ? '임시' : '보관' %>
+              </span>
+              <span class="badge <%= status[:status] == 'complete' ? 'bg-success' : status[:status] == 'partial' ? 'bg-warning' : 'bg-danger' %>">
+                <%= status[:status] == 'complete' ? '✓ 완성' : status[:status] == 'partial' ? '⚠ 부분' : '✗ 없음' %>
+              </span>
+            </div>
+          </div>
+
+          <!-- 카드 본문 -->
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="card-title mb-0">
+                <%= link_to course.title, admin_course_path(course), class: 'text-decoration-none text-dark' %>
+              </h5>
+              <small class="text-muted">#<%= course.id %></small>
+            </div>
+            
+            <% if course.subtitle.present? %>
+              <p class="text-muted small mb-2"><%= course.subtitle %></p>
+            <% end %>
+
+            <div class="mb-2">
+              <span class="badge bg-info"><%= course.category %></span>
+              <% if course.series_name.present? %>
+                <span class="badge bg-secondary"><%= course.series_name %> #<%= course.series_order %></span>
+              <% end %>
+            </div>
+
+            <!-- 콘텐츠 상태 -->
+            <div class="content-status mb-2">
+              <% if course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+                <small class="text-muted">
+                  📄 페이지: <strong><%= status[:page_count] %></strong>개
+                </small>
+              <% else %>
+                <small class="text-muted">
+                  🎬 비디오: <strong><%= status[:has_video] ? '있음' : '없음' %></strong>
+                </small>
+              <% end %>
+            </div>
+
+            <!-- 통계 -->
+            <div class="d-flex justify-content-between text-muted small">
+              <span>👥 <%= course.total_students %>명</span>
+              <span>⭐ <%= course.average_rating %></span>
+              <span>💰 <%= number_to_currency(course.price, unit: '₩', precision: 0) %></span>
+            </div>
+          </div>
+
+          <!-- 액션 버튼 -->
+          <div class="card-footer bg-transparent">
+            <div class="btn-group w-100" role="group">
+              <%= link_to '✏️', edit_admin_course_path(course), class: 'btn btn-sm btn-outline-primary', title: '수정' %>
+              <%= link_to '👁️', course_path(course), class: 'btn btn-sm btn-outline-info', title: '미리보기', target: '_blank' %>
+              <%= link_to '📁', admin_course_path(course), class: 'btn btn-sm btn-outline-secondary', title: '상세' %>
+              <%= link_to '🗑️', admin_course_path(course), method: :delete, 
+                  data: { turbo_method: :delete, turbo_confirm: '정말 삭제하시겠습니까?' }, 
+                  class: 'btn btn-sm btn-outline-danger', title: '삭제' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @courses.empty? %>
+    <div class="alert alert-info text-center my-5">
+      <h4>📚 코스가 없습니다</h4>
+      <p>새로운 코스를 등록해보세요!</p>
+      <%= link_to '➕ 신규 코스 등록', new_admin_course_path, class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.course-card {
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.course-thumbnail {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.course-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 5rem;
+}
+
+.status-badges {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.content-status {
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .course-thumbnail {
+    height: 150px;
+  }
+  
+  .course-card {
+    margin-bottom: 1rem;
+  }
+  
+  .btn-group {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .file-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 키보드 단축키 (통합)
+  document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + N: 신규 코스 등록
+    if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+      e.preventDefault();
+      window.location.href = '<%= new_admin_course_path %>';
+      return;
+    }
+    
+    // Ctrl/Cmd + F: 검색창 포커스
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+      e.preventDefault();
+      const searchInput = document.querySelector('[name="search"]');
+      if (searchInput) searchInput.focus();
+      return;
+    }
+    
+    // Ctrl/Cmd + A: 전체 선택/해제
+    const checkboxes = document.querySelectorAll('.course-checkbox');
+    if ((e.ctrlKey || e.metaKey) && e.key === 'a' && e.target.tagName !== 'INPUT') {
+      e.preventDefault();
+      const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
+      
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = !allChecked;
+        checkbox.dispatchEvent(new Event('change'));
+      });
+      return;
+    }
+  });
+  
+  // 카드 호버 효과
+  document.querySelectorAll('.course-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.zIndex = '10';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.zIndex = '1';
+    });
+  });
+  
+  // 검색 실시간 필터링
+  const searchInput = document.querySelector('[name="search"]');
+  if (searchInput) {
+    let searchTimeout;
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      const query = this.value.toLowerCase();
+      
+      searchTimeout = setTimeout(() => {
+        document.querySelectorAll('.course-card').forEach(card => {
+          const title = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
+          const shouldShow = !query || title.includes(query);
+          
+          card.closest('.col-lg-6, .col-xl-4').style.display = shouldShow ? '' : 'none';
+        });
+      }, 300);
+    });
+  }
+  
+  // 일괄 선택/삭제
+  const checkboxes = document.querySelectorAll('.course-checkbox');
+  const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+  const selectedCountSpan = document.getElementById('selected-count');
+  let selectedCourses = [];
+  
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        selectedCourses.push(this.value);
+      } else {
+        selectedCourses = selectedCourses.filter(id => id !== this.value);
+      }
+      
+      selectedCountSpan.textContent = selectedCourses.length;
+      bulkDeleteBtn.style.display = selectedCourses.length > 0 ? 'block' : 'none';
+    });
+  });
+  
+  if (bulkDeleteBtn) {
+    bulkDeleteBtn.addEventListener('click', function() {
+      if (!confirm(`선택한 ${selectedCourses.length}개의 코스를 삭제하시겠습니까?`)) {
+        return;
+      }
+      
+      // 일괄 삭제 처리 (추후 구현)
+      alert('일괄 삭제 기능은 추후 구현 예정입니다');
+    });
+  }
+
+  // 단축키 도움말
+  console.log('%c⌨️ 관리자 키보드 단축키', 'font-size: 16px; font-weight: bold; color: #0d6efd;');
+  console.log('Ctrl/Cmd + N: 신규 코스 등록');
+  console.log('Ctrl/Cmd + F: 검색');
+  console.log('Ctrl/Cmd + A: 전체 선택/해제');
+});
+</script>

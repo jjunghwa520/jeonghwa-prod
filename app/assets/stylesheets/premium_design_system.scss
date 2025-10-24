@@ -32,8 +32,8 @@
   --leading-relaxed: 1.75;
   
   // Premium Colors
-  --color-primary: #5B47E0;
-  --color-primary-dark: #4936C9;
+  --color-primary: #5B64E3; /* 브랜드 프라이머리 통일 */
+  --color-primary-dark: #4A55D6; /* hover/active 대비 ≤15% */
   --color-secondary: #FF6B9D;
   --color-accent: #FFC107;
   --color-success: #10B981;
@@ -175,8 +175,9 @@ p {
   transition: all var(--transition-base);
   
   &:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
+    /* 상태 톤 다운: 과도한 부상감 완화 */
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
   }
 }
 
@@ -248,11 +249,11 @@ p {
 .btn-premium-outline {
   background: transparent;
   color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  border: 1px solid rgba(91,100,227,0.35);
   
   &:hover:not(:disabled) {
-    background: var(--color-primary);
-    color: var(--color-white);
+    background: rgba(91,100,227,0.10);
+    color: #3F49E0;
   }
 }
 
@@ -555,3 +556,358 @@ p {
 .animate-pulse {
   animation: pulse 2s ease infinite;
 }
+
+/* 2025 Accessibility & Button Tokens */
+:root {
+  --focus-ring-color: #5B64E3; /* brand-consistent, contrast ≥ 3:1 */
+  --btn-radius-neo: 12px;      /* unified rounded radius */
+  --btn-min-height: 48px;      /* minimum touch target height */
+  /* Unified spacing tokens for buttons/icons */
+  --btn-padding-y: 12px;       /* 12–14px 범위에서 기본값 12px */
+  --btn-padding-x: 20px;       /* 균형 잡힌 좌우 패딩 */
+  --icon-gap-left: 8px;        /* 아이콘이 앞에 올 때 텍스트와 간격 */
+  --icon-gap-right: 6px;       /* 아이콘이 뒤에 올 때 텍스트와 간격 */
+}
+
+/* Navigation link accessibility (focus ring + touch target) */
+.nav-premium-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-min-height);
+  border-radius: var(--btn-radius-neo);
+}
+
+.nav-premium-link:focus-visible { outline: 0; }
+
+.nav-premium-link:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--focus-ring-color);
+  pointer-events: none;
+}
+
+/* Fallback: some environments use :focus instead of :focus-visible */
+.nav-premium-link:focus { outline: 0; }
+.nav-premium-link:focus::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--focus-ring-color);
+  pointer-events: none;
+}
+
+/* Unified category/filter/tab controls */
+.btn-filter,
+.btn-teen-tab,
+.btn-age,
+.chip,
+.badge,
+.service-link,
+.age-tab,
+.theme-tab,
+.goal-tab,
+.length-tab,
+.level-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-min-height);
+  border-radius: var(--btn-radius-neo);
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-white);
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--color-gray-800);
+  cursor: pointer;
+  line-height: 1.15; /* 줄바꿈 시 피크 완화 */
+  /* libsass 호환: CSS max() 대신 연속 선언으로 토큰 우선 적용 */
+  padding-inline: 0.875rem;
+  padding-inline: var(--btn-padding-x);
+  padding-block: var(--btn-padding-y);
+  text-decoration: none;
+  transition: filter 200ms ease, box-shadow 200ms ease, transform 120ms ease;
+  white-space: nowrap; /* 배지/칩 상한 관리: 단일 라인 유지 */
+  max-height: 56px;    /* 안전 상한 */
+  overflow: hidden;
+}
+
+/* Iconography via data-attributes (no markup changes) */
+.age-tab::before,
+.theme-tab::before,
+.goal-tab::before,
+.length-tab::before,
+.level-tab::before,
+.chip[data-icon]::before {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: var(--icon-gap-left);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: -0.1em;
+}
+
+/* Quick Entry cards (홈 상단 빠른 진입) */
+.quick-entry-section { padding: var(--space-3xl) 0; }
+
+.quick-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-md);
+}
+
+.quick-entry-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-xl);
+  padding: var(--space-sm) var(--space-lg);
+  text-decoration: none;
+  color: var(--color-gray-900);
+  min-height: 88px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.quick-entry-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: rgba(91,100,227,0.15); }
+.quick-entry-card:focus-visible { outline: 0; box-shadow: 0 0 0 2px var(--focus-ring-color); }
+
+.quick-entry-card .qe-icon {
+  width: 44px; height: 44px; border-radius: 12px; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 22px; line-height: 1; filter: saturate(1.1);
+}
+.quick-entry-card .qe-text h3 { margin: 0 0 6px; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }
+.quick-entry-card .qe-text p { margin: 0; color: var(--color-gray-500); font-weight: 500; }
+
+/* Variants */
+.qe-ebook .qe-icon { background: rgba(91,100,227,0.12); color: #5B64E3; }
+.qe-video .qe-icon { background: rgba(245, 158, 11, 0.14); color: #b45309; }
+.qe-make  .qe-icon { background: rgba(16, 185, 129, 0.14); color: #059669; }
+
+/* Age presets */
+.age-tab[data-age='baby']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M7 10a5 5 0 1 1 10 0v7a5 5 0 1 1-10 0v-7zM16 6l2-2 1 1-2 2zM14.5 4.5l2-2 1 1-2 2z'/%3E%3C/svg%3E"); }
+.age-tab[data-age='toddler']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M4 14h6v6H4zM14 4h6v6h-6zM14 14h6v6h-6zM4 4h6v6H4z'/%3E%3C/svg%3E"); }
+.age-tab[data-age='elementary']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M3 7l9-4 9 4-9 4-9-4zm2 4l7 3 7-3v6l-7 3-7-3v-6z'/%3E%3C/svg%3E"); }
+.age-tab[data-age='all']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.39 4.84L20 8l-4 3.9L17 18l-5-2.6L7 18l1-6.1L4 8l5.61-1.16L12 2z'/%3E%3C/svg%3E"); }
+
+/* Theme presets */
+.theme-tab[data-theme='nature']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C7 7 7 12 12 17c5-5 5-10 0-15zm0 8a2 2 0 100-4 2 2 0 000 4z'/%3E%3C/svg%3E"); }
+.theme-tab[data-theme='adventure']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M3 6l9-4 9 4-9 4-9-4zm0 6l9 4 9-4M3 18l9 4 9-4' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3C/svg%3E"); }
+.theme-tab[data-theme='fantasy']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M2 21l8-8 3 3-8 8H2zm12-11l3-3 4 4-3 3-4-4zM14 8l2-2 4 4-2 2-4-4z'/%3E%3C/svg%3E"); }
+.theme-tab[data-theme='daily']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M3 10l9-7 9 7v11a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1V10z'/%3E%3C/svg%3E"); }
+.theme-tab[data-theme='emotion']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9zm-3-9a1 1 0 110-2 1 1 0 010 2zm6 0a1 1 0 110-2 1 1 0 010 2zm-6.5 2.5a5 5 0 009 0H8.5z'/%3E%3C/svg%3E"); }
+.theme-tab[data-theme='tradition']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M2 12l10-9 10 9-10 9-10-9zm10 6l6-6-6-5-6 5 6 6z'/%3E%3C/svg%3E"); }
+.theme-tab[data-theme='all']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v3H4zM4 10h16v3H4zM4 16h16v3H4z'/%3E%3C/svg%3E"); }
+
+/* Goal presets */
+.goal-tab[data-goal='language']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M3 4h18v4H3zM3 10h10v4H3zM3 16h18v4H3z'/%3E%3C/svg%3E"); }
+.goal-tab[data-goal='thinking']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M9 21v-2a4 4 0 01-4-4c0-2.76 2.69-5 6-5s6 2.24 6 5a4 4 0 01-4 4v2H9zM12 3a3 3 0 110 6 3 3 0 010-6z'/%3E%3C/svg%3E"); }
+.goal-tab[data-goal='emotion']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9zM9 10a1 1 0 110-2 1 1 0 010 2zm6 0a1 1 0 110-2 1 1 0 010 2zm-6.5 2.5a5 5 0 009 0H8.5z'/%3E%3C/svg%3E"); }
+.goal-tab[data-goal='creativity']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M2 22l6-2 10-10-4-4L4 16l-2 6zM15 3l4 4 2-2-4-4-2 2z'/%3E%3C/svg%3E"); }
+.goal-tab[data-goal='science']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M6 2h12v2l-4 6v8l2 2H8l2-2V10L6 4V2z'/%3E%3C/svg%3E"); }
+.goal-tab[data-goal='habit']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M3 21h18v-2H3v2zM4 3h16l-2 12H6L4 3z'/%3E%3C/svg%3E"); }
+.goal-tab[data-goal='all']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235B64E3' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l9 4-9 4-9-4 9-4zm0 10l9 4-9 4-9-4 9-4z'/%3E%3C/svg%3E"); }
+
+/* Length presets */
+.length-tab[data-length='all']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z'/%3E%3C/svg%3E"); }
+.length-tab[data-length='short']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M12 7v5l3 2' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.length-tab[data-length='medium']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M12 6v6l4 2' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.length-tab[data-length='long']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M12 5v7l5 3' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.length-tab[data-length='xl']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M19 12h-6V5' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+
+/* Level presets */
+.level-tab[data-level='all']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M3 17h18v2H3v-2zM3 5h2v10H3V5zm4 3h2v7H7V8zm4 5h2v2h-2v-2zm4-3h2v5h-2V10zm4-2h2v7h-2V8z'/%3E%3C/svg%3E"); }
+.level-tab[data-level='easy']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M12 2l2.39 4.84L20 8l-4 3.9L17 18l-5-2.6L7 18l1-6.1L4 8l5.61-1.16L12 2z'/%3E%3C/svg%3E"); }
+.level-tab[data-level='normal']::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M6 18h12v2H6v-2zm0-8h12v6H6v-6zm0-5h12v3H6V5z'/%3E%3C/svg%3E"); }
+
+/* Fallback: apply icon as element background for environments that ignore ::before on buttons */
+button.length-tab[data-length] {
+  background-repeat: no-repeat !important;
+  background-position: 12px center !important;
+  padding-left: calc(var(--btn-padding-x) + 24px) !important;
+}
+button.level-tab[data-level] {
+  background-repeat: no-repeat !important;
+  background-position: 12px center !important;
+  padding-left: calc(var(--btn-padding-x) + 24px) !important;
+}
+
+button.length-tab[data-length='all'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z'/%3E%3C/svg%3E") !important; }
+button.length-tab[data-length='short'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M12 7v5l3 2' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important; }
+button.length-tab[data-length='medium'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M12 6v6l4 2' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important; }
+button.length-tab[data-length='long'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M12 5v7l5 3' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important; }
+button.length-tab[data-length='xl'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%235B64E3' stroke-width='2'/%3E%3Cpath d='M19 12h-6V5' stroke='%235B64E3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important; }
+
+button.level-tab[data-level='all'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M3 17h18v2H3v-2zM3 5h2v10H3V5zm4 3h2v7H7V8zm4 5h2v2h-2v-2zm4-3h2v5h-2V10zm4-2h2v7h-2V8z'/%3E%3C/svg%3E") !important; }
+button.level-tab[data-level='easy'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M12 2l2.39 4.84L20 8l-4 3.9L17 18l-5-2.6L7 18l1-6.1L4 8l5.61-1.16L12 2z'/%3E%3C/svg%3E") !important; }
+button.level-tab[data-level='normal'] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%235B64E3' d='M6 18h12v2H6v-2zm0-8h12v6H6v-6zm0-5h12v3H6V5z'/%3E%3C/svg%3E") !important; }
+
+/* Normalize native button tabs (UA override for WebKit/Blink) */
+button.age-tab,
+button.theme-tab,
+button.goal-tab,
+button.length-tab,
+button.level-tab {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: var(--color-gray-200) !important;
+  background: var(--color-white) !important;
+  color: var(--color-gray-800);
+}
+
+/* Focus ring: 2px, pseudo */
+.btn-filter:focus-visible,
+.btn-teen-tab:focus-visible,
+.btn-age:focus-visible,
+.chip:focus-visible,
+.badge:focus-visible,
+.service-link:focus-visible,
+.age-tab:focus-visible,
+.theme-tab:focus-visible,
+.goal-tab:focus-visible,
+.length-tab:focus-visible,
+.level-tab:focus-visible { outline: 0; }
+
+.btn-filter:focus-visible::after,
+.btn-teen-tab:focus-visible::after,
+.btn-age:focus-visible::after,
+.chip:focus-visible::after,
+.badge:focus-visible::after,
+.service-link:focus-visible::after,
+.age-tab:focus-visible::after,
+.theme-tab:focus-visible::after,
+.goal-tab:focus-visible::after,
+.length-tab:focus-visible::after,
+.level-tab:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--focus-ring-color);
+  pointer-events: none;
+}
+
+/* Fallback */
+.btn-filter:focus::after,
+.btn-teen-tab:focus::after,
+.btn-age:focus::after,
+.chip:focus::after,
+.badge:focus::after,
+.service-link:focus::after,
+.age-tab:focus::after,
+.theme-tab:focus::after,
+.goal-tab:focus::after,
+.length-tab:focus::after,
+.level-tab:focus::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--focus-ring-color);
+  pointer-events: none;
+}
+
+/* States: subtle only */
+.btn-filter:hover,
+.btn-teen-tab:hover,
+.btn-age:hover,
+.chip:hover,
+.badge:hover,
+.service-link:hover,
+.age-tab:hover,
+.theme-tab:hover,
+.goal-tab:hover,
+.length-tab:hover,
+.level-tab:hover {
+  filter: brightness(1.06);
+  /* 10–20% 감쇠 유지, 무광 */
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.btn-filter:active,
+.btn-teen-tab:active,
+.btn-age:active,
+.chip:active,
+.badge:active,
+.service-link:active,
+.age-tab:active,
+.theme-tab:active,
+.goal-tab:active,
+.length-tab:active,
+.level-tab:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.btn-filter.active,
+.btn-teen-tab.active,
+.btn-age.active,
+.chip.active,
+.badge.active,
+.service-link.active,
+.age-tab.active,
+.theme-tab.active,
+.goal-tab.active,
+.length-tab.active,
+.level-tab.active,
+[aria-pressed='true'],
+[aria-current='true'] {
+  box-shadow: 0 0 0 1px rgba(91,100,227,0.25), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.btn-filter.disabled, .btn-filter:disabled,
+.btn-teen-tab.disabled, .btn-teen-tab:disabled,
+.btn-age.disabled, .btn-age:disabled,
+.chip.disabled, .chip:disabled,
+.badge.disabled, .badge:disabled,
+.service-link.disabled, .service-link:disabled {
+  opacity: .5;
+  pointer-events: none;
+  box-shadow: none;
+  filter: none;
+}
+
+/* Global CTA/Button baseline alignment (no markup changes) */
+.btn,
+.btn-hero,
+.btn-modern,
+.service-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-min-height);
+  line-height: 1; /* 텍스트 베이스라인 안정화 */
+  padding-block: var(--btn-padding-y);
+}
+
+/* Icon spacing: left 8px, right 6px */
+.btn svg:first-child,
+.btn i:first-child,
+.btn-hero svg:first-child,
+.btn-hero i:first-child,
+.btn-modern svg:first-child,
+.btn-modern i:first-child,
+.service-link svg:first-child,
+.service-link i:first-child { margin-right: var(--icon-gap-left); }
+
+.btn svg:last-child,
+.btn i:last-child,
+.btn-hero svg:last-child,
+.btn-hero i:last-child,
+.btn-modern svg:last-child,
+.btn-modern i:last-child,
+.service-link svg:last-child,
+.service-link i:last-child { margin-left: var(--icon-gap-right); }

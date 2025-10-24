@@ -1,0 +1,213 @@
+<% content_for :title, "준비중 - 정화의 서재" %>
+
+<div class="coming-soon-container">
+  <div class="coming-soon-content">
+    <div class="coming-soon-icon">
+      🚧
+    </div>
+    
+    <h1 class="coming-soon-title">
+      청소년 콘텐츠 준비중
+    </h1>
+    
+    <p class="coming-soon-description">
+      더 좋은 콘텐츠로 찾아뵙기 위해<br>
+      열심히 준비하고 있습니다.
+    </p>
+    
+    <div class="coming-soon-features">
+      <div class="feature-item">
+        <i class="bi bi-book-half"></i>
+        <span>청소년을 위한 특별한 동화</span>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-mortarboard"></i>
+        <span>교육 콘텐츠</span>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-star"></i>
+        <span>성장 스토리</span>
+      </div>
+    </div>
+    
+    <p class="coming-soon-notice">
+      현재 전자동화책, 구연동화, 동화만들기 콘텐츠를<br>
+      먼저 즐겨보시기 바랍니다! 😊
+    </p>
+    
+    <div class="coming-soon-actions">
+      <%= link_to "전자동화책 보러가기", courses_path(category: 'ebook'), class: "btn-coming-soon btn-primary" %>
+      <%= link_to "구연동화 보러가기", courses_path(category: 'storytelling'), class: "btn-coming-soon btn-secondary" %>
+      <%= link_to "홈으로", root_path, class: "btn-coming-soon btn-outline" %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .coming-soon-container {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+  
+  .coming-soon-content {
+    max-width: 600px;
+    text-align: center;
+    background: white;
+    padding: 60px 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  }
+  
+  .coming-soon-icon {
+    font-size: 5rem;
+    margin-bottom: 30px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .coming-soon-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+  }
+  
+  .coming-soon-description {
+    font-size: 1.2rem;
+    color: #718096;
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+  
+  .coming-soon-features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #667eea;
+  }
+  
+  .feature-item i {
+    font-size: 2rem;
+  }
+  
+  .feature-item span {
+    font-size: 0.9rem;
+    color: #4a5568;
+    font-weight: 500;
+  }
+  
+  .coming-soon-notice {
+    font-size: 1rem;
+    color: #718096;
+    margin-bottom: 40px;
+    padding: 20px;
+    background: #f7fafc;
+    border-radius: 12px;
+    line-height: 1.8;
+  }
+  
+  .coming-soon-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn-coming-soon {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .btn-coming-soon.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+  }
+  
+  .btn-coming-soon.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  }
+  
+  .btn-coming-soon.btn-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+  }
+  
+  .btn-coming-soon.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+  }
+  
+  .btn-coming-soon.btn-outline {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+  }
+  
+  .btn-coming-soon.btn-outline:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+  }
+  
+  /* 모바일 반응형 */
+  @media (max-width: 768px) {
+    .coming-soon-content {
+      padding: 40px 24px;
+    }
+    
+    .coming-soon-title {
+      font-size: 2rem;
+    }
+    
+    .coming-soon-description {
+      font-size: 1rem;
+    }
+    
+    .coming-soon-features {
+      gap: 20px;
+    }
+    
+    .feature-item i {
+      font-size: 1.5rem;
+    }
+    
+    .feature-item span {
+      font-size: 0.8rem;
+    }
+    
+    .coming-soon-actions {
+      flex-direction: column;
+    }
+    
+    .btn-coming-soon {
+      width: 100%;
+    }
+  }
+</style>
+

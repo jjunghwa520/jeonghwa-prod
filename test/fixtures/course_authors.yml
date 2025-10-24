@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  course: one
+  author: one
+  role: MyString
+  order: 1
+
+two:
+  course: two
+  author: two
+  role: MyString
+  order: 1

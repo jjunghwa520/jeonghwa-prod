@@ -9,6 +9,7 @@
 @import "minimal_buttons";
 @import "kids_theme";
 @import "unified_hero_design";
+@import "hero_refinement_2025";
 
 // Google Fonts
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
@@ -239,9 +240,9 @@ h6 { font-size: 1rem; }
   }
 
   .dropdown-menu {
-    background: var(--glass-bg);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);
     padding: var(--space-sm);
@@ -391,14 +392,14 @@ h6 { font-size: 1rem; }
   border: 1px solid var(--primary-200);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   overflow: hidden;
   position: relative;
   
   &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-2xl);
-    border-color: var(--primary-300);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    border-color: rgba(91, 100, 227, 0.15);
   }
 
   &:before {
@@ -1115,7 +1116,7 @@ section {
    ============================= */
 .book-cover {
   position: relative;
-  height: 180px;
+  aspect-ratio: 16/9; /* 상세 헤더 16:9 통일 */
   border-radius: 12px;
   overflow: hidden;
   background: #f7f5ef;
@@ -1177,7 +1178,7 @@ section {
 .book-cover.category-education { background: linear-gradient(135deg, #fffaf0, #e9f5e7); }
 
 /* Larger variant for detail header */
-.book-cover.lg { height: 260px; border-radius: 14px; }
+.book-cover.lg { aspect-ratio: 16/9; border-radius: 14px; }
 
 /* stamp color variants */
 .stamp-primary { background: #0f172a; }
@@ -1302,7 +1303,7 @@ section {
 .collection-thumb,
 .storybook-thumbnail,
 .age-thumbnail {
-  aspect-ratio: 3/4; /* 통일된 3:4 비율 */
+  aspect-ratio: 16/9; /* YouTube 16:9 비율로 통일 */
   background: #f8fafc;
   position: relative;
   overflow: hidden;
@@ -1493,5 +1494,37 @@ section {
   &:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4) !important;
+  }
+}
+/* ===================================
+   반응형 여백 유틸리티 (2025-10-23 추가)
+   =================================== */
+
+/* 히어로 아래 콘텐츠 영역 */
+.courses-content-section {
+  padding-top: clamp(1rem, 2vh, 1.5rem) !important;
+  padding-bottom: clamp(2rem, 4vh, 3rem) !important;
+}
+
+/* 세로 긴 화면에서 여백 더 축소 */
+@media (min-height: 900px) {
+  .courses-content-section {
+    padding-top: 0.75rem !important;
+  }
+  
+  .py-5 {
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+@media (min-height: 1080px) {
+  .courses-content-section {
+    padding-top: 1rem !important;
+  }
+  
+  .py-5 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 2.5rem !important;
   }
 }

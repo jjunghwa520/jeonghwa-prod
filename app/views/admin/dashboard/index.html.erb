@@ -1,0 +1,437 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>🎛️ 관리자 대시보드</h1>
+      <p class="text-muted mb-0">
+        <i class="bi bi-clock"></i> <%= Time.current.strftime('%Y년 %m월 %d일 %H:%M') %>
+        <span class="ms-3">
+          <i class="bi bi-person-badge"></i> <%= current_user.name %>
+        </span>
+      </p>
+    </div>
+    <div>
+      <%= link_to '🏠 사이트로 이동', root_path, class: 'btn btn-outline-primary', target: '_blank' %>
+    </div>
+  </div>
+  
+  <!-- 빠른 작업 카드 -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <%= link_to new_admin_course_path, class: 'text-decoration-none' do %>
+        <div class="card border-primary quick-action-card">
+          <div class="card-body text-center">
+            <div class="icon-lg mb-2">📚</div>
+            <h5>신규 콘텐츠 등록</h5>
+            <p class="text-muted mb-0">전자동화책 / 구연동화</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-3">
+      <%= link_to admin_content_generator_index_path, class: 'text-decoration-none' do %>
+        <div class="card border-success quick-action-card">
+          <div class="card-body text-center">
+            <div class="icon-lg mb-2">🎨</div>
+            <h5>AI 콘텐츠 생성</h5>
+            <p class="text-muted mb-0">썸네일 / 이미지 자동 생성</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-3">
+      <%= link_to admin_courses_path, class: 'text-decoration-none' do %>
+        <div class="card border-info quick-action-card">
+          <div class="card-body text-center">
+            <div class="icon-lg mb-2">📝</div>
+            <h5>코스 관리</h5>
+            <p class="text-muted mb-0">수정 / 삭제 / 상태 변경</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-3">
+      <%= link_to admin_authors_path, class: 'text-decoration-none' do %>
+        <div class="card border-warning quick-action-card">
+          <div class="card-body text-center">
+            <div class="icon-lg mb-2">👥</div>
+            <h5>작가 관리</h5>
+            <p class="text-muted mb-0">작가 / 성우 / 일러스트레이터</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 주요 통계 -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card stat-card bg-primary text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-1">전체 코스</h6>
+              <h2 class="mb-0"><%= @courses_count %></h2>
+            </div>
+            <div class="stat-icon">📚</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card bg-success text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-1">가입 회원</h6>
+              <h2 class="mb-0"><%= @users_count %></h2>
+            </div>
+            <div class="stat-icon">👥</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card bg-info text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-1">수강 등록</h6>
+              <h2 class="mb-0"><%= @enrollments_count %></h2>
+            </div>
+            <div class="stat-icon">📖</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card bg-warning text-dark">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-1">작성 리뷰</h6>
+              <h2 class="mb-0"><%= @reviews_count %></h2>
+            </div>
+            <div class="stat-icon">⭐</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 콘텐츠 현황 -->
+  <div class="row g-3 mb-4">
+    <!-- 전자동화책 현황 -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">📚 전자동화책 현황</h5>
+          <%= link_to '전체보기', admin_courses_path(category: '전자동화책'), class: 'btn btn-sm btn-light' %>
+        </div>
+        <div class="card-body">
+          <!-- 진행률 바 -->
+          <% complete_percentage = (@content_stats[:ebook_complete].to_f / @content_stats[:ebook_total] * 100).round %>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span>완성도</span>
+              <span><strong><%= complete_percentage %>%</strong></span>
+            </div>
+            <div class="progress" style="height: 20px;">
+              <div class="progress-bar bg-success" style="width: <%= complete_percentage %>%">
+                <%= @content_stats[:ebook_complete] %>/<%= @content_stats[:ebook_total] %>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상세 통계 -->
+          <div class="row text-center">
+            <div class="col-4">
+              <div class="stat-box">
+                <h3 class="text-success"><%= @content_stats[:ebook_complete] %></h3>
+                <p class="text-muted mb-0">✅ 완성</p>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-box">
+                <h3 class="text-warning"><%= @content_stats[:ebook_partial] %></h3>
+                <p class="text-muted mb-0">⚠️ 부분</p>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-box">
+                <h3 class="text-danger"><%= @content_stats[:ebook_missing] %></h3>
+                <p class="text-muted mb-0">❌ 없음</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 액션 버튼 -->
+          <div class="mt-3">
+            <%= link_to '🎨 AI로 생성하기', admin_content_generator_index_path, class: 'btn btn-success w-100' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 구연동화 현황 -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">🎬 구연동화 현황</h5>
+          <%= link_to '전체보기', admin_courses_path(category: '구연동화'), class: 'btn btn-sm btn-light' %>
+        </div>
+        <div class="card-body">
+          <!-- 진행률 바 -->
+          <% video_percentage = (@content_stats[:video_complete].to_f / @content_stats[:video_total] * 100).round %>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span>완성도</span>
+              <span><strong><%= video_percentage %>%</strong></span>
+            </div>
+            <div class="progress" style="height: 20px;">
+              <div class="progress-bar bg-info" style="width: <%= video_percentage %>%">
+                <%= @content_stats[:video_complete] %>/<%= @content_stats[:video_total] %>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상세 통계 -->
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="stat-box">
+                <h3 class="text-success"><%= @content_stats[:video_complete] %></h3>
+                <p class="text-muted mb-0">✅ 비디오 있음</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-box">
+                <h3 class="text-danger"><%= @content_stats[:video_missing] %></h3>
+                <p class="text-muted mb-0">❌ 비디오 없음</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 액션 버튼 -->
+          <div class="mt-3">
+            <%= link_to '📤 업로드하기', new_admin_upload_path, class: 'btn btn-primary w-100' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 인기 코스 & 최근 활동 -->
+  <div class="row g-3 mb-4">
+    <!-- 인기 코스 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">🔥 인기 코스 Top 5</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th width="50">순위</th>
+                  <th>제목</th>
+                  <th width="100">카테고리</th>
+                  <th width="80" class="text-end">수강생</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @popular_courses.each_with_index do |course, idx| %>
+                  <tr>
+                    <td class="text-center">
+                      <% medal = idx == 0 ? '🥇' : idx == 1 ? '🥈' : idx == 2 ? '🥉' : (idx + 1).to_s %>
+                      <%= medal %>
+                    </td>
+                    <td>
+                      <%= link_to course.title, admin_course_path(course), class: 'text-decoration-none' %>
+                    </td>
+                    <td>
+                      <span class="badge bg-secondary"><%= course.category %></span>
+                    </td>
+                    <td class="text-end">
+                      <strong><%= course.enrollment_count %></strong>명
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 최근 활동 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">📊 최근 활동</h5>
+        </div>
+        <div class="card-body">
+          <ul class="nav nav-tabs mb-3" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#recent-enrollments">수강 등록</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#recent-reviews">리뷰</a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <!-- 최근 수강 등록 -->
+            <div class="tab-pane fade show active" id="recent-enrollments">
+              <div class="activity-list">
+                <% @recent_enrollments.each do |enrollment| %>
+                  <div class="activity-item">
+                    <div class="activity-time">
+                      <%= enrollment.created_at.strftime('%m/%d %H:%M') %>
+                    </div>
+                    <div class="activity-content">
+                      <strong><%= enrollment.user.name %></strong>님이
+                      <span class="text-primary"><%= enrollment.course.title %></span>을(를) 수강 등록했습니다
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- 최근 리뷰 -->
+            <div class="tab-pane fade" id="recent-reviews">
+              <div class="activity-list">
+                <% @recent_reviews.each do |review| %>
+                  <div class="activity-item">
+                    <div class="activity-time">
+                      <%= review.created_at.strftime('%m/%d %H:%M') %>
+                    </div>
+                    <div class="activity-content">
+                      <strong><%= review.user.name %></strong>
+                      <span class="text-warning"><%= '⭐' * review.rating %></span>
+                      <br>
+                      <small class="text-muted"><%= review.content.truncate(50) %></small>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 추가 관리 메뉴 -->
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">💬 리뷰 관리</h6>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-3">사용자 리뷰를 관리하고 부적절한 내용을 삭제할 수 있습니다</p>
+          <%= link_to '리뷰 관리', admin_reviews_path, class: 'btn btn-outline-primary w-100' %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">👥 사용자 관리</h6>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-3">회원 정보를 확인하고 권한을 관리할 수 있습니다</p>
+          <%= link_to '사용자 관리', admin_users_path, class: 'btn btn-outline-success w-100' %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">📤 파일 업로드</h6>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-3">기존 방식으로 파일을 업로드할 수 있습니다</p>
+          <%= link_to '파일 업로드', new_admin_upload_path, class: 'btn btn-outline-secondary w-100' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.quick-action-card {
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.icon-lg {
+  font-size: 3rem;
+}
+
+.stat-card {
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+}
+
+.stat-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.stat-box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+}
+
+.stat-box h3 {
+  margin-bottom: 0.5rem;
+}
+
+.activity-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  padding: 0.75rem;
+  border-left: 3px solid #0d6efd;
+  margin-bottom: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.activity-content {
+  font-size: 0.9rem;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .quick-action-card h5 {
+    font-size: 1rem;
+  }
+  
+  .icon-lg {
+    font-size: 2rem;
+  }
+  
+  .stat-icon {
+    font-size: 2rem;
+  }
+}
+</style>

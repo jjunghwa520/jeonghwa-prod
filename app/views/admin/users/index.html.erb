@@ -1,0 +1,32 @@
+<div class="container py-4">
+  <h1 class="mb-3">사용자 관리</h1>
+  <form method="get" class="mb-3 d-flex gap-2">
+    <input type="text" name="q" value="<%= params[:q] %>" class="form-control" placeholder="이름/이메일 검색" />
+    <button class="btn btn-outline-secondary" type="submit">검색</button>
+  </form>
+  <table class="table table-striped">
+    <thead><tr><th>ID</th><th>이름</th><th>이메일</th><th>권한</th><th></th></tr></thead>
+    <tbody>
+      <% @users.each do |u| %>
+        <tr>
+          <td><%= u.id %></td>
+          <td><%= u.name %></td>
+          <td><%= u.email %></td>
+          <td><%= u.role %></td>
+          <td>
+            <div class="d-flex gap-1">
+              <% %w[student instructor admin].each do |role| %>
+                <%= form_with url: admin_user_path(u), method: :patch, class: 'd-inline' do %>
+                  <input type="hidden" name="role" value="<%= role %>" />
+                  <button class="btn btn-sm <%= u.role==role ? 'btn-primary' : 'btn-outline-secondary' %>"><%= role %></button>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+

@@ -1,0 +1,54 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>➕ 신규 작가 등록</h1>
+    <%= link_to "← 목록", admin_authors_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <%= form_with model: [:admin, @author], class: 'row g-3' do |f| %>
+        <div class="col-md-6">
+          <%= f.label :name, '이름 *', class: 'form-label' %>
+          <%= f.text_field :name, class: 'form-control', required: true %>
+        </div>
+
+        <div class="col-md-6">
+          <%= f.label :role, '역할 *', class: 'form-label' %>
+          <%= f.select :role,
+            options_for_select([
+              ['작가', 'writer'],
+              ['일러스트레이터', 'illustrator'],
+              ['성우', 'narrator'],
+              ['제작자', 'producer']
+            ]),
+            {},
+            class: 'form-select',
+            required: true
+          %>
+        </div>
+
+        <div class="col-12">
+          <%= f.label :bio, '소개', class: 'form-label' %>
+          <%= f.text_area :bio, rows: 4, class: 'form-control', placeholder: '작가 소개를 입력하세요...' %>
+        </div>
+
+        <div class="col-md-8">
+          <%= f.label :profile_image, '프로필 이미지 URL', class: 'form-label' %>
+          <%= f.url_field :profile_image, class: 'form-control', placeholder: 'https://...' %>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-check mt-4 pt-2">
+            <%= f.check_box :active, class: 'form-check-input', checked: true %>
+            <%= f.label :active, '활성 상태', class: 'form-check-label' %>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <%= f.submit '💾 저장', class: 'btn btn-primary' %>
+          <%= link_to '취소', admin_authors_path, class: 'btn btn-outline-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

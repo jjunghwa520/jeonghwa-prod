@@ -41,8 +41,15 @@ gem "googleauth"
 # HTTP client for API calls
 gem "httparty"
 
+# SEO - Sitemap generation
+gem "sitemap_generator"
+
 # Environment variables management
 gem "dotenv-rails", groups: [:development, :test]
+
+# Security
+gem "rack-attack"
+gem "secure_headers"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -78,6 +85,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  
+  # N+1 query detection
+  gem "bullet"
 end
 
 group :test do

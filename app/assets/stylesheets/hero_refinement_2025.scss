@@ -1,0 +1,448 @@
+/*
+  2025 Hero Refinement Layer
+  - 기존 스타일 보존 + 시각적 정제(과한 그라데이션/그림자/이모지 노출 축소)
+  - 프리미엄 톤: 명확한 위계, 절제된 색/깊이, 안정된 여백
+*/
+
+/* 공통 히어로 레이어 정제 */
+.hero-section-base {
+  /* 뒤 배경 효과 제거로 더 클린한 레이어 */
+  &::before { content: none !important; }
+  &::after { content: none !important; }
+  margin-top: 0 !important;
+  padding: clamp(2.5rem, 5vh, 4rem) 0 !important; /* 반응형 패딩 */
+  min-height: clamp(500px, 60vh, 700px) !important; /* 반응형 높이 */
+  max-height: 75vh !important; /* 최대 높이 제한 */
+  background: #ffffff !important;
+}
+
+/* =====================================
+   HERO NEO (전면 리디자인)
+   ===================================== */
+.hero-neo {
+  background: #ffffff;
+  padding: 6rem 0 5rem;
+  position: relative;
+}
+
+/* variants quick styles */
+.concept-b .card-copy { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:16px; padding:2rem; box-shadow:0 10px 30px rgba(0,0,0,.08); }
+.concept-c .brand-bar{height:8px;background:linear-gradient(90deg,#5B64E3,#7C87F3)}
+.concept-c .circle-accent::after{content:'';position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(closest-side,rgba(91,100,227,.16),transparent 70%);left:8vw;top:10%;z-index:0}
+.concept-d{background:#0b1220}.concept-d .neo-title,.concept-d .neo-desc,.concept-d .neo-list li{color:#e5e7eb}.concept-d .neo-title .accent{color:#60a5fa}.concept-d .btn-neo.primary{background:#60a5fa;color:#0b1220}
+.concept-f .rim::after{content:'';position:absolute;inset:0;padding:1px;border-radius:20px;background:linear-gradient(135deg,#5B64E3,#00B4D8);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+
+/* concept-i radical */
+.concept-i .full-bleed{position:relative;height:560px}
+.concept-i .dock-panel{background:#0b1220;border-radius:16px;padding:2rem;color:#e5e7eb}
+.concept-i .dock-panel .neo-title{color:#e5e7eb}.concept-i .dock-panel .neo-title .accent{color:#60a5fa}
+.concept-i .dock-panel .btn-neo.primary{background:#60a5fa;color:#0b1220}
+.concept-i .full-bleed::before{content:'';position:absolute;inset:-40px -80px -40px -80px;background:radial-gradient(closest-side,rgba(96,165,250,.18),transparent 70%)}
+
+.hero-neo .grid-neo {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-neo .neo-stage { position: relative; height: 500px; display: flex; align-items: center; justify-content: center; }
+
+.hero-neo .neo-stage::after {
+  content: '';
+  position: absolute; width: 680px; height: 680px; max-width: 90vw; max-height: 90vw; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(91,100,227,.16), transparent 70%);
+  filter: blur(4px);
+}
+
+.hero-neo .neo-character { max-width: 420px; width: 100%; position: relative; z-index: 1; }
+
+.hero-neo .neo-badge { display: inline-block; padding: 8px 12px; border-radius: 12px; background: #f3f4f6; color: #374151; font-weight: 600; margin-bottom: 16px; }
+
+.hero-neo .neo-title { font-family: 'Poppins', sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 3.1rem; line-height: 1.15; color: #0b1220; margin: 0 0 14px; }
+.hero-neo .neo-title .accent { color: #5B64E3; }
+/* prevent awkward word breaks on titles */
+.hero-neo .neo-title { word-break: keep-all; }
+
+/* mobile/desktop title switches */
+.hero-neo .neo-title .title-mobile { display: none; }
+.hero-neo .neo-title .title-desktop { display: inline; }
+@media (max-width: 576px) {
+  .hero-neo .neo-title { font-size: 1.85rem; line-height: 1.1; letter-spacing: -0.015em; }
+  .hero-neo .neo-title .title-desktop { display: none; }
+  .hero-neo .neo-title .title-mobile { display: inline; }
+  .hero-neo .neo-desc { font-size: .98rem; line-height: 1.55; }
+  .hero-neo .neo-cta { gap: 12px; margin-top: 18px; }
+}
+
+.hero-neo .neo-desc { color: #364152; font-size: 1.08rem; line-height: 1.65; max-width: 54ch; }
+
+.hero-neo .neo-list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 10px; }
+.hero-neo .neo-list li { position: relative; padding-left: 22px; color: #1f2937; font-weight: 600; }
+.hero-neo .neo-list li::before { content: '✓'; position: absolute; left: 0; color: #5B64E3; font-weight: 800; }
+
+.hero-neo .neo-cta { display: flex; gap: 14px; margin-top: 24px; }
+.hero-neo .neo-cta { justify-content: center; }
+.hero-neo .neo-right { text-align: center; margin-left: auto; margin-right: auto; max-width: 680px; }
+.hero-neo .neo-desc, .hero-neo .neo-list { margin-left: auto; margin-right: auto; }
+/* desktop/tablet vs mobile hero combo */
+.hero-combo .hero-desktop-tablet { display: block; }
+.hero-combo .hero-mobile { display: none; }
+@media (max-width: 768px) {
+  .hero-combo .hero-desktop-tablet { display: none; }
+  .hero-combo .hero-mobile { display: block; }
+}
+.btn-neo { border: none; border-radius: 12px; padding: 0.95rem 1.75rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.btn-neo.primary { background: #111827; color: #fff; box-shadow: 0 8px 24px rgba(17,24,39,.18); }
+.btn-neo.ghost { background: #fff; color: #111827; border: 1.5px solid #111827; }
+
+@media (max-width: 1024px) {
+  .hero-neo { padding: 4rem 0 3.5rem; }
+  .hero-neo .grid-neo { grid-template-columns: 1fr; }
+  .hero-neo .neo-stage { order: 2; height: 400px; }
+  .hero-neo .neo-right { order: 1; text-align: center; }
+  .hero-neo .neo-desc, .hero-neo .neo-list { margin-left: auto; margin-right: auto; }
+  .hero-neo .neo-cta { justify-content: center; }
+}
+
+/* ---- Concepts applied to hero-neo ---- */
+/* c2: Split 50/50 + 카피 카드형 */
+.concept-c2 .hero-neo { background: linear-gradient(90deg, #ffffff 50%, #f6f7fb 50%) !important; }
+.concept-c2 .hero-neo .neo-right {
+  background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
+  padding: 2rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+/* ---- Teen variant ---- */
+.hero-neo--teen .neo-title .accent { color: #7C87F3; }
+.hero-neo--teen .neo-stage::after { background: radial-gradient(closest-side, rgba(124,135,243,.18), transparent 70%); }
+.hero-neo--teen .btn-neo.primary { background: #5B64E3; }
+.hero-neo--teen .btn-neo.ghost { border-color: #5B64E3; color: #5B64E3; }
+
+/* c3: 상단 브랜드 바 + 캐릭터 뒤 원형 하이라이트 강화 */
+.concept-c3 .hero-neo { position: relative; }
+.concept-c3 .hero-neo::before { content: '' !important; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #5B64E3, #7C87F3); }
+.concept-c3 .hero-neo .neo-stage::after { background: radial-gradient(closest-side, rgba(91,100,227,.2), transparent 70%); }
+
+/* c4: 센터 정렬(컬럼 리버스) */
+.concept-c4 .hero-neo .grid-neo { grid-template-columns: 1fr !important; }
+.concept-c4 .hero-neo .neo-stage { order: 2; }
+.concept-c4 .hero-neo .neo-right { order: 1; text-align: center; }
+.concept-c4 .hero-neo .neo-cta { justify-content: center; }
+
+/* c5: 스포트라이트 무대 효과 강화 */
+.concept-c5 .hero-neo .neo-stage::after {
+  background:
+    radial-gradient(60% 60% at 50% 70%, rgba(0,0,0,.18), rgba(0,0,0,0) 70%),
+    radial-gradient(closest-side, rgba(91,100,227,.12), transparent 70%);
+  filter: blur(6px);
+}
+/* =====================================
+   Style Presets (URL: ?style=clean|soft)
+   ===================================== */
+
+/* A. Clean White: 최대한 화이트, 선명한 타이포, 단색 CTA */
+.style-clean {
+  .hero-carousel-section,
+  .hero-section-small,
+  .modern-hero-section.teen-hero,
+  section.teen-courses-hero {
+    background: #ffffff !important;
+  }
+  .hero-content .hero-title { color: #0f172a !important; text-shadow: none !important; }
+  .hero-content .hero-description { color: #475569 !important; }
+  .btn-hero.primary, .btn-modern.primary { background: #111827 !important; }
+  .btn-hero.secondary, .btn-modern.secondary { background: #fff !important; color: #111827 !important; border: 1px solid rgba(0,0,0,0.12) !important; }
+  .visual-card { box-shadow: 0 4px 10px rgba(0,0,0,0.08) !important; border: 1px solid rgba(0,0,0,0.06) !important; }
+}
+
+/* B. Soft Gradient: 아주 옅은 틴트와 부드러운 깊이감 */
+.style-soft {
+  .hero-carousel-section { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%) !important; }
+  .modern-hero-section.teen-hero { background: linear-gradient(180deg, #f9f7ff 0%, #ffffff 100%) !important; }
+  .hero-section-small { background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%) !important; }
+  .visual-card { box-shadow: 0 8px 18px rgba(0,0,0,0.10) !important; }
+}
+
+/* === Apply presets to hero-neo === */
+.style-clean {
+  .hero-neo { background: #ffffff !important; }
+  .hero-neo .neo-title { color: #0b1220 !important; }
+  .hero-neo .neo-desc { color: #364152 !important; }
+  .hero-neo .neo-stage::after { background: radial-gradient(closest-side, rgba(91,100,227,.10), transparent 70%) !important; }
+}
+
+.style-soft {
+  .hero-neo { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%) !important; }
+  .hero-neo .neo-stage::after { background: radial-gradient(closest-side, rgba(91,100,227,.08), transparent 70%) !important; }
+}
+
+.style-editorial {
+  .hero-neo { background: #ffffff !important; }
+  .hero-neo .neo-title { letter-spacing: -0.03em !important; font-weight: 900 !important; }
+  .hero-neo .neo-desc { max-width: 60ch !important; }
+}
+
+.style-dark {
+  .hero-neo { background: #0b1220 !important; }
+  .hero-neo .neo-title, .hero-neo .neo-desc, .hero-neo .neo-list li { color: #e5e7eb !important; }
+  .hero-neo .neo-title .accent { color: #60a5fa !important; }
+  .hero-neo .neo-stage::after { background: radial-gradient(closest-side, rgba(96,165,250,.22), transparent 70%) !important; filter: blur(10px) !important; }
+  .hero-neo .btn-neo.primary { background: #60a5fa !important; color: #0b1220 !important; box-shadow: 0 10px 30px rgba(96,165,250,.35) !important; }
+  .hero-neo .btn-neo.ghost { border-color: #e5e7eb !important; color: #e5e7eb !important; }
+}
+
+.style-minimal {
+  .hero-neo .neo-stage::after { content: none !important; }
+  .hero-neo .neo-list { display: none !important; }
+  .hero-neo .btn-neo { box-shadow: none !important; }
+}
+
+.style-storytelling {
+  .hero-neo { background: linear-gradient(180deg, #fdf2f8 0%, #fff7f9 100%) !important; }
+  .hero-neo .neo-title { color: #d82e7e !important; }
+  .hero-neo .neo-title .accent { color: #f06292 !important; }
+  .hero-neo .neo-desc, .hero-neo .neo-list li { color: #884a6a !important; }
+  .hero-neo .neo-list li::before { color: #f06292 !important; }
+  .hero-neo .btn-neo.primary { background: #d82e7e !important; box-shadow: 0 6px 20px rgba(216,46,126,0.25) !important; }
+  .hero-neo .btn-neo.ghost { border-color: rgba(216,46,126,0.5) !important; color: #d82e7e !important; }
+}
+
+/* =====================================
+   8 Concepts (URL: ?concept=c1..c8)
+   - 캐릭터 유지 + 레이아웃/배경/카피/CTA를 각기 다르게 구성
+   ===================================== */
+.concept-c1 .character-stage,
+.concept-c2 .character-stage,
+.concept-c3 .character-stage,
+.concept-c4 .character-stage,
+.concept-c5 .character-stage,
+.concept-c6 .character-stage,
+.concept-c7 .character-stage,
+.concept-c8 .character-stage { height: 64vh !important; }
+
+/* C1: Minimal White + Left Character */
+.concept-c1 body { background: #ffffff !important; }
+.concept-c1 .hero-section-base { background: #ffffff !important; }
+.concept-c1 .character-stage { justify-content: flex-start !important; padding-left: 8vw !important; }
+
+/* C2: Split Layout (50/50) with subtle divider */
+.concept-c2 .hero-section-base { background: linear-gradient(90deg, #ffffff 50%, #f6f7fb 50%) !important; }
+.concept-c2 .character-stage { justify-content: center !important; }
+.concept-c2 .hero-content { background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 2rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+
+/* C3: Color Bar Header (brand) */
+.concept-c3 .hero-section-base { background: #ffffff !important; position: relative; }
+.concept-c3 .hero-section-base::before { content: '' !important; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #5B64E3, #7C87F3); }
+.concept-c3 .character-stage { position: relative; }
+.concept-c3 .character-stage::before { content: '' !important; position: absolute; width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(closest-side, rgba(91,100,227,.12), transparent 70%); left: 8vw; top: 10%; z-index: 0; }
+.concept-c3 .character-stage .character-img { position: relative; z-index: 1; }
+
+/* C4: Soft Paper Texture (very subtle) */
+.concept-c4 .hero-section-base { background: #ffffff !important; }
+.concept-c4 .hero-section-base::after { content: '' !important; position: absolute; inset: 0; background: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px) 0 0/6px 6px; pointer-events: none; }
+.concept-c4 .hero-carousel-section .row { flex-direction: column-reverse; text-align: center; }
+.concept-c4 .hero-content { margin-top: 2rem; background: transparent; }
+.concept-c4 .hero-actions { justify-content: center; }
+.concept-c4 .hero-features { justify-content: center; }
+
+/* C5: Stage Shadow (spotlight under character) */
+.concept-c5 .character-stage { position: relative; }
+.concept-c5 .character-stage::after { content: '' !important; position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 40vw; height: 10vw; max-width: 560px; max-height: 160px; background: radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,0.15), rgba(0,0,0,0) 70%); filter: blur(8px); }
+.concept-c5 .hero-content { background: #fff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); padding: 1.5rem !important; }
+
+/* C6: Framed Card (character in soft card) */
+.concept-c6 .character-stage { padding: 2rem !important; }
+.concept-c6 .character-stage .character-img { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 1rem; }
+.concept-c6 .hero-content { background: transparent; }
+
+/* C7: Left Character, Right CTA Pill Group (fixed) */
+.concept-c7 .hero-section-base { position: relative; }
+.concept-c7 .hero-section-base::after { content: '지금 시작하기   •   인기 콘텐츠   •   청소년 전용'; position: absolute; top: 10vh; right: 6vw; background: #111827; color: #fff; padding: 10px 14px; border-radius: 999px; font-weight: 600; letter-spacing: -0.01em; }
+.concept-c7 .hero-actions { gap: .75rem !important; }
+.concept-c7 .btn-hero.primary { background: #5B64E3 !important; }
+.concept-c7 .btn-hero.secondary { border-color: #5B64E3 !important; color: #5B64E3 !important; }
+
+/* C8: Gradient Rim (subtle edge) */
+.concept-c8 .hero-section-base { background: #ffffff !important; position: relative; }
+.concept-c8 .hero-section-base::before { content: '' !important; position: absolute; inset: 0; padding: 1px; border-radius: 16px; background: linear-gradient(135deg, #5B64E3, #00B4D8); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.concept-c8 .hero-content { background: transparent; }
+
+/* 홈 히어로: 배지/스파클 정리, 카피 가독성 강화 */
+.hero-carousel-section {
+  background: #ffffff !important;
+  /* 레이아웃 스케일 명확화 */
+  .row.align-items-center { min-height: 80vh !important; }
+
+  .hero-content {
+    max-width: 620px;
+    padding: 0 1rem !important;
+  }
+
+  .content-badge { display: none !important; }
+
+  .badge-sparkle { display: none !important; }
+
+  .hero-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 3.5rem !important; /* 56px */
+    line-height: 1.12 !important;
+    letter-spacing: -0.02em !important;
+    text-shadow: none !important;
+    color: #0b1220 !important;
+  }
+
+  .hero-description {
+    color: #364152 !important;
+    text-shadow: none !important;
+    font-size: 1.125rem !important;
+    line-height: 1.7 !important;
+    max-width: 56ch !important;
+  }
+
+  .hero-features { margin-top: 1.25rem !important; }
+  .hero-features .feature-item { padding: 6px 0 !important; }
+  .hero-features .feature-icon { display: none !important; }
+  .hero-features .feature-item::before {
+    content: '✓';
+    color: var(--brand-primary);
+    margin-right: 10px;
+    font-weight: 700;
+  }
+
+  .hero-actions { margin-top: 2rem !important; gap: 1rem !important; }
+  .btn-hero.primary { 
+    background: #111827 !important; 
+    box-shadow: 0 4px 16px rgba(17,24,39,0.2) !important; 
+    padding: 0.95rem 1.75rem !important;
+    font-weight: 600 !important;
+  }
+  .btn-hero.secondary { 
+    background: #ffffff !important; 
+    color: #111827 !important; 
+    border: 1.5px solid #111827 !important; 
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important; 
+    text-decoration: none !important;
+  }
+
+  .character-stage { height: 500px !important; }
+  .character-stage .character-img { max-width: 380px !important; }
+}
+
+/* 청소년 히어로: 배경/카드/모션 절제 */
+.modern-hero-section.teen-hero {
+  background: #ffffff !important;
+  .row.align-items-center { min-height: 78vh !important; }
+
+  .hero-content * { text-shadow: none !important; }
+  .hero-title { color: #0f172a !important; font-weight: 700 !important; }
+  .hero-description { color: #475569 !important; font-weight: 400 !important; }
+
+  .hero-visual { height: 360px !important; }
+  .visual-card {
+    border-radius: 12px !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.10) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+  }
+
+  /* 과도한 플로팅 모션을 부드럽게 */
+  .card-1, .card-2, .card-3, .card-4 { animation: none !important; }
+}
+
+@keyframes float-soft-1 { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
+@keyframes float-soft-2 { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } }
+@keyframes float-soft-3 { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-5px) } }
+@keyframes float-soft-4 { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-7px) } }
+
+/* 검색 히어로: 입력/버튼 라운드 통일, 글래스 제거 */
+.hero-section-small {
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%) !important;
+  .search-form .search-input { border-radius: 12px !important; border: 1px solid rgba(0,0,0,0.12) !important; backdrop-filter: none !important; }
+  .search-form .search-btn { border-radius: 12px !important; font-weight: 600 !important; }
+}
+
+/* 반응형 미세 보정 */
+@media (max-width: 768px) {
+  .hero-carousel-section .hero-content { max-width: none; }
+  .modern-hero-section.teen-hero .hero-visual { height: 360px !important; }
+}
+
+
+/* =====================================
+   A1~A4 Minimal Adjustments (2025-10-12)
+   - A1: CTA 48px + focus-visible outline
+   - A2: 390px 폴드 내 H1 2줄 + CTA 노출 보장
+   - A3: 데스크톱 H1 56px, 타이틀→설명 24px
+   - A4: 카피 컨테이너 폭 600px
+   ===================================== */
+
+/* A1: CTA 접근성 (히어로 범위 한정) */
+.hero-neo .btn-neo {
+  min-height: 48px;
+  padding-block: 1.1rem; /* 상하 +6px 수준 */
+}
+.hero-neo .btn-neo:focus-visible {
+  outline: 2px solid #5B64E3 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 8px 24px rgba(17,24,39,.18), 0 0 0 2px #5B64E3 !important;
+}
+/* 키보드 포커스 대체: 일부 브라우저/상황에서 :focus-visible 비노출 대응 */
+.hero-neo .btn-neo:focus {
+  outline: 2px solid #5B64E3 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 8px 24px rgba(17,24,39,.18), 0 0 0 2px #5B64E3 !important;
+}
+
+/* Button focus ring unification for hero scope */
+.hero-neo .btn-neo {
+  position: relative;
+  border-radius: 12px; /* token-aligned */
+}
+.hero-neo .btn-neo:focus-visible { outline: 0 !important; }
+.hero-neo .btn-neo:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--focus-ring-color);
+  pointer-events: none;
+}
+
+/* A3: 1280px+ 데스크톱 타이포/간격 조정 */
+@media (min-width: 1280px) {
+  .hero-neo .neo-title { font-size: 3.5rem; }
+  .hero-neo .neo-title { margin-bottom: 24px; }
+  /* 데스크톱에서 텍스트 컬럼 최소폭 확보 */
+  .hero-neo .grid-neo { grid-template-columns: minmax(600px, 1fr) 0.9fr !important; }
+  /* 그리드 아이템이 축소되지 않도록 중앙 마진 해제 + 스트레치 */
+  .hero-neo .neo-right { margin-left: 0; margin-right: 0; justify-self: stretch; }
+  /* 텍스트 블록 실제 폭 고정(AC: 560–640px 범위) */
+  .hero-neo .neo-right { width: 600px !important; max-width: none !important; }
+}
+
+/* A4: 카피 컨테이너 최대폭 (가독 범위 560–640px 중간값) */
+.hero-neo .neo-right { max-width: 600px; width: 100%; }
+
+/* A2: 390~412px 폴드 내 CTA 노출 보장 */
+@media (max-width: 420px) {
+  .hero-neo { padding: 2.5rem 0 1.5rem !important; }
+  .hero-neo .neo-title { font-size: 1.6rem !important; line-height: 1.12 !important; margin-bottom: 10px !important; }
+  .hero-neo .neo-desc { font-size: 1rem !important; line-height: 1.5 !important; }
+  .hero-neo .neo-stage { height: 280px !important; }
+  .hero-neo .neo-character { max-width: 280px !important; }
+  .hero-neo .neo-cta { margin-top: 8px !important; }
+}
+
+/* 추가: 1440, 1024, 768 간격/그리드 보정 */
+@media (min-width: 1440px) {
+  .hero-neo .grid-neo { grid-template-columns: minmax(640px, 0.9fr) 1fr !important; gap: 24px !important; }
+}
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .hero-neo .grid-neo { grid-template-columns: minmax(560px, 0.95fr) 1fr !important; gap: 24px !important; }
+}
+@media (max-width: 1024px) {
+  .hero-neo .grid-neo { grid-template-columns: 1fr !important; }
+  .hero-neo .neo-title { margin-bottom: 20px; }
+}
+

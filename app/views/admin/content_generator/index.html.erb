@@ -1,0 +1,465 @@
+<% content_for :title, "AI 콘텐츠 생성기 - 관리자" %>
+
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>🎨 AI 콘텐츠 생성기</h1>
+      <p class="text-muted mb-0">페이지별 스토리를 입력하면 AI가 그림을 생성합니다</p>
+    </div>
+    <%= link_to "← 대시보드", admin_root_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <!-- 탭 네비게이션 -->
+  <ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#generate-new">📝 신규 생성</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#manage-existing">📚 기존 관리</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- 신규 생성 탭 -->
+    <div class="tab-pane fade show active" id="generate-new">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">📖 새로운 동화책 페이지 생성</h5>
+        </div>
+        <div class="card-body">
+          <%= form_with url: generate_admin_content_generator_index_path, method: :post, id: 'ai-generate-form' do |f| %>
+            <!-- 1단계: 코스 선택 -->
+            <div class="mb-4">
+              <label class="form-label"><strong>1. 코스 선택</strong></label>
+              <select name="course_id" id="course-select" class="form-select" required>
+                <option value="">코스를 선택하세요</option>
+                <% Course.where(category: ['전자동화책', 'ebook', '동화책']).order(:title).each do |course| %>
+                  <option value="<%= course.id %>" data-title="<%= course.title %>">
+                    <%= course.title %> (ID: <%= course.id %>)
+                  </option>
+                <% end %>
+              </select>
+              <small class="form-text text-muted">또는 신규 코스를 먼저 등록하세요</small>
+            </div>
+
+            <!-- 2단계: 페이지별 스토리 입력 -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-label mb-0"><strong>2. 페이지별 스토리 입력</strong></label>
+                <div>
+                  <button type="button" class="btn btn-sm btn-outline-primary" id="add-page-btn">
+                    ➕ 페이지 추가
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" id="auto-fill-btn">
+                    🤖 AI 자동 스토리 생성
+                  </button>
+                </div>
+              </div>
+              
+              <div id="pages-container">
+                <!-- 페이지 1 기본 -->
+                <div class="card mb-2 page-item">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <strong>📄 페이지 1</strong>
+                      <button type="button" class="btn btn-sm btn-outline-danger remove-page-btn">
+                        🗑️ 삭제
+                      </button>
+                    </div>
+                    <textarea 
+                      name="page_stories[]" 
+                      class="form-control page-story" 
+                      rows="3" 
+                      placeholder="예: 밤하늘에 빛나는 보름달 위에서 토끼가 떡방아를 찧고 있습니다..."
+                      required></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3단계: 생성 옵션 -->
+            <div class="mb-4">
+              <label class="form-label"><strong>3. 생성 옵션</strong></label>
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="form-label">스타일</label>
+                  <select name="style" class="form-select">
+                    <option value="watercolor">수채화 (기본)</option>
+                    <option value="digital">디지털 아트</option>
+                    <option value="cartoon">만화풍</option>
+                    <option value="pixar">3D 픽사 스타일</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">색감</label>
+                  <select name="color_tone" class="form-select">
+                    <option value="pastel">파스텔 (기본)</option>
+                    <option value="vibrant">생동감있는</option>
+                    <option value="soft">부드러운</option>
+                    <option value="warm">따뜻한</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">해상도</label>
+                  <select name="resolution" class="form-select">
+                    <option value="1024x1024">1024x1024 (기본)</option>
+                    <option value="1536x1024">1536x1024 (와이드)</option>
+                    <option value="1024x1536">1024x1536 (세로)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 미리보기 -->
+            <div id="preview-section" class="mb-4" style="display: none;">
+              <div class="alert alert-info">
+                <h6>🔍 프롬프트 미리보기</h6>
+                <pre id="prompt-preview" class="mb-0"></pre>
+              </div>
+            </div>
+
+            <!-- 제출 -->
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-outline-secondary btn-lg" id="preview-prompts-btn">
+                👁️ 프롬프트 미리보기
+              </button>
+              <button type="submit" class="btn btn-primary btn-lg" id="generate-submit-btn">
+                🎨 AI 이미지 생성 시작 (<span id="page-count">1</span>페이지)
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 기존 관리 탭 -->
+    <div class="tab-pane fade" id="manage-existing">
+      <!-- 전체 상태 요약 -->
+      <div class="row mb-4">
+        <% 
+          complete = @course_status.count { |s| s[:status] == 'complete' }
+          partial = @course_status.count { |s| s[:status] == 'partial' }
+          missing = @course_status.count { |s| s[:status] == 'missing' }
+        %>
+        <div class="col-md-4">
+          <div class="card text-center border-success">
+            <div class="card-body">
+              <h3 class="text-success"><%= complete %></h3>
+              <p class="mb-0">✅ 완성 (10장 이상)</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-warning">
+            <div class="card-body">
+              <h3 class="text-warning"><%= partial %></h3>
+              <p class="mb-0">⚠️ 부분 (1-9장)</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-danger">
+            <div class="card-body">
+              <h3 class="text-danger"><%= missing %></h3>
+              <p class="mb-0">❌ 페이지 없음</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 코스별 상태 및 생성 버튼 -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">📚 전자동화책 콘텐츠 상태</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>제목</th>
+                <th>상태</th>
+                <th>페이지</th>
+                <th>캡션</th>
+                <th>작업</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @course_status.each do |item| %>
+                <% 
+                  course = item[:course]
+                  status = item[:status]
+                  badge_class = case status
+                    when 'complete' then 'success'
+                    when 'partial' then 'warning'
+                    else 'danger'
+                  end
+                  status_text = case status
+                    when 'complete' then '✅ 완성'
+                    when 'partial' then '⚠️ 부분'
+                    else '❌ 없음'
+                  end
+                %>
+                <tr>
+                  <td><%= course.id %></td>
+                  <td>
+                    <%= link_to course.title, course_path(course), target: '_blank' %>
+                  </td>
+                  <td>
+                    <span class="badge bg-<%= badge_class %>"><%= status_text %></span>
+                  </td>
+                  <td><%= item[:page_count] %>장</td>
+                  <td><%= item[:caption_count] %>개</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <!-- 항상 재생성 버튼 표시 -->
+                      <%= button_to "🎨 #{status == 'complete' ? '재' : ''}생성", 
+                          generate_admin_content_generator_index_path, 
+                          method: :post,
+                          params: { course_id: course.id, page_count: 15, regenerate: (status == 'complete') },
+                          class: "btn btn-sm btn-#{status == 'complete' ? 'outline-primary' : 'primary'}",
+                          data: { 
+                            confirm: "#{course.title}의 페이지 15장을 AI로 #{status == 'complete' ? '재' : ''}생성하시겠습니까? #{status == 'complete' ? '(기존 파일은 백업됩니다)' : ''}\n약 3-5분 소요됩니다.",
+                            disable_with: "생성 중..." 
+                          } %>
+                      
+                      <%= link_to "📖 리더", read_course_path(course), target: '_blank', class: "btn btn-sm btn-outline-success" if status != 'missing' %>
+                      
+                      <%= link_to "🔧 수정", edit_admin_course_path(course), class: "btn btn-sm btn-outline-secondary" %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사용 가이드 -->
+  <div class="card mt-4 bg-light">
+    <div class="card-body">
+      <h6>💡 사용 가이드</h6>
+      <ul class="mb-0">
+        <li><strong>신규 생성</strong>: 코스 선택 후 페이지별 스토리를 입력하면 AI가 그림을 생성합니다</li>
+        <li><strong>자동 스토리</strong>: 코스 제목을 기반으로 15페이지 스토리를 AI가 자동 생성합니다</li>
+        <li><strong>재생성</strong>: 기존 콘텐츠를 새로운 스타일로 재생성할 수 있습니다 (기존 파일 백업)</li>
+        <li><strong>프롬프트 미리보기</strong>: 생성될 이미지의 프롬프트를 미리 확인할 수 있습니다</li>
+        <li><strong>소요 시간</strong>: 페이지당 약 10-20초, 15페이지 기준 3-5분</li>
+        <li><strong>저장 위치</strong>: <code>public/ebooks/{course_id}/pages/</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+.page-item {
+  transition: all 0.3s;
+}
+
+.page-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.remove-page-btn {
+  opacity: 0.7;
+}
+
+.remove-page-btn:hover {
+  opacity: 1;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const pagesContainer = document.getElementById('pages-container');
+  const addPageBtn = document.getElementById('add-page-btn');
+  const autoFillBtn = document.getElementById('auto-fill-btn');
+  const previewBtn = document.getElementById('preview-prompts-btn');
+  const pageCountSpan = document.getElementById('page-count');
+  let pageNumber = 1;
+
+  // 페이지 추가
+  addPageBtn.addEventListener('click', function() {
+    pageNumber++;
+    const pageHtml = `
+      <div class="card mb-2 page-item">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong>📄 페이지 ${pageNumber}</strong>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-page-btn">
+              🗑️ 삭제
+            </button>
+          </div>
+          <textarea 
+            name="page_stories[]" 
+            class="form-control page-story" 
+            rows="3" 
+            placeholder="이 페이지의 스토리를 입력하세요..."
+            required></textarea>
+        </div>
+      </div>
+    `;
+    pagesContainer.insertAdjacentHTML('beforeend', pageHtml);
+    updatePageCount();
+    attachRemoveHandlers();
+  });
+
+  // AI 자동 스토리 생성
+  autoFillBtn.addEventListener('click', async function() {
+    const courseId = document.getElementById('course-select').value;
+    if (!courseId) {
+      alert('먼저 코스를 선택하세요');
+      return;
+    }
+
+    const courseTitle = document.getElementById('course-select').selectedOptions[0].dataset.title;
+    const pageCount = parseInt(prompt('몇 페이지를 생성하시겠습니까?', '15'));
+    
+    if (!pageCount || pageCount < 1 || pageCount > 30) {
+      alert('1-30 사이의 숫자를 입력하세요');
+      return;
+    }
+
+    // 기존 페이지 제거
+    pagesContainer.innerHTML = '';
+    pageNumber = 0;
+
+    // AI 스토리 생성 (간단한 템플릿)
+    const storyTemplate = generateStoryTemplate(courseTitle, pageCount);
+    
+    storyTemplate.forEach((story, index) => {
+      pageNumber = index + 1;
+      const pageHtml = `
+        <div class="card mb-2 page-item">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong>📄 페이지 ${pageNumber}</strong>
+              <button type="button" class="btn btn-sm btn-outline-danger remove-page-btn">
+                🗑️ 삭제
+              </button>
+            </div>
+            <textarea 
+              name="page_stories[]" 
+              class="form-control page-story" 
+              rows="3" 
+              required>${story}</textarea>
+          </div>
+        </div>
+      `;
+      pagesContainer.insertAdjacentHTML('beforeend', pageHtml);
+    });
+
+    updatePageCount();
+    attachRemoveHandlers();
+  });
+
+  // 스토리 템플릿 생성
+  function generateStoryTemplate(title, pageCount) {
+    const stories = [];
+    const cleanTitle = title.replace(/[🦁🧚‍♀️🐰🐻🦊🐧🦋🐢🦉🐿️🎭🏰🐺🐷🌹🐸👸🏃🍎🦢]/g, '').trim();
+    
+    for (let i = 1; i <= pageCount; i++) {
+      if (i === 1) {
+        stories.push(`${cleanTitle} 이야기가 시작됩니다. 주인공을 만나보세요!`);
+      } else if (i <= pageCount * 0.3) {
+        stories.push(`주인공이 모험을 시작합니다. 새로운 친구들을 만나요.`);
+      } else if (i <= pageCount * 0.7) {
+        stories.push(`흥미진진한 사건이 벌어집니다. 주인공이 문제를 해결해요.`);
+      } else if (i < pageCount) {
+        stories.push(`클라이맥스! 가장 중요한 순간이 찾아왔어요.`);
+      } else {
+        stories.push(`해피엔딩! 모두가 행복하게 끝을 맺습니다.`);
+      }
+    }
+    
+    return stories;
+  }
+
+  // 페이지 삭제
+  function attachRemoveHandlers() {
+    document.querySelectorAll('.remove-page-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (document.querySelectorAll('.page-item').length <= 1) {
+          alert('최소 1개 페이지는 필요합니다');
+          return;
+        }
+        this.closest('.page-item').remove();
+        renumberPages();
+        updatePageCount();
+      });
+    });
+  }
+
+  // 페이지 번호 재정렬
+  function renumberPages() {
+    document.querySelectorAll('.page-item').forEach((item, index) => {
+      const pageNum = index + 1;
+      item.querySelector('strong').textContent = `📄 페이지 ${pageNum}`;
+    });
+    pageNumber = document.querySelectorAll('.page-item').length;
+  }
+
+  // 페이지 수 업데이트
+  function updatePageCount() {
+    const count = document.querySelectorAll('.page-item').length;
+    pageCountSpan.textContent = count;
+  }
+
+  // 프롬프트 미리보기
+  previewBtn.addEventListener('click', async function() {
+    const courseId = document.getElementById('course-select').value;
+    if (!courseId) {
+      alert('먼저 코스를 선택하세요');
+      return;
+    }
+
+    const stories = Array.from(document.querySelectorAll('.page-story')).map(t => t.value);
+    if (stories.some(s => !s.trim())) {
+      alert('모든 페이지의 스토리를 입력하세요');
+      return;
+    }
+
+    const style = document.querySelector('[name="style"]').value;
+    const colorTone = document.querySelector('[name="color_tone"]').value;
+    
+    let preview = `코스 ID: ${courseId}\n`;
+    preview += `스타일: ${style}, 색감: ${colorTone}\n\n`;
+    
+    stories.forEach((story, index) => {
+      preview += `페이지 ${index + 1}:\n`;
+      preview += `스토리: ${story}\n`;
+      preview += `프롬프트: ${story}, ${style} style, ${colorTone} color tone, children's fairy tale illustration, warm soft lighting\n\n`;
+    });
+
+    document.getElementById('prompt-preview').textContent = preview;
+    document.getElementById('preview-section').style.display = 'block';
+  });
+
+  // 초기화
+  attachRemoveHandlers();
+  updatePageCount();
+
+  // 폼 제출 검증
+  document.getElementById('ai-generate-form').addEventListener('submit', function(e) {
+    const courseId = document.getElementById('course-select').value;
+    if (!courseId) {
+      e.preventDefault();
+      alert('코스를 선택하세요');
+      return;
+    }
+
+    const stories = Array.from(document.querySelectorAll('.page-story')).map(t => t.value);
+    if (stories.some(s => !s.trim())) {
+      e.preventDefault();
+      alert('모든 페이지의 스토리를 입력하세요');
+      return;
+    }
+
+    if (!confirm(`${stories.length}페이지의 이미지를 생성하시겠습니까?\n예상 소요 시간: ${Math.ceil(stories.length * 15 / 60)}분`)) {
+      e.preventDefault();
+    }
+  });
+});
+</script>

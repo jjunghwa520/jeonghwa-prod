@@ -15,6 +15,13 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
+  # 로그 로테이션 설정 (10MB 제한, 최대 3개 파일 유지)
+  config.logger = ActiveSupport::Logger.new(
+    Rails.root.join('log', "#{Rails.env}.log"),
+    3,           # 최대 파일 개수
+    10.megabytes # 최대 파일 크기
+  )
+
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?

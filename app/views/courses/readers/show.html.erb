@@ -1,0 +1,257 @@
+<% content_for :title, "#{@course.title} - 읽기" %>
+
+<div class="reader-container">
+  <div class="viewer-16by9" id="viewer">
+    <!-- Realistic flipbook via StPageFlip -->
+    <link rel="stylesheet" href="/vendor/page-flip.css">
+    <div id="flipRoot" style="width:100%; height:100%;"></div>
+    <button class="viewer-nav prev" id="viewerPrev" aria-label="이전 페이지">‹</button>
+    <button class="viewer-nav next" id="viewerNext" aria-label="다음 페이지">›</button>
+    <div id="gateOverlay" class="d-none">
+      <div class="overlay-inner text-center">
+        <p class="mb-3">프리뷰는 전체의 10%까지 제공됩니다.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <%= link_to "수강신청", enroll_course_path(@course), data: { turbo_method: :post }, class: "btn btn-primary btn-lg" %>
+          <%= link_to "강의 상세", course_path(@course), class: "btn btn-outline-light btn-lg" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reader-controls mt-3 d-flex align-items-center justify-content-between">
+    <div class="left-controls d-flex align-items-center gap-2">
+      <button id="prevBtn" class="btn btn-outline-secondary btn-lg">이전</button>
+      <button id="nextBtn" class="btn btn-outline-secondary btn-lg">다음</button>
+    </div>
+    <div class="center-controls d-flex align-items-center gap-2">
+      <button id="zoomOutBtn" class="btn btn-outline-secondary btn-lg">−</button>
+      <div class="progress small text-muted"><span id="pageNum">1</span> / <span id="totalNum"><%= @total_pages %></span></div>
+      <button id="zoomInBtn" class="btn btn-outline-secondary btn-lg">＋</button>
+      <button id="fullscreenBtn" class="btn btn-outline-secondary btn-lg">전체화면</button>
+    </div>
+    <div class="right-controls">
+      <button id="bookmarkBtn" class="btn btn-primary btn-lg">책갈피 저장</button>
+    </div>
+  </div>
+
+  <div class="thumb-strip mt-3 d-flex gap-2 overflow-auto">
+    <% if !@use_placeholder %>
+      <% @page_files.each_with_index do |path, i| %>
+        <img class="thumb" data-page="<%= i + 1 %>" src="<%= path.to_s.sub(Rails.root.join('public').to_s, '') %>" alt="thumb <%= i + 1 %>" loading="lazy" decoding="async">
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="caption-tts mt-3 d-flex align-items-start justify-content-between gap-3">
+    <div id="captionBar" class="caption-bar flex-grow-1" aria-live="polite" aria-atomic="true"></div>
+    <div class="tts-controls d-flex gap-2">
+      <button id="ttsPlay" class="btn btn-outline-primary btn-sm" aria-label="캡션 읽어주기">읽어주기</button>
+      <button id="ttsPause" class="btn btn-outline-secondary btn-sm" aria-label="일시정지">일시정지</button>
+      <button id="ttsStop" class="btn btn-outline-secondary btn-sm" aria-label="정지">정지</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.viewer-16by9{ position:relative; width:100%; aspect-ratio:var(--page-ratio, 4/3); background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; height:calc(100svh - 240px); }
+.viewer-16by9:fullscreen{ height:100svh; }
+.viewer-16by9:-webkit-full-screen{ height:100svh; }
+.viewer-nav{ position:absolute; top:50%; transform:translateY(-50%); z-index:30; width:44px; height:64px; border:none; border-radius:6px; background:rgba(0,0,0,0.35); color:#fff; font-size:28px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.viewer-nav.prev{ left:10px; }
+.viewer-nav.next{ right:10px; }
+.viewer-nav:hover{ background:rgba(0,0,0,0.6); }
+#leftNo,#rightNo{ position:absolute; bottom:8px; left:0; right:0; text-align:center; font-size:12px; color:rgba(0,0,0,.55); font-weight:600; text-shadow:0 1px 0 rgba(255,255,255,.6); }
+#gateOverlay{ position:absolute; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; color:#fff; padding:24px; }
+.thumb{ width:96px; height:54px; object-fit:cover; border-radius:6px; cursor:pointer; flex:0 0 auto; }
+.btn{ min-height:40px; }
+.reader-container .reader-controls{ margin-top:8px !important; }
+.thumb-strip{ margin-top:6px !important; gap:8px !important; }
+.reader-controls .btn{ padding:6px 10px; font-size:0.95rem; }
+@media (max-width: 768px){ .flipbook{ width:100%; height:100%; } .page{ box-shadow:none; } }
+.caption-bar{ background:#fff; color:#333; border-radius:8px; padding:12px; min-height:24px; line-height:1.4; }
+.tts-controls .btn{ min-height:36px; }
+</style>
+
+<script>
+// removed legacy code; using PageFlip below
+</script>
+
+<script src="/vendor/page-flip.browser.js"></script>
+<script>
+  // CDN 폴백: 로컬 스크립트 로드 실패 시 CDN으로 대체
+  (function(){
+    if (!window.St || !St.PageFlip) {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js';
+      document.head.appendChild(s);
+    }
+  })();
+  // CSS 폴백은 이미 링크 병행으로 커버됨
+</script>
+<script>
+  // PageFlip 준비 대기 유틸 및 리사이즈 스로틀
+  function whenPageFlipReady(timeoutMs){
+    return new Promise(function(resolve, reject){
+      var start = Date.now();
+      (function poll(){
+        if (window.St && window.St.PageFlip) return resolve();
+        if (Date.now() - start > (timeoutMs||5000)) return reject(new Error('PageFlip timeout'));
+        setTimeout(poll, 50);
+      })();
+    });
+  }
+  function throttle(fn, wait){ var t=0; return function(){ var n=Date.now(); if(n-t>wait){ t=n; fn(); } } }
+
+  async function initReader(){
+    const root = document.getElementById('flipRoot');
+    if(!root) return;
+    const isEnrolled = <%= @is_enrolled ? 'true' : 'false' %>;
+    const previewLast = <%= @preview_last_page %>;
+    const courseId = <%= @course.id %>;
+    const allowIndex = Math.max(0, previewLast - 1);
+    const overlay = document.getElementById('gateOverlay');
+    const pageNum = document.getElementById('pageNum');
+    const totalNum = document.getElementById('totalNum');
+
+    const pages = <%= raw(@page_files.map { |p| p.to_s.sub(Rails.root.join('public').to_s, '') }.to_json) %>;
+    totalNum.textContent = String(pages.length);
+    // 첫 페이지 이미지 비율 자동 감지 → 컨테이너 aspect-ratio 반영 (기본 4:3)
+    try {
+      const viewerEl = document.getElementById('viewer');
+      if (viewerEl && pages.length > 0) {
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = function() {
+            if (img.width && img.height) {
+              viewerEl.style.setProperty('--page-ratio', `${img.width} / ${img.height}`);
+            }
+            resolve(null);
+          };
+          img.onerror = function() { resolve(null); };
+          img.src = pages[0];
+        });
+      }
+    } catch {}
+
+    try { await whenPageFlipReady(5000); } catch(e) { console.warn('PageFlip not ready in time, continuing'); }
+
+    const pageFlip = new St.PageFlip(root, {
+      width: 900, height: 600, size: 'stretch',
+      minWidth: 320, minHeight: 240,
+      maxWidth: 1600, maxHeight: 1200,
+      drawShadow: true, flippingTime: 700,
+      showCover: true, useMouseEvents: true,
+      mobileScrollSupport: false
+    });
+    pageFlip.loadFromImages(pages);
+
+    function updateCounter(){ pageNum.textContent = String(pageFlip.getCurrentPageIndex() + 1); }
+
+    // 캡션/TTS
+    const captionEl = document.getElementById('captionBar');
+    const tts = { utter: null, speaking: false };
+    function pad3(n){ return String(n).padStart(3,'0'); }
+    function captionUrlByIndex(idx){ return '<%= @pages_root %>' + '/page_' + pad3(idx + 1) + '.txt'; }
+    async function loadCaption(idx){
+      try{
+        const url = captionUrlByIndex(idx);
+        const res = await fetch(url, { cache: 'no-store' });
+        const text = res.ok ? await res.text() : '';
+        captionEl.textContent = (text || '').trim();
+        if (tts.speaking && captionEl.textContent) speak(captionEl.textContent);
+      }catch(e){ captionEl.textContent = ''; }
+    }
+    function speak(text){
+      if(!text) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ko-KR'; u.rate = 1; u.pitch = 1;
+      tts.utter = u; tts.speaking = true; speechSynthesis.speak(u);
+    }
+    document.getElementById('ttsPlay').addEventListener('click', ()=> speak(captionEl.textContent));
+    document.getElementById('ttsPause').addEventListener('click', ()=> speechSynthesis.pause());
+    document.getElementById('ttsStop').addEventListener('click', ()=> { speechSynthesis.cancel(); tts.speaking = false; });
+
+    pageFlip.on('flip', (e)=>{
+      updateCounter();
+      // 페이지 전환 시 TTS 중지 및 캡션 갱신
+      speechSynthesis.cancel(); tts.speaking = false; loadCaption(pageFlip.getCurrentPageIndex());
+      if(!isEnrolled){
+        const idx = pageFlip.getCurrentPageIndex();
+        if(idx >= allowIndex){
+          overlay.classList.remove('d-none');
+          setTimeout(()=>{ pageFlip.turnToPage(allowIndex); overlay.classList.add('d-none'); }, 50);
+        }
+      }
+      localStorage.setItem(`reader:${courseId}:page`, String(pageFlip.getCurrentPageIndex()+1));
+    });
+
+    // 복원
+    const saved = parseInt(localStorage.getItem(`reader:${courseId}:page`) || '1', 10);
+    if(!isNaN(saved) && saved > 1 && saved <= pages.length){ setTimeout(()=> pageFlip.turnToPage(saved-1), 200); }
+
+    // 컨트롤
+    document.getElementById('prevBtn').addEventListener('click', ()=> pageFlip.flipPrev());
+    document.getElementById('nextBtn').addEventListener('click', ()=> pageFlip.flipNext());
+    var vp = document.getElementById('viewerPrev');
+    var vn = document.getElementById('viewerNext');
+    if (vp) vp.addEventListener('click', ()=> pageFlip.flipPrev());
+    if (vn) vn.addEventListener('click', ()=> pageFlip.flipNext());
+    var fsBtn = document.getElementById('fullscreenBtn');
+    var viewerEl = document.getElementById('viewer');
+    if (fsBtn && viewerEl) {
+      fsBtn.addEventListener('click', function(){
+        if (!document.fullscreenElement) {
+          if (viewerEl.requestFullscreen) { viewerEl.requestFullscreen().catch(function(){}); }
+          // Safari prefix (best-effort)
+          // @ts-ignore
+          else if (viewerEl.webkitRequestFullscreen) { viewerEl.webkitRequestFullscreen(); }
+        } else {
+          if (document.exitFullscreen) { document.exitFullscreen().catch(function(){}); }
+          // @ts-ignore
+          else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+        }
+      });
+    }
+    // 썸네일
+    document.querySelectorAll('.thumb').forEach(t=> t.addEventListener('click',(e)=>{ const p=parseInt(e.currentTarget.dataset.page,10); if(!isNaN(p)) pageFlip.turnToPage(p-1); }));
+    // 줌
+    let scale = 1; function applyScale(){ root.style.transform = `scale(${scale})`; root.style.transformOrigin='center center'; }
+    document.getElementById('zoomInBtn').addEventListener('click', ()=>{ scale=Math.min(1.6, scale+0.1); applyScale(); });
+    document.getElementById('zoomOutBtn').addEventListener('click', ()=>{ scale=Math.max(0.7, scale-0.1); applyScale(); });
+
+    updateCounter();
+    try { localStorage.setItem(`reader:${courseId}:page`, String(pageFlip.getCurrentPageIndex()+1)); } catch(e) {}
+    setTimeout(function(){ try { pageFlip.update(); } catch(e) {} }, 50);
+    window.addEventListener('resize', throttle(function(){ try { pageFlip.update(); } catch(e) {} }, 150));
+    // 초기 캡션 로드 및 프리로드 초기화
+    loadCaption(pageFlip.getCurrentPageIndex());
+    const preloadMap = new Map();
+    function indicesAround(i, total){ return [i-2,i-1,i,i+1,i+2].filter(n=> n>=0 && n<total); }
+    function updatePreload(i){
+      const keep = new Set(indicesAround(i, pages.length));
+      keep.forEach(idx=>{
+        if(!preloadMap.has(idx)){
+          const img = new Image(); img.src = pages[idx]; preloadMap.set(idx, img);
+        }
+      });
+      Array.from(preloadMap.keys()).forEach(idx=>{ if(!keep.has(idx)) preloadMap.delete(idx); });
+    }
+    updatePreload(pageFlip.getCurrentPageIndex());
+    pageFlip.on('flip', ()=> updatePreload(pageFlip.getCurrentPageIndex()));
+
+    // 접근성/키보드: Home/End/PageUp/PageDown
+    document.addEventListener('keydown', function(e){
+      if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+      switch(e.code){
+        case 'Home': e.preventDefault(); pageFlip.turnToPage(0); break;
+        case 'End': e.preventDefault(); pageFlip.turnToPage(pages.length - 1); break;
+        case 'PageUp': e.preventDefault(); pageFlip.flipPrev(); break;
+        case 'PageDown': e.preventDefault(); pageFlip.flipNext(); break;
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function(){ initReader(); });
+  document.addEventListener('turbo:load', function(){ initReader(); });
+</script>
+

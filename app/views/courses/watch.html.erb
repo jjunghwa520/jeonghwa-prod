@@ -8,18 +8,28 @@
         <div class="col-12">
           <div class="video-player-wrapper">
             <!-- 📹 영상 배움터 - 실제 비디오 플레이어 -->
-            <div class="modern-video-player" style="height: 60vh; position: relative;">
+            <div class="modern-video-player" style="position: relative;">
               <!-- 비디오 엘리먼트 -->
               <video 
                 id="mainVideo" 
                 class="w-100 h-100" 
-                style="object-fit: cover; background: #000;"
-                poster="https://via.placeholder.com/1280x720/667eea/ffffff?text=📹+영상+배움터"
+                style="object-fit: contain; background: #000;"
+                poster="<%= @course.thumbnail.presence || 'https://via.placeholder.com/1280x720/667eea/ffffff?text=📹+영상+배움터' %>"
                 preload="metadata"
                 playsinline>
-                <!-- 샘플 영상들 - 실제로는 강의 영상 URL이 들어갑니다 -->
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+                <% if @video_url.present? %>
+                  <% if @video_url.ends_with?(".m3u8") %>
+                    <!-- HLS는 hls.js로 attach 예정 -->
+                  <% else %>
+                    <source src="<%= @video_url %>" type="video/mp4">
+                  <% end %>
+                <% else %>
+                  <!-- 데모 폴백 -->
+                  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                <% end %>
+                <% Array(@subtitle_tracks).each_with_index do |track, idx| %>
+                  <track src="<%= track.to_s.sub(Rails.root.join('public').to_s, '') %>" kind="subtitles" srclang="ko" label="한국어" <%= 'default' if idx == 0 %>>
+                <% end %>
                 <p class="text-white text-center mt-5">브라우저가 비디오를 지원하지 않습니다.</p>
               </video>
 
@@ -91,6 +101,17 @@
                 </div>
               </div>
 
+              <!-- 프리뷰 게이트 오버레이 -->
+              <div id="previewGateOverlay" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:20; align-items:center; justify-content:center;">
+                <div class="text-center text-white p-4">
+                  <h5 class="mb-3">프리뷰는 10%까지만 가능합니다</h5>
+                  <div class="d-flex gap-2 justify-content-center">
+                    <%= link_to "수강신청", enroll_course_path(@course), data: { turbo_method: :post }, class: "btn btn-primary btn-lg" %>
+                    <%= link_to "강의 상세", course_path(@course), class: "btn btn-outline-light btn-lg" %>
+                  </div>
+                </div>
+              </div>
+
               <!-- 영상 정보 오버레이 -->
               <div class="video-info-overlay" id="videoInfo">
                 <div class="video-title">
@@ -131,19 +152,24 @@
 
             <!-- 진도 바 -->
             <div class="progress mb-4" style="height: 8px;">
+              <% progress_value = (@enrollment&.progress || 0) %>
               <div class="progress-bar bg-success" role="progressbar" 
-                   style="width: <%= @enrollment.progress %>%" 
-                   aria-valuenow="<%= @enrollment.progress %>" 
+                   style="width: <%= progress_value %>%" 
+                   aria-valuenow="<%= progress_value %>" 
                    aria-valuemin="0" aria-valuemax="100">
               </div>
             </div>
             <div class="d-flex justify-content-between text-muted small mb-4">
-              <span>진도율: <%= @enrollment.progress %>%</span>
+              <span>진도율: <%= @enrollment&.progress || 0 %>%</span>
               <span>
-                <% if @enrollment.completed? %>
+                <% if @enrollment&.completed? %>
                   <i class="bi bi-check-circle text-success"></i> 완료
                 <% else %>
-                  <i class="bi bi-clock"></i> 수강 중
+                  <% if @enrollment %>
+                    <i class="bi bi-clock"></i> 수강 중
+                  <% else %>
+                    <i class="bi bi-lock"></i> 미수강
+                  <% end %>
                 <% end %>
               </span>
             </div>
@@ -188,7 +214,9 @@
                               end %>
                         </li>
                         <li><strong>예상 수강시간:</strong> <%= @course.duration %>시간</li>
-                        <li><strong>수강 시작:</strong> <%= @enrollment.enrolled_at.strftime("%Y년 %m월 %d일") %></li>
+                        <% if @enrollment&.enrolled_at %>
+                          <li><strong>수강 시작:</strong> <%= @enrollment.enrolled_at.strftime("%Y년 %m월 %d일") %></li>
+                        <% end %>
                       </ul>
                     </div>
                     <div class="col-md-6">
@@ -304,7 +332,7 @@
 
             <!-- 강의 완료 버튼 -->
             <div class="mt-4">
-              <% if @enrollment.completed? %>
+              <% if @enrollment&.completed? %>
                 <div class="alert alert-success text-center">
                   <i class="bi bi-trophy"></i>
                   <strong>강의 완료!</strong><br>
@@ -325,7 +353,7 @@
 
 <style>
 .watch-container {
-  margin-top: -76px; /* 네비게이션 바 높이만큼 올리기 */
+  margin-top: 0;
 }
 
 .curriculum-item:hover {
@@ -347,6 +375,11 @@
   cursor: none;
   transition: cursor 0.3s ease;
 }
+
+/* 플레이어 높이: 상단 UI를 고려해 한 화면에서 개요/목차 일부까지 보이도록 조정 */
+.modern-video-player { height: calc(100svh - 200px) !important; min-height: 460px; }
+@media (max-width: 1200px){ .modern-video-player { height: calc(100svh - 260px) !important; min-height: 380px; } }
+@media (max-width: 992px){ .modern-video-player { height: calc(100svh - 300px) !important; min-height: 320px; } }
 
 .modern-video-player:hover {
   cursor: default;
@@ -645,7 +678,7 @@
 
 <script>
 // 🎥 영상 배움터 - 모던 비디오 플레이어 JavaScript
-document.addEventListener('DOMContentLoaded', function() {
+function initWatch(){
   const video = document.getElementById('mainVideo');
   const playPauseBtn = document.getElementById('playPauseBtn');
   const centerPlayBtn = document.getElementById('centerPlayBtn');
@@ -667,10 +700,47 @@ document.addEventListener('DOMContentLoaded', function() {
   let isPlaying = false;
   let controlsTimeout;
 
+  // 이어보기/10% 게이트 변수
+  const isEnrolled = <%= @is_enrolled ? 'true' : 'false' %>;
+  const courseId = <%= @course.id %>;
+  const watchKey = `watch:${courseId}:position`;
+
+  // 기존 HLS 정리
+  try { if (window.__hls && window.__hls.destroy) { window.__hls.destroy(); } } catch(e) {}
+  window.__hls = null;
+
+  // HLS attach if needed
+  const videoUrl = '<%= @video_url.to_s %>';
+  if (videoUrl && videoUrl.endsWith('.m3u8')) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+    s.onload = () => {
+      if (window.Hls && window.Hls.isSupported()) {
+        const hls = new window.Hls();
+        window.__hls = hls;
+        hls.loadSource(videoUrl);
+        hls.attachMedia(video);
+        // attach 지연 대비 폴백 타이머: 2초 내 ready 안되면 native로 시도
+        setTimeout(()=>{
+          if (video.readyState < 2 && video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoUrl;
+          }
+        }, 2000);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoUrl;
+      }
+    };
+    document.head.appendChild(s);
+  }
+
   // 비디오 로드 완료
   video.addEventListener('loadedmetadata', function() {
     totalTimeSpan.textContent = formatTime(video.duration);
     loadingSpinner.style.display = 'none';
+    const saved = parseFloat(localStorage.getItem(watchKey) || '0');
+    if (!isNaN(saved) && saved > 0 && saved < video.duration) {
+      video.currentTime = saved;
+    }
   });
 
   // 재생/일시정지 토글
@@ -690,22 +760,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // 이벤트 리스너
-  playPauseBtn.addEventListener('click', togglePlayPause);
-  centerPlayBtn.addEventListener('click', togglePlayPause);
-  video.addEventListener('click', togglePlayPause);
+  // 이벤트 리스너 (중복 방지 위해 직접 할당)
+  playPauseBtn.onclick = togglePlayPause;
+  centerPlayBtn.onclick = togglePlayPause;
+  video.onclick = togglePlayPause;
 
   // 스킵 기능
-  skipBackBtn.addEventListener('click', function() {
+  skipBackBtn.onclick = function() {
     video.currentTime = Math.max(0, video.currentTime - 10);
-  });
+  };
 
-  skipForwardBtn.addEventListener('click', function() {
+  skipForwardBtn.onclick = function() {
     video.currentTime = Math.min(video.duration, video.currentTime + 10);
-  });
+  };
 
   // 음소거 토글
-  muteBtn.addEventListener('click', function() {
+  muteBtn.onclick = function() {
     if (video.muted) {
       video.muted = false;
       muteBtn.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
@@ -714,7 +784,7 @@ document.addEventListener('DOMContentLoaded', function() {
       video.muted = true;
       muteBtn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
     }
-  });
+  };
 
   // 볼륨 조절
   volumeSlider.addEventListener('input', function() {
@@ -736,7 +806,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // 전체화면 토글
-  fullscreenBtn.addEventListener('click', function() {
+  fullscreenBtn.onclick = function() {
     if (!document.fullscreenElement) {
       videoPlayer.requestFullscreen().catch(err => {
         console.log('전체화면 오류:', err);
@@ -744,7 +814,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       document.exitFullscreen();
     }
-  });
+  };
 
   // 전체화면 상태 변경 감지
   document.addEventListener('fullscreenchange', function() {
@@ -755,12 +825,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // 진행바 업데이트
+  // 진행바 업데이트 및 이어보기/프리뷰 게이트
   video.addEventListener('timeupdate', function() {
     const progress = (video.currentTime / video.duration) * 100;
     progressFilled.style.width = progress + '%';
     progressHandle.style.left = progress + '%';
     currentTimeSpan.textContent = formatTime(video.currentTime);
+
+    // 이어보기 저장
+    try { localStorage.setItem(watchKey, String(video.currentTime)); } catch(e) {}
+
+    // 10% 프리뷰 게이트
+    if (!isEnrolled && video.duration && video.currentTime >= video.duration * 0.10) {
+      video.pause();
+      const overlay = document.getElementById('previewGateOverlay');
+      if (overlay) overlay.style.display = 'flex';
+    }
   });
 
   // 진행바 클릭으로 탐색
@@ -862,6 +942,20 @@ document.addEventListener('DOMContentLoaded', function() {
   volumeSlider.value = 100;
   
   console.log('🎥 영상 배움터 플레이어가 준비되었습니다!');
+}
+document.addEventListener('DOMContentLoaded', function(){
+  try { history.scrollRestoration = 'manual'; } catch(e) {}
+  window.scrollTo(0,0);
+  initWatch();
+});
+document.addEventListener('turbo:load', function(){
+  try { history.scrollRestoration = 'manual'; } catch(e) {}
+  window.scrollTo(0,0);
+  initWatch();
+});
+document.addEventListener('turbo:before-render', function(){
+  try { if (window.__hls && window.__hls.destroy) { window.__hls.destroy(); } } catch(e) {}
+  window.__hls = null;
 });
 
 // 강의 완료 함수

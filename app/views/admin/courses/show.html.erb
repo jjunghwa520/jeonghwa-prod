@@ -1,0 +1,382 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="mb-1"><%= @course.title %></h1>
+      <% if @course.subtitle.present? %>
+        <p class="text-muted mb-0"><%= @course.subtitle %></p>
+      <% end %>
+    </div>
+    <div class="d-flex gap-2">
+      <%= link_to '✏️ 편집', edit_admin_course_path(@course), class: 'btn btn-primary' %>
+      <%= link_to '👁️ 미리보기', course_path(@course), class: 'btn btn-info', target: '_blank' %>
+      <%= link_to '← 목록', admin_courses_path, class: 'btn btn-outline-secondary' %>
+    </div>
+  </div>
+
+  <!-- 상태 카드 -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card bg-<%= @course.status == 'published' ? 'success' : @course.status == 'draft' ? 'warning' : 'secondary' %> text-white">
+        <div class="card-body">
+          <h6>발행 상태</h6>
+          <h3><%= @course.status == 'published' ? '✅ 발행됨' : @course.status == 'draft' ? '📝 임시저장' : '📦 보관됨' %></h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-<%= @content_status[:status] == 'complete' ? 'success' : @content_status[:status] == 'partial' ? 'warning' : 'danger' %> text-white">
+        <div class="card-body">
+          <h6>콘텐츠 상태</h6>
+          <h3>
+            <% if @course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+              <%= @content_status[:page_count] %>페이지
+            <% else %>
+              <%= @content_status[:has_video] ? '✅ 있음' : '❌ 없음' %>
+            <% end %>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h6>수강생</h6>
+          <h3>👥 <%= @course.total_students %>명</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h6>평점</h6>
+          <h3>⭐ <%= @course.average_rating %></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <!-- 기본 정보 -->
+    <div class="col-lg-8">
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">📋 기본 정보</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-3">제목</dt>
+            <dd class="col-sm-9"><strong><%= @course.title %></strong></dd>
+            
+            <% if @course.subtitle.present? %>
+              <dt class="col-sm-3">부제목</dt>
+              <dd class="col-sm-9"><%= @course.subtitle %></dd>
+            <% end %>
+            
+            <dt class="col-sm-3">카테고리</dt>
+            <dd class="col-sm-9">
+              <span class="badge bg-info"><%= @course.category %></span>
+            </dd>
+            
+            <% if @course.series_name.present? %>
+              <dt class="col-sm-3">시리즈</dt>
+              <dd class="col-sm-9">
+                <span class="badge bg-secondary"><%= @course.series_name %> #<%= @course.series_order %></span>
+              </dd>
+            <% end %>
+            
+            <dt class="col-sm-3">연령</dt>
+            <dd class="col-sm-9"><%= @course.age %></dd>
+            
+            <dt class="col-sm-3">난이도</dt>
+            <dd class="col-sm-9">
+              <% if @course.difficulty %>
+                <%= '⭐' * @course.difficulty.to_i %>
+              <% end %>
+              (학습 단계: <%= @course.level %>)
+            </dd>
+            
+            <dt class="col-sm-3">가격</dt>
+            <dd class="col-sm-9">
+              <strong><%= number_to_currency(@course.price, unit: '₩', precision: 0) %></strong>
+              <% if @course.discount_percentage.to_i > 0 %>
+                <span class="badge bg-danger"><%= @course.discount_percentage %>% 할인</span>
+                <small class="text-muted">
+                  (할인가: <%= number_to_currency(@course.discounted_price, unit: '₩', precision: 0) %>)
+                </small>
+              <% end %>
+            </dd>
+            
+            <dt class="col-sm-3">소요시간</dt>
+            <dd class="col-sm-9"><%= @course.duration %>분</dd>
+            
+            <% if @course.tags.present? %>
+              <dt class="col-sm-3">태그</dt>
+              <dd class="col-sm-9">
+                <% @course.tag_list.each do |tag| %>
+                  <span class="badge bg-light text-dark"><%= tag %></span>
+                <% end %>
+              </dd>
+            <% end %>
+            
+            <% if @course.production_date.present? %>
+              <dt class="col-sm-3">제작일</dt>
+              <dd class="col-sm-9"><%= @course.production_date.strftime('%Y년 %m월 %d일') %></dd>
+            <% end %>
+            
+            <dt class="col-sm-3">설명</dt>
+            <dd class="col-sm-9"><%= simple_format(@course.description) %></dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- 제작진 정보 -->
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">👥 제작진</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <% if @course.writer %>
+              <div class="col-md-4">
+                <div class="author-info">
+                  <span class="badge bg-primary">작가</span>
+                  <p class="mb-0 mt-1"><strong><%= @course.writer.name %></strong></p>
+                  <% if @course.writer.bio.present? %>
+                    <small class="text-muted"><%= @course.writer.bio.truncate(50) %></small>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            
+            <% if @course.illustrator %>
+              <div class="col-md-4">
+                <div class="author-info">
+                  <span class="badge bg-success">일러스트레이터</span>
+                  <p class="mb-0 mt-1"><strong><%= @course.illustrator.name %></strong></p>
+                  <% if @course.illustrator.bio.present? %>
+                    <small class="text-muted"><%= @course.illustrator.bio.truncate(50) %></small>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            
+            <% if @course.narrator %>
+              <div class="col-md-4">
+                <div class="author-info">
+                  <span class="badge bg-info">성우</span>
+                  <p class="mb-0 mt-1"><strong><%= @course.narrator.name %></strong></p>
+                  <% if @course.narrator.bio.present? %>
+                    <small class="text-muted"><%= @course.narrator.bio.truncate(50) %></small>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          
+          <% if !@course.writer && !@course.illustrator && !@course.narrator %>
+            <p class="text-muted mb-0">등록된 제작진이 없습니다</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 파일 목록 -->
+      <div class="card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">📁 파일 목록</h5>
+          <%= link_to '➕ 파일 추가', edit_admin_course_path(@course, anchor: 'files'), class: 'btn btn-sm btn-primary' %>
+        </div>
+        <div class="card-body">
+          <% if @course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+            <!-- 전자책 파일 -->
+            <h6>📄 페이지 이미지 (<%= @existing_files[:images].count %>개)</h6>
+            <% if @existing_files[:images].any? %>
+              <div class="file-grid mb-3">
+                <% @existing_files[:images].first(12).each do |file| %>
+                  <div class="file-thumbnail">
+                    <%= image_tag file[:path], alt: file[:name], class: 'img-thumbnail' %>
+                    <small><%= file[:name] %></small>
+                  </div>
+                <% end %>
+                <% if @existing_files[:images].count > 12 %>
+                  <div class="text-muted">
+                    ... 외 <%= @existing_files[:images].count - 12 %>개
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted">이미지 파일이 없습니다</p>
+            <% end %>
+            
+            <h6 class="mt-3">📝 캡션 (<%= @existing_files[:captions].count %>개)</h6>
+            <% if @existing_files[:captions].any? %>
+              <div class="list-group list-group-flush">
+                <% @existing_files[:captions].first(5).each do |file| %>
+                  <div class="list-group-item">
+                    <i class="bi bi-file-text"></i> <%= file[:name] %>
+                    <small class="text-muted">(<%= number_to_human_size(file[:size]) %>)</small>
+                  </div>
+                <% end %>
+                <% if @existing_files[:captions].count > 5 %>
+                  <div class="list-group-item text-muted">
+                    ... 외 <%= @existing_files[:captions].count - 5 %>개
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted">캡션 파일이 없습니다</p>
+            <% end %>
+          <% else %>
+            <!-- 비디오 파일 -->
+            <h6>🎬 비디오 (<%= @existing_files[:videos].count %>개)</h6>
+            <% if @existing_files[:videos].any? %>
+              <div class="list-group list-group-flush mb-3">
+                <% @existing_files[:videos].each do |file| %>
+                  <div class="list-group-item">
+                    <i class="bi bi-file-play"></i> 
+                    <strong><%= file[:name] %></strong>
+                    <span class="badge bg-secondary"><%= number_to_human_size(file[:size]) %></span>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted">비디오 파일이 없습니다</p>
+            <% end %>
+            
+            <h6>📄 자막 (<%= @existing_files[:subtitles].count %>개)</h6>
+            <% if @existing_files[:subtitles].any? %>
+              <div class="list-group list-group-flush">
+                <% @existing_files[:subtitles].each do |file| %>
+                  <div class="list-group-item">
+                    <i class="bi bi-file-earmark-text"></i> <%= file[:name] %>
+                    <small class="text-muted">(<%= number_to_human_size(file[:size]) %>)</small>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted">자막 파일이 없습니다</p>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <div class="col-lg-4">
+      <!-- 썸네일 -->
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h6 class="mb-0">🖼️ 썸네일</h6>
+        </div>
+        <div class="card-body text-center">
+          <% if @course.thumbnail.present? %>
+            <%= image_tag @course.thumbnail, alt: @course.title, class: 'img-fluid rounded' %>
+          <% else %>
+            <div class="placeholder-thumbnail-large">
+              <span>📚</span>
+              <p class="text-muted mt-2">썸네일 없음</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 빠른 작업 -->
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h6 class="mb-0">⚡ 빠른 작업</h6>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <%= link_to '✏️ 코스 수정', edit_admin_course_path(@course), class: 'btn btn-outline-primary' %>
+            <%= link_to '👁️ 프론트 미리보기', course_path(@course), class: 'btn btn-outline-info', target: '_blank' %>
+            <% if @course.category.to_s.match?(/전자동화책|ebook|동화책/) %>
+              <%= link_to '📖 리더 보기', read_course_path(@course), class: 'btn btn-outline-secondary', target: '_blank' %>
+            <% else %>
+              <%= link_to '🎬 플레이어 보기', watch_course_path(@course), class: 'btn btn-outline-secondary', target: '_blank' %>
+            <% end %>
+            <%= link_to '🗑️ 삭제', admin_course_path(@course), 
+                method: :delete,
+                data: { turbo_method: :delete, turbo_confirm: '정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.' },
+                class: 'btn btn-outline-danger' %>
+          </div>
+        </div>
+      </div>
+
+      <!-- 통계 -->
+      <div class="card">
+        <div class="card-header bg-light">
+          <h6 class="mb-0">📊 통계</h6>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <strong>ID:</strong> #<%= @course.id %>
+            </li>
+            <li class="mb-2">
+              <strong>등록일:</strong> <%= @course.created_at.strftime('%Y년 %m월 %d일') %>
+            </li>
+            <li class="mb-2">
+              <strong>수정일:</strong> <%= @course.updated_at.strftime('%Y년 %m월 %d일') %>
+            </li>
+            <li class="mb-2">
+              <strong>강사:</strong> <%= @course.instructor.name %>
+            </li>
+            <li class="mb-2">
+              <strong>수강생:</strong> <%= @course.total_students %>명
+            </li>
+            <li class="mb-2">
+              <strong>리뷰:</strong> <%= @course.reviews.count %>개
+            </li>
+            <li class="mb-2">
+              <strong>평균 평점:</strong> ⭐ <%= @course.average_rating %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.placeholder-thumbnail-large {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0.5rem;
+}
+
+.placeholder-thumbnail-large span {
+  font-size: 4rem;
+}
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+.file-thumbnail {
+  text-align: center;
+}
+
+.file-thumbnail img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.file-thumbnail small {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.author-info {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  height: 100%;
+}
+</style>

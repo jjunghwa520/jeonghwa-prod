@@ -110,6 +110,17 @@
                 <%= f.url_field :thumbnail, class: "form-control" %>
                 <div class="form-text">강의를 대표하는 이미지 URL을 입력하세요 (선택사항)</div>
               </div>
+
+              <div class="mb-3">
+                <%= f.label :ebook_pages_root, "전자동화 이미지 루트(예: /ebooks/:id/pages)", class: "form-label fw-semibold" %>
+                <%= f.text_field :ebook_pages_root, class: "form-control" %>
+                <div class="form-text">지정하지 않으면 /public/ebooks/:id/pages/page_001.jpg 규칙을 사용합니다</div>
+              </div>
+
+              <div class="mb-3">
+                <%= f.label :video_url, "구연동화 비디오 URL(HLS .m3u8 또는 MP4)", class: "form-label fw-semibold" %>
+                <%= f.url_field :video_url, class: "form-control" %>
+              </div>
             </div>
             
             <!-- 공개 설정 섹션 -->

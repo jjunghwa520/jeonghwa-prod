@@ -1,0 +1,54 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📤 파일 업로드</h1>
+    <%= link_to "← 대시보드", admin_root_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <!-- 기존 단일 업로드 (간소화) -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">📄 파일 업로드</h5>
+    </div>
+    <div class="card-body">
+      <%= form_with url: admin_uploads_path, multipart: true, class: 'row g-3' do |f| %>
+        <div class="col-md-3">
+          <label class="form-label">코스 ID</label>
+          <input type="number" name="course_id" class="form-control" placeholder="예: 3" required />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">종류</label>
+          <select name="kind" class="form-select">
+            <option value="ebook_images">전자책 이미지(page_*.jpg)</option>
+            <option value="captions">캡션(page_*.txt)</option>
+            <option value="video">영상(main.mp4)</option>
+            <option value="subtitle">자막(.vtt)</option>
+            <option value="hls">HLS(.m3u8, .ts)</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">파일 (여러 개 선택 가능)</label>
+          <input type="file" name="files[]" class="form-control" multiple />
+          <div class="form-text">
+            💡 Shift 또는 Ctrl을 누르고 여러 파일을 선택할 수 있습니다
+          </div>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">📤 업로드</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 사용 가이드 -->
+  <div class="card mt-4 bg-light">
+    <div class="card-body">
+      <h6>💡 파일명 규칙</h6>
+      <ul class="mb-0">
+        <li><strong>전자책 이미지:</strong> <code>page_001.jpg, page_002.jpg, ...</code></li>
+        <li><strong>캡션:</strong> <code>page_001.txt, page_002.txt, ...</code></li>
+        <li><strong>영상:</strong> <code>main.mp4</code> 또는 <code>index.m3u8</code></li>
+        <li><strong>자막:</strong> <code>*.vtt</code> (WebVTT 포맷)</li>
+      </ul>
+    </div>
+  </div>
+</div>
