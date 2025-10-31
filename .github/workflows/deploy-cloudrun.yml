@@ -31,7 +31,7 @@ jobs:
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
 
       - name: Configure Docker auth (gcr.io)
         run: gcloud auth configure-docker gcr.io -q
