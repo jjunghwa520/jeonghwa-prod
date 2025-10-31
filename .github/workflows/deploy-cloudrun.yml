@@ -33,28 +33,27 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker auth
-        run: gcloud auth configure-docker ${GCP_ARTIFACT_REGISTRY:-asia-northeast3-docker.pkg.dev} -q
+      - name: Configure Docker auth (gcr.io)
+        run: gcloud auth configure-docker gcr.io -q
 
-      - name: Build and push image
+      - name: Build and push image (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region }}
           SERVICE: ${{ inputs.service }}
         run: |
-          IMAGE=${{ env.PROJECT_ID }}/${{ env.SERVICE }}:$(git rev-parse --short HEAD)
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           docker build -t ${IMAGE} kicda-jh
-          gcloud artifacts repositories list --location=${{ env.REGION }} || true
           docker push ${IMAGE}
 
-      - name: Deploy to Cloud Run
+      - name: Deploy to Cloud Run (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region }}
           SERVICE: ${{ inputs.service }}
           BASE_URL: ${{ inputs.base_url }}
         run: |
-          IMAGE=${{ env.PROJECT_ID }}/${{ env.SERVICE }}:$(git rev-parse --short HEAD)
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           gcloud run deploy ${SERVICE} \
             --image=${IMAGE} \
             --project=${PROJECT_ID} \
