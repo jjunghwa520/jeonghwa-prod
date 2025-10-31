@@ -43,7 +43,7 @@ jobs:
           SERVICE: ${{ inputs.service }}
         run: |
           IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
-          docker build -t ${IMAGE} kicda-jh
+          docker build -t ${IMAGE} .
           docker push ${IMAGE}
 
       - name: Deploy to Cloud Run (gcr.io)
