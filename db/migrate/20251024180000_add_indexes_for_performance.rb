@@ -9,3 +9,6 @@ class AddIndexesForPerformance < ActiveRecord::Migration[8.0]
 end
 
 
+
+
+

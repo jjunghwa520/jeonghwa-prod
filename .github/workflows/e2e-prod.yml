@@ -1,0 +1,53 @@
+name: E2E on Production (Playwright)
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Base URL for tests
+        required: false
+        default: https://정화의서재.kr
+  workflow_run:
+    workflows: ["Deploy to Production (Kamal)"]
+    types: ["completed"]
+
+concurrency:
+  group: e2e-prod
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: kicda-jh/e2e-playwright
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests (prod)
+        env:
+          BASE_URL: ${{ github.event.inputs.base_url || 'https://정화의서재.kr' }}
+        run: |
+          npx playwright test --reporter=list,html
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: kicda-jh/e2e-playwright/playwright-report
+
+

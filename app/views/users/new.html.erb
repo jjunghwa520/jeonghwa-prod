@@ -944,7 +944,8 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// Turbo 및 전통 로드 모두에서 초기화되도록 두 이벤트에 바인딩
+function initSignupPage() {
   console.log('🚀 회원가입 페이지 JavaScript 로드됨');
   let selectedAge = null;
   
@@ -1237,7 +1238,41 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 비밀번호 검증 초기화
   setupPasswordValidation();
-  
+
+  // 제출 버튼 로딩/비활성화 및 약관 체크 상태에 따른 활성화
+  try {
+    const form = document.querySelector('.needs-validation');
+    const submitBtn = document.getElementById('submit-btn');
+    const termsSection = document.getElementById('terms-section');
+
+    function updateSubmitDisabled() {
+      if (!form || !submitBtn) return;
+      // 모든 required 체크박스가 체크되었는지 확인
+      const requiredChecks = termsSection ? Array.from(termsSection.querySelectorAll('input[type="checkbox"][required]')) : [];
+      const allChecked = requiredChecks.every(cb => cb.checked);
+      submitBtn.disabled = !allChecked;
+    }
+
+    if (form && submitBtn) {
+      updateSubmitDisabled();
+      if (termsSection) {
+        termsSection.addEventListener('change', updateSubmitDisabled);
+      }
+      form.addEventListener('submit', function(event) {
+        // 유효하면 로딩 상태로 전환
+        if (form.checkValidity() === true) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = '가입 중...';
+        }
+      });
+    }
+  } catch (e) {
+    console.error('제출 버튼 상태 제어 중 오류', e);
+  }
+
   console.log('✅ 모든 JavaScript 초기화 완료');
-});
+}
+
+document.addEventListener('turbo:load', initSignupPage);
+document.addEventListener('DOMContentLoaded', initSignupPage);
 </script>

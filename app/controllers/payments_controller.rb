@@ -1,6 +1,7 @@
 class PaymentsController < ApplicationController
   before_action :require_login
   before_action :set_course, only: [:checkout, :confirm]
+  skip_before_action :require_login, only: [:webhook]
   
   # 결제 시작
   def checkout
@@ -167,7 +168,7 @@ class PaymentsController < ApplicationController
   rescue => e
     redirect_to user_orders_path(current_user), alert: "환불 처리 중 오류: #{e.message}"
   end
-
+  
   # 토스페이먼츠 웹훅 처리 (성공/실패/환불)
   skip_before_action :verify_authenticity_token, only: [:webhook]
   def webhook

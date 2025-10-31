@@ -40,3 +40,6 @@ test('Toss 결제 위젯 로드 스모크', async ({ page }) => {
 
   expect(hasTossInit).toBeTruthy();
 });
+
+
+

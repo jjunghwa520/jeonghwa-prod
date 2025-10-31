@@ -1,6 +1,5 @@
 class Courses::ReadersController < ApplicationController
   before_action :set_course
-  before_action :require_login
 
   def show
     configured_root = @course.respond_to?(:ebook_pages_root) && @course.ebook_pages_root.present? ? @course.ebook_pages_root : "/ebooks/#{@course.id}/pages"

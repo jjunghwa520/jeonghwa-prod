@@ -288,7 +288,7 @@
                     <i class="bi bi-play-circle"></i> 수강하기
                   <% end %>
                   <% if @course.category.in?(%w[전자동화책 ebook]) %>
-                    <%= link_to read_course_path(@course), class: "btn btn-primary btn-lg" do %>
+                    <%= link_to read_course_path(@course), class: "btn btn-primary btn-lg", data: { turbo: false } do %>
                       <i class="bi bi-book"></i> 읽기
                     <% end %>
                   <% end %>
@@ -315,7 +315,7 @@
                     <%= form.submit "▶️ 바로 수강하기", class: "btn btn-success btn-lg" %>
                   <% end %>
                   <% if @course.category.in?(%w[전자동화책 ebook]) %>
-                    <%= link_to read_course_path(@course), class: "btn btn-outline-secondary btn-lg" do %>
+                    <%= link_to read_course_path(@course), class: "btn btn-outline-secondary btn-lg", data: { turbo: false } do %>
                       <i class="bi bi-book"></i> 미리 읽어보기(10%)
                     <% end %>
                   <% elsif @course.category.in?(%w[구연동화 storytelling]) %>
@@ -331,7 +331,7 @@
                   <i class="bi bi-box-arrow-in-right"></i> 로그인 후 수강
                 <% end %>
                 <% if @course.category.in?(%w[전자동화책 ebook]) %>
-                  <%= link_to read_course_path(@course), class: "btn btn-outline-secondary btn-lg" do %>
+                  <%= link_to read_course_path(@course), class: "btn btn-outline-secondary btn-lg", data: { turbo: false } do %>
                     <i class="bi bi-book"></i> 미리 읽어보기(10%)
                   <% end %>
                 <% elsif @course.category.in?(%w[구연동화 storytelling]) %>
