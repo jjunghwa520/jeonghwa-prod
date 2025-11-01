@@ -5,13 +5,16 @@ on:
     inputs:
       service:
         description: Cloud Run service name
-        required: true
+        required: false
+        default: jeonghwa-app
       region:
         description: GCP region (e.g. asia-northeast3)
-        required: true
+        required: false
+        default: asia-northeast3
       base_url:
         description: Public base URL for the app
-        required: true
+        required: false
+        default: https://xn--2i4b17iihloh20d.kr
 
 jobs:
   build-and-deploy:
