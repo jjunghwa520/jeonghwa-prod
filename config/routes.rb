@@ -110,8 +110,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  
+  # 예외 처리 라우트(ExceptionsApp)
+  match "/404", to: "static_errors#not_found", via: :all
+  match "/500", to: "static_errors#internal_error", via: :all
 end
 
-# 예외 처리 라우트(ExceptionsApp)
-match "/404", to: "static_errors#not_found", via: :all
-match "/500", to: "static_errors#internal_error", via: :all
+ 
