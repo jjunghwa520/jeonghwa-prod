@@ -112,8 +112,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   # 예외 처리 라우트(ExceptionsApp)
-  match "/404", to: "static_errors#not_found", via: :all
-  match "/500", to: "static_errors#internal_error", via: :all
+  get "/404", to: "static_errors#not_found"
+  get "/500", to: "static_errors#internal_error"
 end
 
  
