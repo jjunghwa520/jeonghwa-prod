@@ -55,6 +55,7 @@ jobs:
           REGION: ${{ inputs.region }}
           SERVICE: ${{ inputs.service }}
           BASE_URL: ${{ inputs.base_url }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           gcloud run deploy ${SERVICE} \
@@ -63,7 +64,7 @@ jobs:
             --region=${REGION} \
             --platform=managed \
             --allow-unauthenticated \
-            --set-env-vars=BASE_URL=${BASE_URL}
+            --set-env-vars=BASE_URL=${BASE_URL},RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
 
 
 
