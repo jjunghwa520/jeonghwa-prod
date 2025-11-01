@@ -22,6 +22,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      DEFAULT_SERVICE: jeonghwa-app
+      DEFAULT_REGION: asia-northeast3
+      DEFAULT_BASE_URL: https://xn--2i4b17iihloh20d.kr
     permissions:
       contents: read
       id-token: write
@@ -45,8 +49,8 @@ jobs:
       - name: Build and push image (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          REGION: ${{ inputs.region }}
-          SERVICE: ${{ inputs.service }}
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
+          SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
         run: |
           IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           docker build -t ${IMAGE} .
@@ -55,9 +59,9 @@ jobs:
       - name: Deploy to Cloud Run (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          REGION: ${{ inputs.region }}
-          SERVICE: ${{ inputs.service }}
-          BASE_URL: ${{ inputs.base_url }}
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
+          SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
+          BASE_URL: ${{ inputs.base_url || env.DEFAULT_BASE_URL }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
