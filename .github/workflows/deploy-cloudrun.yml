@@ -65,16 +65,16 @@ jobs:
           echo "📤 Pushing to GCR..."
           if docker push ${IMAGE}; then
             echo "✅ GCR push successful"
-            echo "REGISTRY_TYPE=gcr" >> $GITHUB_ENV
-            echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
+            echo "gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}" > /tmp/docker_image.txt
+            echo "gcr" > /tmp/registry_type.txt
           else
             echo "⚠️  GCR push failed, will try Artifact Registry as fallback"
-            echo "REGISTRY_TYPE=artifact" >> $GITHUB_ENV
+            echo "artifact" > /tmp/registry_type.txt
             exit 1
           fi
 
       - name: Build and push image (Artifact Registry - 대체 방식)
-        if: env.REGISTRY_TYPE == 'artifact'
+        if: failure() && steps.gcr_push.outcome == 'failure'
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
@@ -84,7 +84,7 @@ jobs:
           COMMIT_SHA=$(git rev-parse --short HEAD)
           IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:${COMMIT_SHA}
           
-          echo "📦 Setting up Artifact Registry..."
+          echo "📦 Setting up Artifact Registry (GCR 실패 시 대체)..."
           
           # Configure Docker auth for Artifact Registry
           gcloud auth configure-docker ${REGION}-docker.pkg.dev -q
@@ -107,7 +107,20 @@ jobs:
           echo "📤 Pushing to Artifact Registry..."
           docker push ${IMAGE}
           
-          echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
+          echo "${IMAGE}" > /tmp/docker_image.txt
+          echo "artifact" > /tmp/registry_type.txt
+
+      - name: Set image path
+        id: set_image
+        run: |
+          if [ -f /tmp/docker_image.txt ]; then
+            IMAGE=$(cat /tmp/docker_image.txt)
+            echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
+            echo "✅ Using image: ${IMAGE}"
+          else
+            echo "❌ Error: No image path found"
+            exit 1
+          fi
 
       - name: Deploy to Cloud Run
         env:
