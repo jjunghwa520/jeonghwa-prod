@@ -4,8 +4,11 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.2", ">= 8.0.2.1"
 # Use Sprockets for asset pipeline (needed for SCSS and Bootstrap)
 gem "sprockets-rails"
-# Use sqlite3 as the database for Active Record
+# Use sqlite3 as the database for Active Record (development/test)
 gem "sqlite3", ">= 2.1"
+
+# Use PostgreSQL for production
+gem "pg", "~> 1.5", platforms: [:ruby]
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
