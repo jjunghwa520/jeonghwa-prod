@@ -33,6 +33,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate Secrets
+        run: |
+          echo "🔍 Validating required secrets..."
+          if [ -z "${{ secrets.GCP_PROJECT_ID }}" ]; then
+            echo "❌ Error: GCP_PROJECT_ID secret is empty!"
+            exit 1
+          fi
+          if [ -z "${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}" ]; then
+            echo "❌ Error: GCP_WORKLOAD_IDENTITY_PROVIDER secret is empty!"
+            exit 1
+          fi
+          if [ -z "${{ secrets.GCP_SERVICE_ACCOUNT }}" ]; then
+            echo "❌ Error: GCP_SERVICE_ACCOUNT secret is empty!"
+            exit 1
+          fi
+          if [ -z "${{ secrets.RAILS_MASTER_KEY }}" ]; then
+            echo "❌ Error: RAILS_MASTER_KEY secret is empty!"
+            exit 1
+          fi
+          echo "✅ All required secrets are present"
+          echo "PROJECT_ID length: $(echo -n '${{ secrets.GCP_PROJECT_ID }}' | wc -c)"
+
       - id: auth
         name: Auth to GCP
         uses: google-github-actions/auth@v2
@@ -43,8 +65,23 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Verify GCP Access
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          echo "🔍 Verifying GCP access..."
+          gcloud config set project ${PROJECT_ID}
+          gcloud projects describe ${PROJECT_ID} || {
+            echo "❌ Error: Cannot access GCP project ${PROJECT_ID}"
+            exit 1
+          }
+          echo "✅ GCP access verified"
+
       - name: Configure Docker auth (gcr.io)
-        run: gcloud auth configure-docker gcr.io -q
+        run: |
+          echo "🔧 Configuring Docker for GCR..."
+          gcloud auth configure-docker gcr.io -q
+          echo "✅ Docker configured"
 
       - name: Build and push image (gcr.io)
         env:
@@ -56,7 +93,7 @@ jobs:
           COMMIT_SHA=$(git rev-parse --short HEAD)
           
           # Debug: Print variables (masked)
-          echo "🔍 Debug Info:"
+          echo "🔍 Build Configuration:"
           echo "PROJECT_ID: ${PROJECT_ID:0:4}**** (length: ${#PROJECT_ID})"
           echo "REGION: ${REGION}"
           echo "SERVICE: ${SERVICE}"
@@ -69,22 +106,36 @@ jobs:
           fi
           
           IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}
-          echo "📦 Image: ${IMAGE}"
+          echo "📦 Target Image: ${IMAGE}"
+          
+          # Check if Dockerfile exists
+          if [ ! -f "Dockerfile" ]; then
+            echo "❌ Error: Dockerfile not found in repository root"
+            exit 1
+          fi
           
           echo "🔨 Building Docker image..."
-          docker build -t ${IMAGE} . || {
+          docker build \
+            --progress=plain \
+            --tag ${IMAGE} \
+            . 2>&1 | tee /tmp/docker-build.log || {
             echo "❌ Docker build failed"
+            echo "Last 50 lines of build log:"
+            tail -50 /tmp/docker-build.log
             exit 1
           }
           
           echo "📤 Pushing to GCR..."
           docker push ${IMAGE} || {
             echo "❌ Docker push failed"
-            echo "💡 Check GCR permissions for service account"
+            echo "💡 Troubleshooting:"
+            echo "1. Check GCR permissions: gcloud projects get-iam-policy ${PROJECT_ID}"
+            echo "2. Verify service account has 'Storage Admin' or 'Artifact Registry Writer' role"
+            echo "3. Check if GCR API is enabled: gcloud services list --enabled"
             exit 1
           }
           
-          echo "✅ Build and push successful"
+          echo "✅ Build and push successful: ${IMAGE}"
 
       - name: Deploy to Cloud Run (gcr.io)
         env:
