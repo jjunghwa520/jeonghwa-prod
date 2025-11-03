@@ -52,9 +52,39 @@ jobs:
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
         run: |
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
-          docker build -t ${IMAGE} .
-          docker push ${IMAGE}
+          set -e  # Exit on error
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          
+          # Debug: Print variables (masked)
+          echo "🔍 Debug Info:"
+          echo "PROJECT_ID: ${PROJECT_ID:0:4}**** (length: ${#PROJECT_ID})"
+          echo "REGION: ${REGION}"
+          echo "SERVICE: ${SERVICE}"
+          echo "COMMIT_SHA: ${COMMIT_SHA}"
+          
+          # Validate PROJECT_ID
+          if [ -z "${PROJECT_ID}" ]; then
+            echo "❌ Error: GCP_PROJECT_ID is empty!"
+            exit 1
+          fi
+          
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}
+          echo "📦 Image: ${IMAGE}"
+          
+          echo "🔨 Building Docker image..."
+          docker build -t ${IMAGE} . || {
+            echo "❌ Docker build failed"
+            exit 1
+          }
+          
+          echo "📤 Pushing to GCR..."
+          docker push ${IMAGE} || {
+            echo "❌ Docker push failed"
+            echo "💡 Check GCR permissions for service account"
+            exit 1
+          }
+          
+          echo "✅ Build and push successful"
 
       - name: Deploy to Cloud Run (gcr.io)
         env:
