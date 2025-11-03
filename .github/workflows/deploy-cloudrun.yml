@@ -43,73 +43,38 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Verify GCP setup and permissions
-        env:
-          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
-        run: |
-          echo "🔍 Verifying GCP setup..."
-          echo "Project ID: ${PROJECT_ID}"
-          echo "Region: ${REGION}"
-          
-          # Check if project is accessible
-          if ! gcloud projects describe ${PROJECT_ID} > /dev/null 2>&1; then
-            echo "❌ Error: Cannot access project ${PROJECT_ID}"
-            exit 1
-          fi
-          
-          # Check if Artifact Registry API is enabled
-          echo "Checking Artifact Registry API..."
-          if ! gcloud services list --enabled --project=${PROJECT_ID} --filter="name:artifactregistry.googleapis.com" --format="value(name)" | grep -q "artifactregistry.googleapis.com"; then
-            echo "⚠️  Warning: Artifact Registry API may not be enabled"
-            echo "Please enable it: gcloud services enable artifactregistry.googleapis.com --project=${PROJECT_ID}"
-          else
-            echo "✅ Artifact Registry API is enabled"
-          fi
-          
-          # Check permissions
-          echo "Checking service account permissions..."
-          SERVICE_ACCOUNT=$(gcloud config get-value account)
-          echo "Current account: ${SERVICE_ACCOUNT}"
+      - name: Configure Docker auth (GCR - 원래 방식)
+        run: gcloud auth configure-docker gcr.io -q
 
-      - name: Create Artifact Registry repository (if not exists)
+      - name: Build and push image (GCR 시도 - 원래 방식)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
+        id: gcr_push
+        continue-on-error: true
         run: |
-          REPO_NAME="jeonghwa-docker"
-          echo "📦 Checking Artifact Registry repository: ${REPO_NAME}"
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}
           
-          # Check if repository exists, create if not
-          if gcloud artifacts repositories describe ${REPO_NAME} \
-            --location=${REGION} \
-            --project=${PROJECT_ID} 2>/dev/null; then
-            echo "✅ Repository ${REPO_NAME} already exists"
+          echo "🔨 Building Docker image for GCR (원래 방식)..."
+          echo "Image: ${IMAGE}"
+          
+          docker build -t ${IMAGE} .
+          
+          echo "📤 Pushing to GCR..."
+          if docker push ${IMAGE}; then
+            echo "✅ GCR push successful"
+            echo "REGISTRY_TYPE=gcr" >> $GITHUB_ENV
+            echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
           else
-            echo "Creating Artifact Registry repository: ${REPO_NAME}"
-            if gcloud artifacts repositories create ${REPO_NAME} \
-              --repository-format=docker \
-              --location=${REGION} \
-              --project=${PROJECT_ID} \
-              --description="Docker images for Jeonghwa Library"; then
-              echo "✅ Repository created successfully"
-            else
-              echo "❌ Failed to create repository. This may indicate permission issues."
-              echo "Required role: roles/artifactregistry.admin or roles/artifactregistry.writer"
-              echo "Please ensure the service account has proper permissions."
-              exit 1
-            fi
+            echo "⚠️  GCR push failed, will try Artifact Registry as fallback"
+            echo "REGISTRY_TYPE=artifact" >> $GITHUB_ENV
+            exit 1
           fi
 
-      - name: Configure Docker auth (Artifact Registry)
-        env:
-          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
-        run: |
-          gcloud auth configure-docker ${REGION}-docker.pkg.dev -q
-
-      - name: Build and push image (Artifact Registry)
+      - name: Build and push image (Artifact Registry - 대체 방식)
+        if: env.REGISTRY_TYPE == 'artifact'
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
@@ -119,26 +84,30 @@ jobs:
           COMMIT_SHA=$(git rev-parse --short HEAD)
           IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:${COMMIT_SHA}
           
-          echo "🔨 Building Docker image..."
-          echo "Image: ${IMAGE}"
+          echo "📦 Setting up Artifact Registry..."
           
-          if docker build -t ${IMAGE} .; then
-            echo "✅ Docker build successful"
-          else
-            echo "❌ Docker build failed"
-            exit 1
+          # Configure Docker auth for Artifact Registry
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev -q
+          
+          # Create repository if it doesn't exist
+          if ! gcloud artifacts repositories describe ${REPO_NAME} \
+            --location=${REGION} \
+            --project=${PROJECT_ID} 2>/dev/null; then
+            echo "Creating Artifact Registry repository..."
+            gcloud artifacts repositories create ${REPO_NAME} \
+              --repository-format=docker \
+              --location=${REGION} \
+              --project=${PROJECT_ID} \
+              --description="Docker images for Jeonghwa Library" || true
           fi
           
-          echo "📤 Pushing image to Artifact Registry..."
-          if docker push ${IMAGE}; then
-            echo "✅ Image pushed successfully"
-            echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
-          else
-            echo "❌ Failed to push image. This may indicate permission issues."
-            echo "Required role: roles/artifactregistry.writer"
-            echo "Please ensure the service account has proper permissions."
-            exit 1
-          fi
+          echo "🔨 Building Docker image for Artifact Registry..."
+          docker build -t ${IMAGE} .
+          
+          echo "📤 Pushing to Artifact Registry..."
+          docker push ${IMAGE}
+          
+          echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
 
       - name: Deploy to Cloud Run
         env:
@@ -148,8 +117,9 @@ jobs:
           BASE_URL: ${{ inputs.base_url || env.DEFAULT_BASE_URL }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          REPO_NAME="jeonghwa-docker"
-          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:$(git rev-parse --short HEAD)
+          echo "🚀 Deploying to Cloud Run..."
+          echo "Image: ${IMAGE}"
+          
           gcloud run deploy ${SERVICE} \
             --image=${IMAGE} \
             --project=${PROJECT_ID} \
@@ -165,8 +135,6 @@ jobs:
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          REPO_NAME="jeonghwa-docker"
-          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:$(git rev-parse --short HEAD)
           echo "Running database migrations..."
           gcloud run jobs create migrate-${SERVICE} \
             --image=${IMAGE} \
