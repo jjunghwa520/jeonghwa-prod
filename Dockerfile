@@ -71,4 +71,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Cloud Run uses PORT environment variable (default: 8080)
 EXPOSE 8080
 ENV PORT=8080
-CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0", "-p", "${PORT:-8080}"]
+CMD ./bin/thrust ./bin/rails server -b 0.0.0.0 -p ${PORT:-8080}
