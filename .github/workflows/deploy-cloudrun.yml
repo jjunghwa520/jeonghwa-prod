@@ -43,86 +43,20 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker auth (GCR - 원래 방식)
+      - name: Configure Docker auth (gcr.io)
         run: gcloud auth configure-docker gcr.io -q
 
-      - name: Build and push image (GCR 시도 - 원래 방식)
-        env:
-          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
-          SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
-        id: gcr_push
-        continue-on-error: true
-        run: |
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}
-          
-          echo "🔨 Building Docker image for GCR (원래 방식)..."
-          echo "Image: ${IMAGE}"
-          
-          docker build -t ${IMAGE} .
-          
-          echo "📤 Pushing to GCR..."
-          if docker push ${IMAGE}; then
-            echo "✅ GCR push successful"
-            echo "gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}" > /tmp/docker_image.txt
-            echo "gcr" > /tmp/registry_type.txt
-          else
-            echo "⚠️  GCR push failed, will try Artifact Registry as fallback"
-            echo "artifact" > /tmp/registry_type.txt
-            exit 1
-          fi
-
-      - name: Build and push image (Artifact Registry - 대체 방식)
-        if: failure() && steps.gcr_push.outcome == 'failure'
+      - name: Build and push image (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
         run: |
-          REPO_NAME="jeonghwa-docker"
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:${COMMIT_SHA}
-          
-          echo "📦 Setting up Artifact Registry (GCR 실패 시 대체)..."
-          
-          # Configure Docker auth for Artifact Registry
-          gcloud auth configure-docker ${REGION}-docker.pkg.dev -q
-          
-          # Create repository if it doesn't exist
-          if ! gcloud artifacts repositories describe ${REPO_NAME} \
-            --location=${REGION} \
-            --project=${PROJECT_ID} 2>/dev/null; then
-            echo "Creating Artifact Registry repository..."
-            gcloud artifacts repositories create ${REPO_NAME} \
-              --repository-format=docker \
-              --location=${REGION} \
-              --project=${PROJECT_ID} \
-              --description="Docker images for Jeonghwa Library" || true
-          fi
-          
-          echo "🔨 Building Docker image for Artifact Registry..."
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           docker build -t ${IMAGE} .
-          
-          echo "📤 Pushing to Artifact Registry..."
           docker push ${IMAGE}
-          
-          echo "${IMAGE}" > /tmp/docker_image.txt
-          echo "artifact" > /tmp/registry_type.txt
 
-      - name: Set image path
-        id: set_image
-        run: |
-          if [ -f /tmp/docker_image.txt ]; then
-            IMAGE=$(cat /tmp/docker_image.txt)
-            echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
-            echo "✅ Using image: ${IMAGE}"
-          else
-            echo "❌ Error: No image path found"
-            exit 1
-          fi
-
-      - name: Deploy to Cloud Run
+      - name: Deploy to Cloud Run (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
@@ -130,9 +64,7 @@ jobs:
           BASE_URL: ${{ inputs.base_url || env.DEFAULT_BASE_URL }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          echo "🚀 Deploying to Cloud Run..."
-          echo "Image: ${IMAGE}"
-          
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           gcloud run deploy ${SERVICE} \
             --image=${IMAGE} \
             --project=${PROJECT_ID} \
@@ -148,6 +80,7 @@ jobs:
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
+          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
           echo "Running database migrations..."
           gcloud run jobs create migrate-${SERVICE} \
             --image=${IMAGE} \
