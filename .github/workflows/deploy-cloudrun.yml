@@ -43,20 +43,47 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Configure Docker auth (gcr.io)
-        run: gcloud auth configure-docker gcr.io -q
-
-      - name: Build and push image (gcr.io)
+      - name: Create Artifact Registry repository (if not exists)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
         run: |
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
+          REPO_NAME="jeonghwa-docker"
+          # Check if repository exists, create if not
+          if ! gcloud artifacts repositories describe ${REPO_NAME} \
+            --location=${REGION} \
+            --project=${PROJECT_ID} 2>/dev/null; then
+            echo "Creating Artifact Registry repository: ${REPO_NAME}"
+            gcloud artifacts repositories create ${REPO_NAME} \
+              --repository-format=docker \
+              --location=${REGION} \
+              --project=${PROJECT_ID} \
+              --description="Docker images for Jeonghwa Library" || echo "Repository may already exist"
+          else
+            echo "Repository ${REPO_NAME} already exists"
+          fi
+
+      - name: Configure Docker auth (Artifact Registry)
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
+        run: |
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev -q
+
+      - name: Build and push image (Artifact Registry)
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
+          SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
+        run: |
+          REPO_NAME="jeonghwa-docker"
+          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:$(git rev-parse --short HEAD)
           docker build -t ${IMAGE} .
           docker push ${IMAGE}
+          echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
 
-      - name: Deploy to Cloud Run (gcr.io)
+      - name: Deploy to Cloud Run
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
@@ -64,7 +91,8 @@ jobs:
           BASE_URL: ${{ inputs.base_url || env.DEFAULT_BASE_URL }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
+          REPO_NAME="jeonghwa-docker"
+          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:$(git rev-parse --short HEAD)
           gcloud run deploy ${SERVICE} \
             --image=${IMAGE} \
             --project=${PROJECT_ID} \
@@ -72,6 +100,30 @@ jobs:
             --platform=managed \
             --allow-unauthenticated \
             --set-env-vars=BASE_URL=${BASE_URL},RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+
+      - name: Run database migrations
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
+          SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: |
+          REPO_NAME="jeonghwa-docker"
+          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE}:$(git rev-parse --short HEAD)
+          echo "Running database migrations..."
+          gcloud run jobs create migrate-${SERVICE} \
+            --image=${IMAGE} \
+            --region=${REGION} \
+            --project=${PROJECT_ID} \
+            --command=bash \
+            --args=-c,"bundle exec rails db:migrate" \
+            --set-env-vars=RAILS_ENV=production,RAILS_MASTER_KEY=${RAILS_MASTER_KEY} \
+            --max-retries=1 \
+            --task-timeout=600s || echo "Migration job may already exist, attempting to execute..."
+          gcloud run jobs execute migrate-${SERVICE} \
+            --region=${REGION} \
+            --project=${PROJECT_ID} \
+            --wait || echo "Migration job execution completed or failed"
 
       - name: Health Check (Domain)
         env:
