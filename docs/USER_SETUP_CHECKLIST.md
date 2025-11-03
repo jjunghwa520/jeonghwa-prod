@@ -21,7 +21,7 @@
 ```
 □ 상단 프로젝트 선택 드롭다운 클릭
 □ "새 프로젝트" 클릭
-□ 프로젝트 이름: jeonghwa-library-prod
+□ 프로젝트 이름: jeonghwa-prod
 □ "만들기" 클릭
 □ 생성 완료 대기 (1-2분)
 □ 프로젝트 선택
@@ -204,7 +204,7 @@ cat /Users/l2dogyu/KICDA/ruby/kicda-jh/config/master.key
 
 ```yaml
 GCP 정보:
-  프로젝트 ID: jeonghwa-library-prod
+  프로젝트 ID: jeonghwa-prod
   프로젝트 번호: 123456789012
   리전: asia-northeast3
   버킷: jeonghwa-assets

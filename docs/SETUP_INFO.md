@@ -30,7 +30,7 @@ RAILS_MASTER_KEY: 71dfcbdae82a7dbd6f483bc635a1b024
 
 ### 프로젝트 생성 시
 ```
-프로젝트 이름: jeonghwa-library-prod
+프로젝트 이름: jeonghwa-prod
 리전 (기본): asia-northeast3 (Seoul)
 ```
 
@@ -104,7 +104,7 @@ Value: 173b110305a65f8392f54ea55c116867
 ```
 배포 준비 완료!
 
-GCP 프로젝트 ID: jeonghwa-library-prod-xxxxx
+GCP 프로젝트 ID: jeonghwa-prod
 GCP 프로젝트 번호: 123456789012
 GitHub Username: jeonghwa-library (또는 실제 username)
 GitHub 저장소: jeonghwa-library
