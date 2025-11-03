@@ -66,6 +66,9 @@ SecureHeaders::Configuration.default do |config|
     connect_src: %w[
       'self'
       https://api.tosspayments.com
+      https://apigw-sandbox.tosspayments.com
+      https://log.tosspayments.com
+      https://event.tosspayments.com
       https://generativelanguage.googleapis.com
       https://cdn.jsdelivr.net
     ],
@@ -74,6 +77,8 @@ SecureHeaders::Configuration.default do |config|
     frame_src: %w[
       'self'
       https://widget.tosspayments.com
+      https://sandbox.tosspayments.com
+      https://pay.toss.im
     ],
     
     # 미디어: 자신 + blob (HLS)

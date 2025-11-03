@@ -73,5 +73,22 @@ jobs:
             --allow-unauthenticated \
             --set-env-vars=BASE_URL=${BASE_URL},RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
 
+      - name: Health Check (Domain)
+        env:
+          BASE_URL: ${{ inputs.base_url || env.DEFAULT_BASE_URL }}
+        run: |
+          echo "Checking health of ${BASE_URL}..."
+          for i in {1..10}; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L ${BASE_URL}/up || echo "000")
+            echo "Attempt $i: HTTP $HTTP_CODE"
+            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "302" ]; then
+              echo "✅ Health check passed (HTTP $HTTP_CODE)"
+              exit 0
+            fi
+            echo "⏳ Waiting 10s before retry..."
+            sleep 10
+          done
+          echo "❌ Health check failed after 10 attempts"
+          exit 1
 
 

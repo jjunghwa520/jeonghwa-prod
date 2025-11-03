@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_141647) do
+  create_table "analytics", force: :cascade do |t|
+    t.date "date"
+    t.string "metric_type"
+    t.decimal "value"
+    t.integer "user_count"
+    t.integer "course_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "authors", force: :cascade do |t|
     t.string "name", null: false
     t.text "bio"
@@ -38,6 +48,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
   create_table "content_pipelines", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "content_views", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "course_id", null: false
+    t.datetime "viewed_at"
+    t.integer "duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_content_views_on_course_id"
+    t.index ["user_id"], name: "index_content_views_on_user_id"
   end
 
   create_table "course_authors", force: :cascade do |t|
@@ -95,6 +116,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
     t.index ["user_id"], name: "index_enrollments_on_user_id"
   end
 
+  create_table "events", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "discount_rate"
+    t.string "status"
+    t.string "event_type"
+    t.string "banner_image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "generated_images", force: :cascade do |t|
     t.integer "user_id"
     t.integer "course_id"
@@ -118,6 +152,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
     t.index ["status"], name: "index_generated_images_on_status"
     t.index ["user_id", "status"], name: "index_generated_images_on_user_id_and_status"
     t.index ["user_id"], name: "index_generated_images_on_user_id"
+  end
+
+  create_table "inquiries", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "title"
+    t.text "content"
+    t.string "status"
+    t.text "admin_response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_inquiries_on_user_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -154,6 +199,37 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
+  create_table "settlements", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "course_id", null: false
+    t.decimal "amount"
+    t.date "period_start"
+    t.date "period_end"
+    t.string "status"
+    t.date "payment_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_settlements_on_course_id"
+    t.index ["user_id"], name: "index_settlements_on_user_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "plan_type", default: "basic", null: false
+    t.string "status", default: "active", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.boolean "auto_renew", default: true
+    t.string "payment_key"
+    t.string "billing_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_type"], name: "index_subscriptions_on_plan_type"
+    t.index ["user_id", "status"], name: "index_subscriptions_on_user_id_and_status"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -168,6 +244,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
 
   add_foreign_key "cart_items", "courses"
   add_foreign_key "cart_items", "users"
+  add_foreign_key "content_views", "courses"
+  add_foreign_key "content_views", "users"
   add_foreign_key "course_authors", "authors"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "courses", "users", column: "instructor_id"
@@ -175,8 +253,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_180000) do
   add_foreign_key "enrollments", "users"
   add_foreign_key "generated_images", "courses"
   add_foreign_key "generated_images", "users"
+  add_foreign_key "inquiries", "users"
   add_foreign_key "orders", "courses"
   add_foreign_key "orders", "users"
   add_foreign_key "reviews", "courses"
   add_foreign_key "reviews", "users"
+  add_foreign_key "settlements", "courses"
+  add_foreign_key "settlements", "users"
+  add_foreign_key "subscriptions", "users"
 end

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "document-reader": {
+      "command": "node",
+      "args": [
+        "/Users/l2dogyu/KICDA/ruby/kicda-jh/mcp-servers/document-reader-mcp.js"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    }
+  }
+}
+

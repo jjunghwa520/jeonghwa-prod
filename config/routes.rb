@@ -48,6 +48,27 @@ Rails.application.routes.draw do
   end
   get 'cart_choice', to: 'cart_items#choice'
   
+  # 구독 시스템
+  resources :subscriptions do
+    member do
+      patch :cancel
+      patch :pause
+      patch :resume
+    end
+  end
+  
+  # 이벤트/프로모션
+  resources :events, only: [:index, :show]
+  
+  # 1:1 문의
+  resources :inquiries, only: [:index, :show, :new, :create]
+  
+  # 작가 네임스페이스
+  namespace :author do
+    root to: "dashboard#index"
+    get 'dashboard', to: 'dashboard#index'
+  end
+  
   # AI 이미지 생성
   resources :generated_images do
     member do
@@ -69,6 +90,9 @@ Rails.application.routes.draw do
     resources :uploads, only: [:new, :create]
     resources :reviews, only: [:index, :update, :destroy]
     resources :users, only: [:index, :update]
+    resources :events
+    resources :inquiries, only: [:index, :show, :update]
+    resources :analytics, only: [:index]
     
     # AI 콘텐츠 생성기
     resources :content_generator, only: [:index] do
@@ -81,6 +105,10 @@ Rails.application.routes.draw do
   
   # 전자동화책 리더
   get "/courses/:id/read", to: "courses/readers#show", as: :read_course
+  
+  # DRM 보호 뷰어
+  get "/courses/:id/secure_view", to: "courses/secure_readers#show", as: :secure_view_course
+  post "/courses/:id/track_duration", to: "courses/secure_readers#track_duration", as: :track_duration_course
   
   # 결제 시스템
   get "/payments/:course_id/checkout", to: "payments#checkout", as: :checkout_payment

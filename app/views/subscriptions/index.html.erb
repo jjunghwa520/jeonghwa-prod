@@ -1,0 +1,83 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <h1 class="text-3xl font-bold text-navy-800 mb-8">내 구독 관리</h1>
+
+    <!-- 현재 구독 -->
+    <% if @current_subscription %>
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+              <%= Subscription::PLAN_TYPES[@current_subscription.plan_type.to_sym][:name] %>
+            </h2>
+            <p class="text-gray-600"><%= Subscription::PLAN_TYPES[@current_subscription.plan_type.to_sym][:description] %></p>
+          </div>
+          <span class="px-4 py-2 rounded-full text-sm font-semibold <%= @current_subscription.active? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+            <%= @current_subscription.status.upcase %>
+          </span>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
+          <div>
+            <p class="text-sm text-gray-500">시작일</p>
+            <p class="text-lg font-semibold"><%= @current_subscription.start_date.strftime('%Y.%m.%d') %></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">종료일</p>
+            <p class="text-lg font-semibold"><%= @current_subscription.end_date.strftime('%Y.%m.%d') %></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">남은 기간</p>
+            <p class="text-lg font-semibold"><%= @current_subscription.days_remaining %>일</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <% if @current_subscription.status == 'active' %>
+            <%= button_to '구독 취소', cancel_subscription_path(@current_subscription), method: :patch, data: { confirm: '정말 구독을 취소하시겠습니까?' }, class: 'bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg' %>
+            <%= button_to '일시 중지', pause_subscription_path(@current_subscription), method: :patch, class: 'bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg' %>
+          <% elsif @current_subscription.status == 'paused' %>
+            <%= button_to '구독 재개', resume_subscription_path(@current_subscription), method: :patch, class: 'bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg' %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-8 mb-8 text-center">
+        <p class="text-gray-700 mb-4">현재 활성화된 구독이 없습니다.</p>
+        <%= link_to '구독 플랜 보기 →', new_subscription_path, class: 'inline-block bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold' %>
+      </div>
+    <% end %>
+
+    <!-- 구독 이력 -->
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">구독 이력</h2>
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">플랜</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">기간</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">금액</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">상태</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% @subscriptions.each do |subscription| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4"><%= Subscription::PLAN_TYPES[subscription.plan_type.to_sym][:name] %></td>
+              <td class="px-6 py-4 text-sm text-gray-600">
+                <%= subscription.start_date.strftime('%Y.%m.%d') %> ~ <%= subscription.end_date.strftime('%Y.%m.%d') %>
+              </td>
+              <td class="px-6 py-4 font-semibold"><%= number_to_currency(subscription.price, unit: '₩', precision: 0) %></td>
+              <td class="px-6 py-4">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold <%= subscription.active? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600' %>">
+                  <%= subscription.status %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

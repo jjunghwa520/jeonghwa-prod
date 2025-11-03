@@ -1,0 +1,111 @@
+<div class="min-h-screen bg-gradient-to-br from-cream-50 via-white to-peach-50 py-12">
+  <div class="container mx-auto px-4">
+    <!-- 헤더 -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-navy-800 mb-4">
+        💎 구독 플랜 선택
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        정화의 서재에서 더 많은 이야기를 만나보세요
+      </p>
+    </div>
+
+    <!-- 플랜 카드 -->
+    <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <% @plans.each do |plan_key, plan_info| %>
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden <%= plan_key == :premium ? 'ring-4 ring-accent-400' : '' %> hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+          <!-- 플랜 헤더 -->
+          <div class="<%= plan_key == :premium ? 'bg-gradient-to-r from-accent-400 to-accent-500' : 'bg-gradient-to-r from-primary-400 to-primary-500' %> text-white px-8 py-6">
+            <% if plan_key == :premium %>
+              <div class="text-sm font-semibold mb-2 flex items-center">
+                <span class="bg-white text-accent-500 px-3 py-1 rounded-full text-xs">추천</span>
+              </div>
+            <% end %>
+            <h3 class="text-2xl font-bold mb-2"><%= plan_info[:name] %></h3>
+            <div class="flex items-baseline">
+              <span class="text-4xl font-bold"><%= number_to_currency(plan_info[:price], unit: '₩', precision: 0) %></span>
+              <span class="text-lg ml-2 opacity-90">/월</span>
+            </div>
+          </div>
+
+          <!-- 플랜 설명 -->
+          <div class="px-8 py-6">
+            <p class="text-gray-600 mb-6"><%= plan_info[:description] %></p>
+
+            <!-- 혜택 목록 -->
+            <ul class="space-y-3 mb-8">
+              <% if plan_key == :basic %>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span class="text-gray-700">월 10개 콘텐츠 열람 가능</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span class="text-gray-700">전자동화책 및 구연동화 지원</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span class="text-gray-700">연령대별 맞춤 콘텐츠</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span class="text-gray-700">리뷰 작성 가능</span>
+                </li>
+              <% else %>
+                <li class="flex items-start">
+                  <span class="text-accent-500 mr-2">★</span>
+                  <span class="text-gray-700 font-semibold">무제한 콘텐츠 열람</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-accent-500 mr-2">★</span>
+                  <span class="text-gray-700 font-semibold">신규 콘텐츠 우선 제공</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-accent-500 mr-2">★</span>
+                  <span class="text-gray-700">전자동화책 및 구연동화 지원</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-accent-500 mr-2">★</span>
+                  <span class="text-gray-700">연령대별 맞춤 콘텐츠</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-accent-500 mr-2">★</span>
+                  <span class="text-gray-700">독점 프리미엄 콘텐츠</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-accent-500 mr-2">★</span>
+                  <span class="text-gray-700">광고 없이 깨끗한 환경</span>
+                </li>
+              <% end %>
+            </ul>
+
+            <!-- 구독 폼 -->
+            <%= form_with url: subscriptions_path, method: :post, local: true, class: 'space-y-4' do |f| %>
+              <%= hidden_field_tag :plan_type, plan_key %>
+              
+              <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <%= check_box_tag :auto_renew, '1', true, class: 'w-5 h-5 text-primary-500 rounded focus:ring-primary-400' %>
+                <%= label_tag :auto_renew, '자동 갱신', class: 'ml-3 text-gray-700 font-medium' %>
+              </div>
+
+              <%= f.submit '구독하기', class: "w-full #{plan_key == :premium ? 'bg-gradient-to-r from-accent-400 to-accent-500 hover:from-accent-500 hover:to-accent-600' : 'bg-gradient-to-r from-primary-400 to-primary-500 hover:from-primary-500 hover:to-primary-600'} text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 하단 안내 -->
+    <div class="text-center mt-12 text-gray-600 max-w-2xl mx-auto">
+      <p class="mb-2">✨ 첫 달 무료 체험 가능 (프리미엄 플랜)</p>
+      <p class="mb-2">🔄 언제든지 플랜 변경 및 해지 가능</p>
+      <p class="mb-2">💳 안전한 결제 시스템 (토스페이먼츠)</p>
+    </div>
+
+    <!-- 뒤로가기 -->
+    <div class="text-center mt-8">
+      <%= link_to '← 메인으로 돌아가기', root_path, class: 'text-primary-500 hover:text-primary-600 font-medium' %>
+    </div>
+  </div>
+</div>
+

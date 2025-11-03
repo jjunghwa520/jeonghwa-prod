@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :cart_items, dependent: :destroy
   has_many :generated_images, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_one :current_subscription, -> { active.order(end_date: :desc) }, class_name: 'Subscription'
 
   # Validations
   validates :name, presence: true, length: { minimum: 2, maximum: 50 }
@@ -32,6 +34,25 @@ class User < ApplicationRecord
 
   def admin?
     role == "admin"
+  end
+
+  # 구독 관련 메서드
+  def subscribed?
+    current_subscription&.active? || false
+  end
+
+  def premium_subscriber?
+    current_subscription&.active? && current_subscription&.premium?
+  end
+
+  def basic_subscriber?
+    current_subscription&.active? && current_subscription&.plan_type == 'basic'
+  end
+
+  def subscription_status
+    return 'none' unless current_subscription
+    return 'expired' if current_subscription.expired?
+    current_subscription.status
   end
 
   private
