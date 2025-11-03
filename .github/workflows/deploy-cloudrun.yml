@@ -77,26 +77,40 @@ jobs:
           }
           echo "✅ GCP access verified"
 
-      - name: Configure Docker auth (gcr.io)
-        run: |
-          echo "🔧 Configuring Docker for GCR..."
-          gcloud auth configure-docker gcr.io -q
-          echo "✅ Docker configured"
-
-      - name: Ensure GCR repository exists
+      - name: Ensure Artifact Registry repository exists
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
         run: |
-          echo "🔍 Checking GCR repository..."
-          if ! gcloud container images describe gcr.io/${PROJECT_ID}/${SERVICE}:latest 2>/dev/null; then
-            echo "📦 GCR repository doesn't exist, but it will be created on first push"
-            echo "💡 Note: Service account needs 'Storage Admin' or 'Artifact Registry Writer' role"
+          REPO_NAME="docker"
+          echo "🔍 Checking Artifact Registry repository..."
+          if ! gcloud artifacts repositories describe ${REPO_NAME} \
+            --location=${REGION} \
+            --project=${PROJECT_ID} 2>/dev/null; then
+            echo "📦 Creating Artifact Registry repository..."
+            gcloud artifacts repositories create ${REPO_NAME} \
+              --repository-format=docker \
+              --location=${REGION} \
+              --project=${PROJECT_ID} \
+              --description="Docker images for ${SERVICE}" || {
+              echo "❌ Failed to create Artifact Registry repository"
+              exit 1
+            }
+            echo "✅ Artifact Registry repository created"
           else
-            echo "✅ GCR repository exists"
+            echo "✅ Artifact Registry repository exists"
           fi
 
-      - name: Build and push image (gcr.io)
+      - name: Configure Docker auth (Artifact Registry)
+        env:
+          REGION: ${{ inputs.region || env.DEFAULT_REGION }}
+        run: |
+          echo "🔧 Configuring Docker for Artifact Registry..."
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev -q
+          echo "✅ Docker configured"
+
+      - name: Build and push image (Artifact Registry)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
@@ -118,7 +132,7 @@ jobs:
             exit 1
           fi
           
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:${COMMIT_SHA}
+          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/docker/${SERVICE}:${COMMIT_SHA}
           echo "📦 Target Image: ${IMAGE}"
           
           # Check if Dockerfile exists
@@ -138,19 +152,19 @@ jobs:
             exit 1
           }
           
-          echo "📤 Pushing to GCR..."
+          echo "📤 Pushing to Artifact Registry..."
           docker push ${IMAGE} || {
             echo "❌ Docker push failed"
             echo "💡 Troubleshooting:"
-            echo "1. Check GCR permissions: gcloud projects get-iam-policy ${PROJECT_ID}"
-            echo "2. Verify service account has 'Storage Admin' or 'Artifact Registry Writer' role"
-            echo "3. Check if GCR API is enabled: gcloud services list --enabled"
+            echo "1. Check Artifact Registry permissions: gcloud projects get-iam-policy ${PROJECT_ID}"
+            echo "2. Verify service account has 'Artifact Registry Writer' role"
+            echo "3. Check if Artifact Registry API is enabled: gcloud services list --enabled"
             exit 1
           }
           
           echo "✅ Build and push successful: ${IMAGE}"
 
-      - name: Deploy to Cloud Run (gcr.io)
+      - name: Deploy to Cloud Run (Artifact Registry)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ inputs.region || env.DEFAULT_REGION }}
@@ -158,7 +172,7 @@ jobs:
           BASE_URL: ${{ inputs.base_url || env.DEFAULT_BASE_URL }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
+          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/docker/${SERVICE}:$(git rev-parse --short HEAD)
           gcloud run deploy ${SERVICE} \
             --image=${IMAGE} \
             --project=${PROJECT_ID} \
@@ -174,7 +188,7 @@ jobs:
           SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          IMAGE=gcr.io/${PROJECT_ID}/${SERVICE}:$(git rev-parse --short HEAD)
+          IMAGE=${REGION}-docker.pkg.dev/${PROJECT_ID}/docker/${SERVICE}:$(git rev-parse --short HEAD)
           echo "Running database migrations..."
           gcloud run jobs create migrate-${SERVICE} \
             --image=${IMAGE} \
