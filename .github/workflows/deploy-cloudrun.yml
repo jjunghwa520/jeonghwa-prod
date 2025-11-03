@@ -83,6 +83,19 @@ jobs:
           gcloud auth configure-docker gcr.io -q
           echo "✅ Docker configured"
 
+      - name: Ensure GCR repository exists
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          SERVICE: ${{ inputs.service || env.DEFAULT_SERVICE }}
+        run: |
+          echo "🔍 Checking GCR repository..."
+          if ! gcloud container images describe gcr.io/${PROJECT_ID}/${SERVICE}:latest 2>/dev/null; then
+            echo "📦 GCR repository doesn't exist, but it will be created on first push"
+            echo "💡 Note: Service account needs 'Storage Admin' or 'Artifact Registry Writer' role"
+          else
+            echo "✅ GCR repository exists"
+          fi
+
       - name: Build and push image (gcr.io)
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
