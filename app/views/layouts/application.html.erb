@@ -27,6 +27,15 @@
       <meta property="<%= property %>" content="<%= content %>">
     <% end %>
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="정화의서재">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <meta name="theme-color" content="#4F46E5">
+    
     <%= yield :meta %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag if Rails.env.production? %>

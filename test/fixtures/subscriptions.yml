@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  plan_type: MyString
+  status: MyString
+  start_date: 2025-11-03
+  end_date: 2025-11-03
+  price: 9.99
+  auto_renew: false
+
+two:
+  user: two
+  plan_type: MyString
+  status: MyString
+  start_date: 2025-11-03
+  end_date: 2025-11-03
+  price: 9.99
+  auto_renew: false
