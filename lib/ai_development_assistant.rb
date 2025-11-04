@@ -4,7 +4,7 @@
 require 'yaml'
 require 'json'
 
-class AIDevelopmentAssistant
+class AiDevelopmentAssistant
   attr_reader :config, :context, :history
   
   def initialize
@@ -330,7 +330,7 @@ end
 
 # 사용 예시
 if __FILE__ == $0
-  assistant = AIDevelopmentAssistant.new
+  assistant = AiDevelopmentAssistant.new
   
   # 테스트 실행
   puts "\n=== AI 개발 어시스턴트 테스트 ==="
