@@ -143,5 +143,3 @@ Rails.application.routes.draw do
   get "/404", to: "static_errors#not_found"
   get "/500", to: "static_errors#internal_error"
 end
-
- 
