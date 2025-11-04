@@ -38,4 +38,19 @@ class HomeController < ApplicationController
     @variant = (params[:variant].presence || 'base').to_s.downcase
     @style = (params[:style].presence || 'clean').to_s.downcase
   end
+  
+  # 디버깅용: 라우팅 확인
+  def debug_routes
+    return head :forbidden unless Rails.env.development? || params[:secret] == ENV['DEBUG_SECRET']
+    
+    routes_info = {
+      events_route: Rails.application.routes.url_helpers.events_path rescue 'NOT_FOUND',
+      subscriptions_route: Rails.application.routes.url_helpers.subscriptions_path rescue 'NOT_FOUND',
+      routes_count: Rails.application.routes.routes.count,
+      has_events_controller: defined?(EventsController),
+      has_subscriptions_controller: defined?(SubscriptionsController)
+    }
+    
+    render json: routes_info
+  end
 end

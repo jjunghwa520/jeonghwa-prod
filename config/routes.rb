@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "storybook", to: "home#storybook_index"
   get "teen_content", to: "home#teen_content"
   get "hero_preview", to: "home#hero_preview"
+  get "debug_routes", to: "home#debug_routes"
 
   # 강의 관련 라우트
   resources :courses do
