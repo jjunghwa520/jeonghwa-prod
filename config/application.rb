@@ -40,7 +40,7 @@ module KicdaJh
     
     # 예외 처리: 라우트를 통해 404/500을 커스텀 페이지로 처리할 준비
     # 실제 핸들러/뷰는 controllers/views에 추가
-    config.exceptions_app = self.routes
+    # config.exceptions_app = self.routes  # 임시 주석 처리: 라우팅 로드 문제 해결을 위해
     
   end
 end
